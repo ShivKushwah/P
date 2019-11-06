@@ -22,4 +22,4 @@ add_executable(foreign_types
     ~/Research/P-Secure-Fork/P/Bld/Drops/Prt/include/PrtValues.h
     ~/Research/P-Secure-Fork/P/Bld/Drops/Prt/include/sal.h)
 
-target_link_libraries(foreign_types ${CMAKE_SOURCE_DIR}/../../../Bld/Drops/Prt/lib/libPrt_static.a /home/shiv/Research/ProgrammingEnclaves/Submodule/P/Ext/libhandler/out/gcc-amd64-linux-gnu/debug/libhandler.a ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(foreign_types ${CMAKE_SOURCE_DIR}/../../../Bld/Drops/Prt/lib/libPrt_static.a /home/shiv/Research/P-Secure-Fork/P/Ext/libhandler/out/gcc-amd64-linux-gnu/debug/libhandler.a ${CMAKE_THREAD_LIBS_INIT})
