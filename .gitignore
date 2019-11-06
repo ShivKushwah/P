@@ -297,3 +297,12 @@ Src/PrtDist/Binaries/clusterconfiguration.xml
 nupkgs/
 /Tst/temp_builds
 *.db
+
+Src/Samples/ForeignTypes/CMakeCache.txt
+Src/Samples/ForeignTypes/CMakeFiles/
+Src/Samples/ForeignTypes/ForeignStringType.c
+Src/Samples/ForeignTypes/ForeignStringType.h
+Src/Samples/ForeignTypes/Makefile
+Src/Samples/ForeignTypes/cmake_install.cmake
+Src/Samples/ForeignTypes/foreign_types
+packages-microsoft-prod.deb
