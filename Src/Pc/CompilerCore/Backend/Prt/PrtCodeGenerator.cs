@@ -1170,6 +1170,40 @@ namespace Plang.Compiler.Backend.Prt
                     break;
 
                 case SendStmt sendStmt:
+
+                    // //string funImplName = context.Names.GetNameForFunctionImpl(funCallStmt.Function);
+                    // //List<ILinearRef> funArgs = sendStmt.MachineExpr;// .ArgsList.Cast<ILinearRef>().ToList();
+
+                    // context.WriteLine(
+                    //         output, $"{FunCallArgsArrayName}[0] = {GetVariableReference(function, sendStmt.MachineExpr)};");
+               
+
+                    // // Put all the arguments in the args array
+                    // // foreach (var arg in funArgs.Select((arg, i) => new { arg, i }))
+                    // // {
+                    // //     context.WriteLine(
+                    // //         output, $"{FunCallArgsArrayName}[{arg.i}] = {GetVariableReference(function, arg.arg)};");
+                    // // }
+
+                    // // Call the function and immediately free the value
+                    // context.WriteLine(output, $"PrtFreeValue(P_SecureSend_IMPL(context, {FunCallArgsArrayName}));");
+
+                    // // PrtFreeValue(PTMP_tmp2);
+                    // // PTMP_tmp2 = NULL;
+
+                    // // Free and set to null all the moved arguments
+                    // // IEnumerable<string> toFree = funArgs.Where(arg => arg.LinearType.Equals(LinearType.Move))
+                    // //     .Select(arg => GetVariablePointer(function, arg.Variable));
+                    // // foreach (string argName in toFree)
+                    // // {
+                    // //     context.WriteLine(output, $"PrtFreeValue({argName});");
+                    // //     context.WriteLine(output, $"{argName} = NULL;");
+                    // // }
+
+                    // WriteCleanupCheck(output, function);
+                    // //NOTE I added below
+                    // //context.Write(output, "");
+
                     context.Write(output, "PrtSendInternal(context, PrtGetMachine(context->process, ");
                     WriteExpr(output, function, sendStmt.MachineExpr);
                     context.Write(output, "), ");
@@ -1191,7 +1225,7 @@ namespace Plang.Compiler.Backend.Prt
                     // Send can immediately schedule work on another machine. It does this via a recursive call to PrtScheduleWork,
                     // which is almost certainly the Wrong Thing To Do (tm).
                     // TODO: fix the underlying problem and remove this check.
-                    WriteCleanupCheck(output, function);
+                    // WriteCleanupCheck(output, function);
                     break;
 
                 case SwapAssignStmt swapAssignStmt:
