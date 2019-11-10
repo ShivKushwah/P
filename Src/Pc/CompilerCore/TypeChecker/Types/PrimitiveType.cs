@@ -47,7 +47,7 @@ namespace Plang.Compiler.TypeChecker.Types
 
                 case "machine":
                     return otherType.CanonicalRepresentation.Equals("machine") ||
-                           otherType.CanonicalRepresentation.Equals("null") ||
+                           otherType.CanonicalRepresentation.Equals("null") ||                           
                            otherType is PermissionType;
 
                 case "int":

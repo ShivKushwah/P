@@ -19,8 +19,11 @@ namespace Plang.Compiler.TypeChecker.Types
 
         public override bool IsAssignableFrom(PLanguageType otherType)
         {
-            return otherType.Canonicalize() is ForeignType other &&
-                   CanonicalRepresentation == other.CanonicalRepresentation;
+            //NOTE I added below
+            return (otherType.Canonicalize() is ForeignType other &&
+                   CanonicalRepresentation == other.CanonicalRepresentation) || true;
+            // return otherType.Canonicalize() is ForeignType other &&
+            //        CanonicalRepresentation == other.CanonicalRepresentation;
         }
 
         public override PLanguageType Canonicalize()
