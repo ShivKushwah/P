@@ -52,6 +52,7 @@ RAISE     : 'raise' ;
 RECEIVE   : 'receive' ;
 RETURN    : 'return' ;
 SEND      : 'send' ;
+SECURE_SEND : 'secure_send' ;
 SIZEOF    : 'sizeof' ;
 SPEC      : 'spec' ;
 START     : 'start' ;

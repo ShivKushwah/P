@@ -219,6 +219,12 @@ namespace Plang.Compiler.TypeChecker
                     unavailable = ProcessExpr(unavailable, sendStmt.Evt);
                     unavailable = ProcessArgList(sendStmt.Arguments, unavailable, ArgOptions.SwapNotAllowed);
                     break;
+                
+                case SecureSendStmt secureSendStmt:
+                    unavailable = ProcessExpr(unavailable, secureSendStmt.MachineExpr);
+                    unavailable = ProcessExpr(unavailable, secureSendStmt.Evt);
+                    unavailable = ProcessArgList(secureSendStmt.Arguments, unavailable, ArgOptions.SwapNotAllowed);
+                    break;
 
                 case AnnounceStmt announceStmt:
                     unavailable = ProcessExpr(unavailable, announceStmt.PEvent);

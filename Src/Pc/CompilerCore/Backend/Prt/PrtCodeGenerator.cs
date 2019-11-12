@@ -1168,6 +1168,27 @@ namespace Plang.Compiler.Backend.Prt
                 case ContinueStmt continueStmt:
                     context.WriteLine(output, "continue;");
                     break;
+                
+                case SecureSendStmt secureSendStmt:
+                    // context.Write(output, "_P_GEN_funargs[0] = ");
+                    // foreach (IPExpr sendArgExpr in secureSendStmt.Arguments)
+                    // {
+                    //     Debug.Assert(sendArgExpr is IVariableRef);
+                    //     IVariableRef argVar = (IVariableRef)sendArgExpr;
+                    //     context.Write(output, $"{GetVariableReference(function, argVar)}");
+                    // }
+                    // context.WriteLine(output, ";");
+
+
+                    // context.Write(output, "_P_GEN_funargs[1] = &(");
+                    // WriteExpr(output, function, secureSendStmt.Evt);
+                    // context.WriteLine(output, ");");
+
+                    // context.WriteLine(output, "PrtFreeValue(P_SecureSend_IMPL(context, _P_GEN_funargs));");
+
+                    // WriteCleanupCheck(output, function);
+
+                    break;
 
                 case SendStmt sendStmt:
 

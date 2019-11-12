@@ -486,6 +486,26 @@ namespace Plang.Compiler.Backend
                         })
                         .ToList();
 
+                case SecureSendStmt secureSendStmt:
+                    (IExprTerm secureSendMachine, List<IPStmt> secureSendMachineDeps) = SimplifyExpression(secureSendStmt.MachineExpr);
+                    (VariableAccessExpr secureSendMachineAccessExpr, IPStmt secureSendMachineAssn) = SaveInTemporary(new CloneExpr(secureSendMachine));
+
+                    (IExprTerm secureSendEvent, List<IPStmt> secureSendEventDeps) = SimplifyExpression(secureSendStmt.Evt);
+                    (VariableAccessExpr secureSendEventAccessExpr, IPStmt secureSendEventAssn) = SaveInTemporary(new CloneExpr(secureSendEvent));
+
+                    (IReadOnlyList<IVariableRef> secureSendArgs, List<IPStmt> secureSendArgDeps) = SimplifyArgPack(secureSendStmt.Arguments);
+
+                    return secureSendMachineDeps
+                        .Concat(new[] { secureSendMachineAssn })
+                        .Concat(secureSendEventDeps)
+                        .Concat(new[] { secureSendEventAssn })
+                        .Concat(secureSendArgDeps)
+                        .Concat(new[]
+                        {
+                            new SecureSendStmt(location, secureSendMachineAccessExpr, secureSendEventAccessExpr, secureSendArgs)
+                        })
+                        .ToList();
+
                 case SwapAssignStmt swapAssignStmt:
                     (IPExpr swapVar, List<IPStmt> swapVarDeps) = SimplifyLvalue(swapAssignStmt.NewLocation);
                     Variable rhs = swapAssignStmt.OldLocation;
