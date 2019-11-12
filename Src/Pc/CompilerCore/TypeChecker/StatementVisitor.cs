@@ -411,16 +411,16 @@ namespace Plang.Compiler.TypeChecker
 
         public override IPStmt VisitSecureSendStmt(PParser.SecureSendStmtContext context)
         {
-            if (machine?.IsSpec == true)
-            {
-                throw handler.IllegalMonitorOperation(context, context.SECURE_SEND().Symbol, machine);
-            }
+            // if (machine?.IsSpec == true)
+            // {
+            //     throw handler.IllegalMonitorOperation(context, context.SECURE_SEND().Symbol, machine);
+            // }
 
-            IPExpr machineExpr = exprVisitor.Visit(context.machine);
-            if (!PrimitiveType.Machine.IsAssignableFrom(machineExpr.Type))
-            {
-                throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine);
-            }
+            IPExpr machineExpr = exprVisitor.Visit(context.kirat);
+            // if (!PrimitiveType.Machine.IsAssignableFrom(machineExpr.Type))
+            // {
+            //     throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine);
+            // }
 
             IPExpr evtExpr = exprVisitor.Visit(context.@event);
             if (IsDefinitelyNullEvent(evtExpr))

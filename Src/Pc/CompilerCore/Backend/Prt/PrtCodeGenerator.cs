@@ -1170,23 +1170,18 @@ namespace Plang.Compiler.Backend.Prt
                     break;
                 
                 case SecureSendStmt secureSendStmt:
-                    // context.Write(output, "_P_GEN_funargs[0] = ");
-                    // foreach (IPExpr sendArgExpr in secureSendStmt.Arguments)
-                    // {
-                    //     Debug.Assert(sendArgExpr is IVariableRef);
-                    //     IVariableRef argVar = (IVariableRef)sendArgExpr;
-                    //     context.Write(output, $"{GetVariableReference(function, argVar)}");
-                    // }
-                    // context.WriteLine(output, ";");
+                    context.Write(output, "_P_GEN_funargs[0] = ");
+                    IVariableRef kirat = (IVariableRef)secureSendStmt.MachineExpr;
+                    context.Write(output, $"{GetVariableReference(function, kirat)}");
+                    context.WriteLine(output, ";");
 
+                    context.Write(output, "_P_GEN_funargs[1] = &(");
+                    WriteExpr(output, function, secureSendStmt.Evt);
+                    context.WriteLine(output, ");");
 
-                    // context.Write(output, "_P_GEN_funargs[1] = &(");
-                    // WriteExpr(output, function, secureSendStmt.Evt);
-                    // context.WriteLine(output, ");");
+                    context.WriteLine(output, "PrtFreeValue(P_SecureSend_IMPL(context, _P_GEN_funargs));");
 
-                    // context.WriteLine(output, "PrtFreeValue(P_SecureSend_IMPL(context, _P_GEN_funargs));");
-
-                    // WriteCleanupCheck(output, function);
+                    WriteCleanupCheck(output, function);
 
                     break;
 
