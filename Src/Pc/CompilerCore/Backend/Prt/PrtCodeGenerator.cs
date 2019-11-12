@@ -1203,24 +1203,46 @@ namespace Plang.Compiler.Backend.Prt
                     // WriteCleanupCheck(output, function);
                     // //NOTE I added below
                     // //context.Write(output, "");
-
-                    context.Write(output, "PrtSendInternal(context, PrtGetMachine(context->process, ");
-                    WriteExpr(output, function, sendStmt.MachineExpr);
-                    context.Write(output, "), ");
-                    WriteExpr(output, function, sendStmt.Evt);
-                    context.Write(output, $", {sendStmt.Arguments.Count}");
+                    context.Write(output, "_P_GEN_funargs[0] = ");
                     foreach (IPExpr sendArgExpr in sendStmt.Arguments)
                     {
                         Debug.Assert(sendArgExpr is IVariableRef);
                         IVariableRef argVar = (IVariableRef)sendArgExpr;
-                        context.Write(output, $", {GetVariableReference(function, argVar)}");
+                        context.Write(output, $"{GetVariableReference(function, argVar)}");
                     }
+                    context.WriteLine(output, ";");
 
+
+                    context.Write(output, "_P_GEN_funargs[1] = &(");
+                    WriteExpr(output, function, sendStmt.Evt);
                     context.WriteLine(output, ");");
 
-                    Debug.Assert(sendStmt.Evt is IVariableRef);
-                    IVariableRef sendEventVar = (IVariableRef)sendStmt.Evt;
-                    context.WriteLine(output, $"*({GetVariableReference(function, sendEventVar)}) = NULL;");
+                    context.WriteLine(output, "PrtFreeValue(P_SecureSend_IMPL(context, _P_GEN_funargs));");
+
+                    WriteCleanupCheck(output, function);
+
+
+                    // context.Write(output, "PrtFreeValue(P_SecureSend_IMPL(context, _P_GEN_funargs));");
+
+                    // context.Write(output, "PrtSendInternal(context, PrtGetMachine(context->process, ");
+                    // WriteExpr(output, function, sendStmt.MachineExpr);
+                    // context.Write(output, "), ");
+
+                    // context.Write()
+                    // WriteExpr(output, function, sendStmt.Evt);
+                    // context.Write(output, $", {sendStmt.Arguments.Count}");
+                    // foreach (IPExpr sendArgExpr in sendStmt.Arguments)
+                    // {
+                    //     Debug.Assert(sendArgExpr is IVariableRef);
+                    //     IVariableRef argVar = (IVariableRef)sendArgExpr;
+                    //     context.Write(output, $", {GetVariableReference(function, argVar)}");
+                    // }
+
+                    // context.WriteLine(output, ");");
+
+                    // Debug.Assert(sendStmt.Evt is IVariableRef);
+                    // IVariableRef sendEventVar = (IVariableRef)sendStmt.Evt;
+                    // context.WriteLine(output, $"*({GetVariableReference(function, sendEventVar)}) = NULL;");
 
                     // Send can immediately schedule work on another machine. It does this via a recursive call to PrtScheduleWork,
                     // which is almost certainly the Wrong Thing To Do (tm).
