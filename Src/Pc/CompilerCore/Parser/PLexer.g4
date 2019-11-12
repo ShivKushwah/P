@@ -9,7 +9,7 @@ EVENT     : 'event' ;
 EVENTSET  : 'eventset' ;
 FLOAT     : 'float' ;
 INT       : 'int' ;
-MACHINE   : 'machine' ;
+MACHINE   : 'machine' | 'secure_machine'  ;
 INTERFACE : 'interface' ;
 MAP       : 'map' ;
 SET       : 'set' ;
