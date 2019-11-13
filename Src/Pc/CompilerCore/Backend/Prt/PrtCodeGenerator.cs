@@ -252,7 +252,13 @@ namespace Plang.Compiler.Backend.Prt
                     context.WriteLine(output, $"{context.GetDeclNumber(machine.StartState)}U,");
                     context.WriteLine(output, $"{fieldArrayName},");
                     context.WriteLine(output, $"{stateArrayName},");
-                    context.WriteLine(output, $"{methodArrayName}");
+                    context.WriteLine(output, $"{methodArrayName},");
+                    if (machine.IsSecure) {
+                        context.WriteLine(output, $"PRT_TRUE");
+
+                    } else {
+                        context.WriteLine(output, $"PRT_FALSE");
+                    }
                     context.WriteLine(output, "};");
 
                     break;
@@ -1519,6 +1525,7 @@ namespace Plang.Compiler.Backend.Prt
                     break;
 
                 case CtorExpr ctorExpr:
+                    //TODO do we not need to declare variables here like in securesend?
                     context.Write(
                         output,
                         $"((_P_GEN_funval = P_CreateMachineSecureChild_IMPL(context, _P_GEN_funargs)), (_P_GEN_funval))");
