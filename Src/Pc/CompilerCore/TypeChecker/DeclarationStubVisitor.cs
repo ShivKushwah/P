@@ -133,6 +133,13 @@ namespace Plang.Compiler.TypeChecker
             nodesToDeclarations.Put(context, decl);
             return VisitChildrenWithNewScope(decl, context);
         }
+        public override object VisitImplSecureMachineDecl(PParser.ImplSecureMachineDeclContext context)
+        {
+            string symbolName = context.name.GetText();
+            Machine decl = CurrentScope.Put(symbolName, context);
+            nodesToDeclarations.Put(context, decl);
+            return VisitChildrenWithNewScope(decl, context);
+        }
 
         public override object VisitSpecMachineDecl(PParser.SpecMachineDeclContext context)
         {

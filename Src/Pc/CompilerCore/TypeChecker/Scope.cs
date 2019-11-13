@@ -530,6 +530,14 @@ namespace Plang.Compiler.TypeChecker
             interfaces.Add(name, new Interface(name, tree));
             return machine;
         }
+        public Machine Put(string name, PParser.ImplSecureMachineDeclContext tree)
+        {
+            Machine machine = new Machine(name, tree);
+            CheckConflicts(machine, Namespace(machines), Namespace(interfaces), Namespace(enums), Namespace(typedefs));
+            machines.Add(name, machine);
+            interfaces.Add(name, new Interface(name, tree));
+            return machine;
+        }
 
         public Machine Put(string name, PParser.SpecMachineDeclContext tree)
         {

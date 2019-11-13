@@ -10,7 +10,7 @@ namespace Plang.Compiler.TypeChecker.AST.Declarations
     {
         public Interface(string name, ParserRuleContext sourceNode)
         {
-            Debug.Assert(sourceNode is PParser.InterfaceDeclContext || sourceNode is PParser.ImplMachineDeclContext);
+            Debug.Assert(sourceNode is PParser.InterfaceDeclContext || sourceNode is PParser.ImplMachineDeclContext || sourceNode is PParser.ImplSecureMachineDeclContext);
             Name = name;
             SourceLocation = sourceNode;
         }

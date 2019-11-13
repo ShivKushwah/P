@@ -234,6 +234,9 @@ extern "C" {
 		PRT_VALUE* currentTrigger;
 		PRT_VALUE* currentPayload;
 
+		//Secure Machine
+		PRT_BOOLEAN isSecure;
+
 		// Machine state management
 		PRT_UINT32 currentState;
 		PRT_STATESTACK callStack;

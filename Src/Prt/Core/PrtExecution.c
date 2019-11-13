@@ -177,6 +177,8 @@ PrtMkMachinePrivate(
 	// Allocate memory for state machine context
 	PRT_MACHINEINST_PRIV* context = (PRT_MACHINEINST_PRIV*)PrtCalloc(1, sizeof(PRT_MACHINEINST_PRIV));
 
+	//context->isSecure = true;
+
 	// Assign the interface name
 	context->interfaceBound = interfaceName;
 

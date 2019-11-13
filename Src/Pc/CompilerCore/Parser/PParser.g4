@@ -54,6 +54,7 @@ topDecl : typeDefDecl
         | eventSetDecl
         | interfaceDecl
         | implMachineDecl
+        | implSecureMachineDecl
         | specMachineDecl
         | funDecl
         | namedModuleDecl
@@ -86,6 +87,7 @@ interfaceDecl : INTERFACE name=iden LPAREN type? RPAREN (RECEIVES nonDefaultEven
 
 // has scope
 implMachineDecl : MACHINE name=iden cardinality? receivesSends* machineBody ;
+implSecureMachineDecl : SECURE_MACHINE name=iden cardinality? receivesSends* machineBody ;
 idenList : names+=iden (COMMA names+=iden)* ;
 
 receivesSends : RECEIVES eventSetLiteral? SEMI # MachineReceive

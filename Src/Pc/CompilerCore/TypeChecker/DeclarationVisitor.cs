@@ -279,10 +279,92 @@ namespace Plang.Compiler.TypeChecker
 
         #region Machines
 
+        public override object VisitImplSecureMachineDecl (PParser.ImplSecureMachineDeclContext context)
+        {
+
+            //TODO Try to call VisitImplMachineDecl instead
+            // MACHINE name=iden
+            Machine machine = (Machine)nodesToDeclarations.Get(context);
+            machine.IsSecure = true;
+
+            // cardinality?
+            bool hasAssume = context.cardinality()?.ASSUME() != null;
+            bool hasAssert = context.cardinality()?.ASSERT() != null;
+            long cardinality = long.Parse(context.cardinality()?.IntLiteral().GetText() ?? "-1");
+            if (cardinality > uint.MaxValue)
+            {
+                throw Handler.ValueOutOfRange(context.cardinality(), "uint32");
+            }
+
+            machine.Assume = hasAssume ? (uint?)cardinality : null;
+            machine.Assert = hasAssert ? (uint?)cardinality : null;
+
+            // receivesSends*
+            foreach (PParser.ReceivesSendsContext receivesSends in context.receivesSends())
+            {
+                Tuple<string, PEvent[]> recvSendTuple = (Tuple<string, PEvent[]>)Visit(receivesSends);
+                string eventSetType = recvSendTuple.Item1;
+                if (eventSetType.Equals("RECV", StringComparison.InvariantCulture))
+                {
+                    if (machine.Receives == null)
+                    {
+                        machine.Receives = new EventSet();
+                    }
+
+                    foreach (PEvent @event in recvSendTuple.Item2)
+                    {
+                        machine.Receives.AddEvent(@event);
+                    }
+                }
+                else if (eventSetType.Equals("SEND", StringComparison.InvariantCulture))
+                {
+                    if (machine.Sends == null)
+                    {
+                        machine.Sends = new EventSet();
+                    }
+
+                    foreach (PEvent @event in recvSendTuple.Item2)
+                    {
+                        machine.Sends.AddEvent(@event);
+                    }
+                }
+                else
+                {
+                    Debug.Fail("grammar changed surrounding receives/sends.");
+                }
+            }
+
+            if (machine.Receives == null)
+            {
+                machine.Receives = CurrentScope.UniversalEventSet;
+            }
+
+            if (machine.Sends == null)
+            {
+                machine.Sends = CurrentScope.UniversalEventSet;
+            }
+
+            // machineBody
+            using (currentScope.NewContext(machine.Scope))
+            using (currentMachine.NewContext(machine))
+            {
+                Visit(context.machineBody());
+            }
+
+            // initialize the corresponding interface
+            currentScope.Value.Get(machine.Name, out Interface @interface);
+            @interface.ReceivableEvents = machine.Receives;
+            @interface.PayloadType = machine.PayloadType;
+
+            return machine;
+
+        }
+
         public override object VisitImplMachineDecl(PParser.ImplMachineDeclContext context)
         {
             // MACHINE name=iden
             Machine machine = (Machine)nodesToDeclarations.Get(context);
+            machine.IsSecure = false;
 
             // cardinality?
             bool hasAssume = context.cardinality()?.ASSUME() != null;

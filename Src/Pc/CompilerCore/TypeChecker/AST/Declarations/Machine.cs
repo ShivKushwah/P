@@ -16,12 +16,13 @@ namespace Plang.Compiler.TypeChecker.AST.Declarations
 
         public Machine(string name, ParserRuleContext sourceNode)
         {
-            Debug.Assert(sourceNode is PParser.ImplMachineDeclContext || sourceNode is PParser.SpecMachineDeclContext);
+            Debug.Assert(sourceNode is PParser.ImplMachineDeclContext || sourceNode is PParser.ImplSecureMachineDeclContext || sourceNode is PParser.SpecMachineDeclContext);
             Name = name;
             SourceLocation = sourceNode;
             IsSpec = sourceNode is PParser.SpecMachineDeclContext;
         }
 
+        public bool IsSecure { get; set; }
         public bool IsSpec { get; }
         public uint? Assume { get; set; }
         public uint? Assert { get; set; }

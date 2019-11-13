@@ -83,6 +83,7 @@ namespace Plang.Compiler.TypeChecker.AST.Declarations
                          sourceNode is PParser.EventSetLiteralContext ||
                          sourceNode is PParser.InterfaceDeclContext ||
                          sourceNode is PParser.ImplMachineDeclContext ||
+                         sourceNode is PParser.ImplSecureMachineDeclContext ||
                          sourceNode is PParser.SpecMachineDeclContext ||
                          sourceNode is PParser.StateDeclContext);
             Name = name;
