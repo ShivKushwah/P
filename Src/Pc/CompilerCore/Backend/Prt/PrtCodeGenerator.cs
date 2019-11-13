@@ -1526,21 +1526,25 @@ namespace Plang.Compiler.Backend.Prt
 
                 case CtorExpr ctorExpr:
                     //TODO do we not need to declare variables here like in securesend?
-                    context.Write(
-                        output,
-                        $"((_P_GEN_funval = P_CreateMachineSecureChild_IMPL(context, _P_GEN_funargs)), (_P_GEN_funval))");
+                    if (ctorExpr.Interface.IsSecure) {
+                        context.Write(
+                            output,
+                            $"((_P_GEN_funval = P_CreateMachineSecureChild_IMPL(context, _P_GEN_funargs)), (_P_GEN_funval))");
                    
-                    // context.Write(
-                    //     output,
-                    //     $"PrtCloneValue(PrtMkInterface(context, {context.GetDeclNumber(ctorExpr.Interface)}, {ctorExpr.Arguments.Count}");
-                    // foreach (IPExpr pExpr in ctorExpr.Arguments)
-                    // {
-                    //     Debug.Assert(pExpr is IVariableRef);
-                    //     IVariableRef argVar = (IVariableRef)pExpr;
-                    //     context.Write(output, $", {GetVariableReference(function, argVar)}");
-                    // }
+                    } else {
+                        context.Write(
+                            output,
+                            $"PrtCloneValue(PrtMkInterface(context, {context.GetDeclNumber(ctorExpr.Interface)}, {ctorExpr.Arguments.Count}");
+                        foreach (IPExpr pExpr in ctorExpr.Arguments)
+                        {
+                            Debug.Assert(pExpr is IVariableRef);
+                            IVariableRef argVar = (IVariableRef)pExpr;
+                            context.Write(output, $", {GetVariableReference(function, argVar)}");
+                        }
 
-                    // context.Write(output, ")->id)");
+                        context.Write(output, ")->id)");
+                
+                    }
                     break;
 
                 case DefaultExpr defaultExpr:

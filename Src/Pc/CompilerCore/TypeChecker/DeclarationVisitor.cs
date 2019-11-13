@@ -355,6 +355,7 @@ namespace Plang.Compiler.TypeChecker
             currentScope.Value.Get(machine.Name, out Interface @interface);
             @interface.ReceivableEvents = machine.Receives;
             @interface.PayloadType = machine.PayloadType;
+            @interface.IsSecure = true;
 
             return machine;
 
@@ -434,6 +435,7 @@ namespace Plang.Compiler.TypeChecker
             currentScope.Value.Get(machine.Name, out Interface @interface);
             @interface.ReceivableEvents = machine.Receives;
             @interface.PayloadType = machine.PayloadType;
+            @interface.IsSecure = false;
 
             return machine;
         }

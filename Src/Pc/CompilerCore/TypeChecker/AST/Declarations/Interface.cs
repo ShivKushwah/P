@@ -19,6 +19,8 @@ namespace Plang.Compiler.TypeChecker.AST.Declarations
 
         public PLanguageType PayloadType { get; set; } = PrimitiveType.Null;
 
+        public bool IsSecure { get; set; }
+
         public string Name { get; }
         public ParserRuleContext SourceLocation { get; }
     }
