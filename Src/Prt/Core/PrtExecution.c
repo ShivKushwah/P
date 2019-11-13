@@ -223,6 +223,8 @@ PrtMkMachinePrivate(
 	PRT_MACHINEDECL* curMachineDecl = program->machines[instanceOf];
 	PRT_UINT32 nVars = curMachineDecl->nVars;
 
+	context->isSecure = curMachineDecl->isSecure;
+
 	context->currentState = curMachineDecl->initStateIndex;
 	context->varValues = NULL;
 	if (nVars > 0)

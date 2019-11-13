@@ -133,6 +133,8 @@ extern "C" {
 		PRT_VARDECL* vars; /**< The array of variable declarations  */
 		PRT_STATEDECL* states; /**< The array of state declarations     */
 		PRT_FUNDECL** funs; /**< The array of fun declarations       */
+		PRT_BOOLEAN isSecure; /**< If the machine is a "secure_machine"       */
+
 	} PRT_MACHINEDECL;
 
 	/** Represents a P program declaration */
