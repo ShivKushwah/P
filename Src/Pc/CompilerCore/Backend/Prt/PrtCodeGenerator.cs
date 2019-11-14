@@ -911,6 +911,13 @@ namespace Plang.Compiler.Backend.Prt
                     // Free old value
                     context.WriteLine(output, $"PrtFreeValue(*{lvalName});");
 
+                    //Case of = new SecureMachine()
+                    if (assignStmt.Value is CtorExpr) {
+                        CtorExpr ctorExpr = (CtorExpr)assignStmt.Value;
+                        context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
+
+                    }
+
                     // Assign new value
                     context.Write(output, $"*{lvalName} = ");
                     WriteExpr(output, function, assignStmt.Value);
