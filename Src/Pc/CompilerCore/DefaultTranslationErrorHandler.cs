@@ -107,6 +107,12 @@ namespace Plang.Compiler
                 $"got type: {expr.Type.OriginalRepresentation}, expected: {string.Join(", ", expected.Select(e => e.Name))}");
         }
 
+        public Exception InformationFlowException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected)
+        {
+            return IssueError(location,
+                $"Security Issue: Secret Variables are leaked. got type: {actual.OriginalRepresentation}, expected: {string.Join("; ", expected.Select(t => t.OriginalRepresentation))}");
+        }
+
         public Exception MissingNamedTupleEntry(PParser.IdenContext location,
             NamedTupleType namedTuple)
         {

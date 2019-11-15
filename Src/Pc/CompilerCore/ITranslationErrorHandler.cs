@@ -38,6 +38,8 @@ namespace Plang.Compiler
 
         Exception TypeMismatch(IPExpr expr, params TypeKind[] expected);
 
+        Exception InformationFlowException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected);
+
         Exception MissingNamedTupleEntry(PParser.IdenContext location, NamedTupleType namedTuple);
 
         Exception OutOfBoundsTupleAccess(PParser.IntContext location, TupleType tuple);

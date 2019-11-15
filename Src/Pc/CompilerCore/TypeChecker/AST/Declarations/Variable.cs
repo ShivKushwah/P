@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Declarations
             Role = role;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public VariableRole Role { get; }
         public PLanguageType Type { get; set; }
 

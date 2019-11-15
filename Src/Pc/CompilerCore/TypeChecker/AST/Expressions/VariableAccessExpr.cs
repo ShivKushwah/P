@@ -11,6 +11,7 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SourceLocation = sourceLocation;
             Variable = variable;
             Type = variable.Type;
+            highSecurityLabel = variable.highSecurityLabel;
         }
 
         public bool highSecurityLabel { get; set; } = false;

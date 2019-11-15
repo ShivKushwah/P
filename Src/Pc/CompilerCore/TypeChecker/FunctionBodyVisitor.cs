@@ -1,5 +1,6 @@
 using Plang.Compiler.TypeChecker.AST.Declarations;
 using Plang.Compiler.TypeChecker.AST.Statements;
+using Plang.Compiler.TypeChecker.Types;
 using System.Diagnostics.Contracts;
 
 namespace Plang.Compiler.TypeChecker
@@ -65,7 +66,11 @@ namespace Plang.Compiler.TypeChecker
             foreach (PParser.IdenContext varName in context.idenList()._names)
             {
                 Variable variable = method.Scope.Put(varName.GetText(), varName, VariableRole.Local);
-                variable.Type = TypeResolver.ResolveType(context.type(), method.Scope, handler);
+                PLanguageType type = TypeResolver.ResolveType(context.type(), method.Scope, handler);
+                variable.Type = type;
+                if (type is PrimitiveType) {
+                    variable.highSecurityLabel = ((PrimitiveType)type).highSecurityLabel;
+                }
                 method.AddLocalVariable(variable);
             }
 

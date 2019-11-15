@@ -20,7 +20,6 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             OriginalRepresentation = name;
             CanonicalRepresentation = name;
-            highSecurityLabel = false;
             switch (name)
             {
                 case "any":
@@ -37,7 +36,7 @@ namespace Plang.Compiler.TypeChecker.Types
             }
         }
 
-        public bool highSecurityLabel { get; set; }
+        public bool highSecurityLabel { get; set; } = false;
 
         public override string OriginalRepresentation { get; }
         public override string CanonicalRepresentation { get; }
@@ -58,7 +57,9 @@ namespace Plang.Compiler.TypeChecker.Types
                            otherType is PermissionType;
 
                 case "int":
-                    return otherType.CanonicalRepresentation.Equals("int");
+                    //return otherType.CanonicalRepresentation.Equals("int");
+                    return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");
+
                 
                 case "secure_int":
                     return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");

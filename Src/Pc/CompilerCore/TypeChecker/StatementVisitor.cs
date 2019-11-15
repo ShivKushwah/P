@@ -171,6 +171,11 @@ namespace Plang.Compiler.TypeChecker
                 throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
             }
 
+            //Check if this assignment is a security risk
+            if (!variable.highSecurityLabel && value.highSecurityLabel) {
+                throw handler.InformationFlowException(context.rvalue(), value.Type, variable.Type);
+            }
+
             return new AssignStmt(context, variable, value);
         }
 
