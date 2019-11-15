@@ -200,6 +200,14 @@ PRT_VALUE* PRT_CALL_CONV PrtMkIntValue(_In_ PRT_INT value)
 	return retVal;
 }
 
+PRT_VALUE* PRT_CALL_CONV PrtMkSecureIntValue(_In_ PRT_INT value)
+{
+	PRT_VALUE* retVal = (PRT_VALUE*)PrtMalloc(sizeof(PRT_VALUE));
+	retVal->discriminator = PRT_VALUE_KIND_SECURE_INT;
+	retVal->valueUnion.nt = value;
+	return retVal;
+}
+
 PRT_VALUE* PRT_CALL_CONV PrtMkFloatValue(_In_ PRT_FLOAT value)
 {
 	PRT_VALUE* retVal = (PRT_VALUE*)PrtMalloc(sizeof(PRT_VALUE));
@@ -270,7 +278,7 @@ PRT_VALUE* PRT_CALL_CONV PrtMkDefaultValue(_In_ PRT_TYPE* type)
 	case PRT_KIND_INT:
 		return PrtMkIntValue(0);
 	case PRT_KIND_SECURE_INT:
-		return PrtMkIntValue(0);
+		return PrtMkSecureIntValue(0);
 	case PRT_KIND_FLOAT:
 		return PrtMkFloatValue(0);
 	case PRT_KIND_NULL:
@@ -1699,7 +1707,7 @@ PRT_VALUE* PRT_CALL_CONV PrtCloneValue(_In_ PRT_VALUE* value)
 	case PRT_VALUE_KIND_INT:
 		return PrtMkIntValue(value->valueUnion.nt);
 	case PRT_VALUE_KIND_SECURE_INT:
-		return PrtMkIntValue(value->valueUnion.nt); //TODO SHIV IS THIS OKAY?
+		return PrtMkSecureIntValue(value->valueUnion.nt); //TODO SHIV IS THIS OKAY?
 	case PRT_VALUE_KIND_FLOAT:
 		return PrtMkFloatValue(value->valueUnion.ft);
 	case PRT_VALUE_KIND_FOREIGN:
@@ -1869,7 +1877,7 @@ PRT_VALUE* PRT_CALL_CONV PrtConvertValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* t
 			? (PRT_INT)value->valueUnion.ft
 			: value->valueUnion.nt);
 	case PRT_KIND_SECURE_INT: //TODO not sure about this one, will this cause leakage? SHIV
-		return PrtMkIntValue(value->discriminator == PRT_VALUE_KIND_FLOAT
+		return PrtMkSecureIntValue(value->discriminator == PRT_VALUE_KIND_FLOAT
 			? (PRT_INT)value->valueUnion.ft
 			: value->valueUnion.nt);
 	case PRT_KIND_FLOAT:
