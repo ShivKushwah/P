@@ -533,6 +533,10 @@ namespace Plang.Compiler.Backend.Prt
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Int):
                     context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_INT, {{ NULL }} }};");
                     break;
+                
+                case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Secure_Int):
+                    context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_SECURE_INT, {{ NULL }} }};");
+                    break;
 
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Float):
                     context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_FLOAT, {{ NULL }} }};");

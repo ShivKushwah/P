@@ -138,6 +138,7 @@ namespace Plang.Compiler.TypeChecker
                 {
                     case "bool": return PrimitiveType.Bool;
                     case "int": return PrimitiveType.Int;
+                    case "secure_int": return PrimitiveType.Secure_Int;
                     case "float": return PrimitiveType.Float;
                     case "event": return PrimitiveType.Event;
                     case "machine": return PrimitiveType.Machine;

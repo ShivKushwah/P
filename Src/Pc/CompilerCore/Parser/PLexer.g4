@@ -9,6 +9,7 @@ EVENT     : 'event' ;
 EVENTSET  : 'eventset' ;
 FLOAT     : 'float' ;
 INT       : 'int' ;
+SECURE_INT : 'secure_int' ;
 MACHINE   : 'machine';
 SECURE_MACHINE : 'secure_machine';
 INTERFACE : 'interface' ;

@@ -269,6 +269,8 @@ PRT_VALUE* PRT_CALL_CONV PrtMkDefaultValue(_In_ PRT_TYPE* type)
 		return PrtMkMachineValue(PrtNullMachineId);
 	case PRT_KIND_INT:
 		return PrtMkIntValue(0);
+	case PRT_KIND_SECURE_INT:
+		return PrtMkIntValue(0);
 	case PRT_KIND_FLOAT:
 		return PrtMkFloatValue(0);
 	case PRT_KIND_NULL:
@@ -409,6 +411,21 @@ PRT_INT PRT_CALL_CONV PrtPrimGetInt(_In_ PRT_VALUE* prmVal)
 	return prmVal->valueUnion.nt;
 }
 
+//TODO SHIV are these necessary? would this leak?
+void PRT_CALL_CONV PrtPrimSetSecureInt(_Inout_ PRT_VALUE* prmVal, _In_ PRT_INT value)
+{
+	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
+	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid type on primitive set");
+	prmVal->valueUnion.nt = value;
+}
+
+PRT_INT PRT_CALL_CONV PrtPrimGetSecureInt(_In_ PRT_VALUE* prmVal)
+{
+	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
+	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid type on primitive get");
+	return prmVal->valueUnion.nt;
+}
+
 void PRT_CALL_CONV PrtPrimSetFloat(_Inout_ PRT_VALUE* prmVal, _In_ PRT_FLOAT value)
 {
 	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
@@ -494,6 +511,7 @@ void PRT_CALL_CONV PrtSeqUpdateEx(_Inout_ PRT_VALUE* seq, _In_ PRT_VALUE* index,
 	PrtAssert(PrtIsValidValue(value), "Invalid value expression.");
 	PrtAssert(seq->discriminator == PRT_VALUE_KIND_SEQ, "Invalid value");
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 	PrtAssert(0 <= (PRT_UINT32)index->valueUnion.nt && (PRT_UINT32)index->valueUnion.nt <= seq->valueUnion.seq->size,
 		"Invalid index");
 
@@ -587,6 +605,8 @@ void PRT_CALL_CONV PrtSeqInsertEx(_Inout_ PRT_VALUE* seq, _In_ PRT_VALUE* index,
 	PRT_BOOLEAN cloneValue)
 {
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+
 	PrtSeqInsertExIntIndex(seq, index->valueUnion.nt, value, cloneValue);
 }
 
@@ -618,6 +638,7 @@ void PRT_CALL_CONV PrtSeqRemove(_Inout_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 	PrtAssert(PrtIsValidValue(seq), "Invalid value expression.");
 	PrtAssert(seq->discriminator == PRT_VALUE_KIND_SEQ, "Invalid value");
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 	PrtAssert(0 <= index->valueUnion.nt && (PRT_UINT32)index->valueUnion.nt < seq->valueUnion.seq->size, "Invalid index"
 	);
 
@@ -638,6 +659,7 @@ PRT_VALUE* PRT_CALL_CONV PrtSeqGet(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 	PrtAssert(PrtIsValidValue(seq), "Invalid value expression.");
 	PrtAssert(seq->discriminator == PRT_VALUE_KIND_SEQ, "Invalid value");
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 	PrtAssert(0 <= index->valueUnion.nt && (PRT_UINT32)index->valueUnion.nt < seq->valueUnion.seq->size, "Invalid index"
 	);
 
@@ -647,6 +669,7 @@ PRT_VALUE* PRT_CALL_CONV PrtSeqGet(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 PRT_VALUE* PRT_CALL_CONV PrtSeqGetNC(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 {
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 
 	return *PrtSeqGetNCIntIndex(seq, index->valueUnion.nt);
 }
@@ -654,6 +677,7 @@ PRT_VALUE* PRT_CALL_CONV PrtSeqGetNC(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 PRT_VALUE** PRT_CALL_CONV PrtSeqGetLValue(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 {
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 
 	return PrtSeqGetNCIntIndex(seq, index->valueUnion.nt);
 }
@@ -1375,6 +1399,8 @@ PRT_UINT32 PRT_CALL_CONV PrtGetHashCodeValue(_In_ PRT_VALUE* inputValue)
 		return PrtGetHashCodeUInt32(0x01000000 ^ PrtGetHashCodeMachineId(*inputValue->valueUnion.mid));
 	case PRT_VALUE_KIND_INT:
 		return PrtGetHashCodePrtInt(0x02000000 ^ ((PRT_INT)inputValue->valueUnion.nt));
+	case PRT_VALUE_KIND_SECURE_INT:
+		return PrtGetHashCodePrtInt(0x02000001 ^ ((PRT_INT)inputValue->valueUnion.nt)); //TODO SHIV is this correct?
 	case PRT_VALUE_KIND_FLOAT:
 		return PrtGetHashCodePrtFloat((inputValue->valueUnion.ft));
 	case PRT_VALUE_KIND_FOREIGN:
@@ -1547,6 +1573,9 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsEqualValue(_In_ PRT_VALUE* value1, _In_ PRT_VALUE
 	case PRT_VALUE_KIND_INT:
 		return
 			value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
+	case PRT_VALUE_KIND_SECURE_INT:
+		return
+			value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
 	case PRT_VALUE_KIND_FLOAT:
 		return
 			value1->valueUnion.ft == value2->valueUnion.ft ? PRT_TRUE : PRT_FALSE;
@@ -1669,6 +1698,8 @@ PRT_VALUE* PRT_CALL_CONV PrtCloneValue(_In_ PRT_VALUE* value)
 		return PrtMkMachineValue(*value->valueUnion.mid);
 	case PRT_VALUE_KIND_INT:
 		return PrtMkIntValue(value->valueUnion.nt);
+	case PRT_VALUE_KIND_SECURE_INT:
+		return PrtMkIntValue(value->valueUnion.nt); //TODO SHIV IS THIS OKAY?
 	case PRT_VALUE_KIND_FLOAT:
 		return PrtMkFloatValue(value->valueUnion.ft);
 	case PRT_VALUE_KIND_FOREIGN:
@@ -1802,6 +1833,7 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsNullValue(_In_ PRT_VALUE* value)
 	}
 	case PRT_VALUE_KIND_BOOL:
 	case PRT_VALUE_KIND_INT:
+	case PRT_VALUE_KIND_SECURE_INT:
 	case PRT_VALUE_KIND_FLOAT:
 	case PRT_VALUE_KIND_FOREIGN:
 	case PRT_VALUE_KIND_SET:
@@ -1820,9 +1852,11 @@ PRT_VALUE* PRT_CALL_CONV PrtConvertValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* t
 	PrtAssert(
 		value->discriminator == PRT_VALUE_KIND_FLOAT
 		|| value->discriminator == PRT_VALUE_KIND_INT
+		|| value->discriminator == PRT_VALUE_KIND_SECURE_INT
 		|| value->discriminator == PRT_VALUE_KIND_MID, "Invalid value expression.");
 	PrtAssert(
 		type->typeKind == PRT_KIND_INT
+		|| type->typeKind == PRT_KIND_SECURE_INT
 		|| type->typeKind == PRT_KIND_FLOAT
 		|| type->typeKind == PRT_KIND_MACHINE, "Invalid type expression.");
 
@@ -1831,6 +1865,10 @@ PRT_VALUE* PRT_CALL_CONV PrtConvertValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* t
 	case PRT_KIND_MACHINE:
 		return PrtCloneValue(value);
 	case PRT_KIND_INT:
+		return PrtMkIntValue(value->discriminator == PRT_VALUE_KIND_FLOAT
+			? (PRT_INT)value->valueUnion.ft
+			: value->valueUnion.nt);
+	case PRT_KIND_SECURE_INT: //TODO not sure about this one, will this cause leakage? SHIV
 		return PrtMkIntValue(value->discriminator == PRT_VALUE_KIND_FLOAT
 			? (PRT_INT)value->valueUnion.ft
 			: value->valueUnion.nt);
@@ -1877,6 +1915,9 @@ PRT_BOOLEAN PRT_CALL_CONV PrtInhabitsType(_In_ PRT_VALUE* value, _In_ PRT_TYPE* 
 		return (vkind == PRT_VALUE_KIND_MID || PrtIsNullValue(value)) ? PRT_TRUE : PRT_FALSE;
 	case PRT_KIND_INT:
 		return vkind == PRT_VALUE_KIND_INT ? PRT_TRUE : PRT_FALSE;
+	case PRT_KIND_SECURE_INT:
+		return vkind == PRT_VALUE_KIND_SECURE_INT ? PRT_TRUE : PRT_FALSE;
+		
 	case PRT_KIND_FLOAT:
 		return vkind == PRT_VALUE_KIND_FLOAT ? PRT_TRUE : PRT_FALSE;
 	case PRT_KIND_FOREIGN:
@@ -2021,6 +2062,7 @@ void PRT_CALL_CONV PrtFreeValue(_Inout_ PRT_VALUE* value)
 	case PRT_VALUE_KIND_BOOL:
 	case PRT_VALUE_KIND_EVENT:
 	case PRT_VALUE_KIND_INT:
+	case PRT_VALUE_KIND_SECURE_INT:
 	case PRT_VALUE_KIND_FLOAT:
 	case PRT_VALUE_KIND_NULL:
 	{
@@ -2139,6 +2181,8 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsValidValue(_In_ PRT_VALUE* value)
 		return value->discriminator == PRT_VALUE_KIND_MID;
 	case PRT_VALUE_KIND_INT:
 		return value->discriminator == PRT_VALUE_KIND_INT;
+	case PRT_VALUE_KIND_SECURE_INT:
+		return value->discriminator == PRT_VALUE_KIND_SECURE_INT;
 	case PRT_VALUE_KIND_FLOAT:
 		return value->discriminator == PRT_VALUE_KIND_FLOAT;
 	case PRT_VALUE_KIND_NULL:

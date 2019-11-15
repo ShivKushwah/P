@@ -34,6 +34,7 @@ type : SEQ LBRACK type RBRACK     # SeqType
      | LPAREN idenTypeList RPAREN # NamedTupleType
      | BOOL      # PrimitiveType
      | INT       # PrimitiveType
+     | SECURE_INT # PrimitiveType
      | FLOAT     # PrimitiveType
      | EVENT     # PrimitiveType
      | MACHINE   # PrimitiveType

@@ -8,6 +8,7 @@ namespace Plang.Compiler.TypeChecker.Types
     {
         public static readonly PrimitiveType Bool = new PrimitiveType("bool");
         public static readonly PrimitiveType Int = new PrimitiveType("int");
+        public static readonly PrimitiveType Secure_Int = new PrimitiveType("secure_int");
         public static readonly PrimitiveType Float = new PrimitiveType("float");
         public static readonly PrimitiveType Event = new PrimitiveType("event");
         public static readonly PrimitiveType Machine = new PrimitiveType("machine");
@@ -52,6 +53,9 @@ namespace Plang.Compiler.TypeChecker.Types
 
                 case "int":
                     return otherType.CanonicalRepresentation.Equals("int");
+                
+                case "secure_int":
+                    return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");
 
                 case "event":
                     return otherType.CanonicalRepresentation.Equals("event") ||
