@@ -14,6 +14,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = variable.Type;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public ParserRuleContext SourceLocation { get; }
         public Variable Variable { get; }
         public PLanguageType Type { get; }

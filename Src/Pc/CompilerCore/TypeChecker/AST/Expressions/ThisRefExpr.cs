@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = new PermissionType(value);
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public Machine Value { get; }
 
         public ParserRuleContext SourceLocation { get; }

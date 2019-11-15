@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SourceLocation = sourceLocation;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public PEvent Value { get; }
 
         public PLanguageType Type { get; } = PrimitiveType.Event;

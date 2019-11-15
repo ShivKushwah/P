@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Collection = collection;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr Item { get; }
         public IPExpr Collection { get; }
 

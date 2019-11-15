@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = type;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IReadOnlyList<IPExpr> TupleFields { get; }
 
         public ParserRuleContext SourceLocation { get; }

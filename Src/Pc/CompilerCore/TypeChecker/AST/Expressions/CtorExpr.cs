@@ -15,6 +15,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = new PermissionType(Interface);
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public Interface Interface { get; }
         public IReadOnlyList<IPExpr> Arguments { get; }
 

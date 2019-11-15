@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SourceLocation = sourceLocation;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public double Value { get; }
         public ParserRuleContext SourceLocation { get; }
         public PLanguageType Type { get; } = PrimitiveType.Float;

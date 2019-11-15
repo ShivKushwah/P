@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = new EnumType(Value.ParentEnum);
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public EnumElem Value { get; }
         public PLanguageType Type { get; }
         public ParserRuleContext SourceLocation { get; }

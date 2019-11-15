@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = type;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr SubExpr { get; }
         public int FieldNo { get; }
 

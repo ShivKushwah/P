@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = subExpr.Type;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public UnaryOpType Operation { get; }
         public IPExpr SubExpr { get; }
 

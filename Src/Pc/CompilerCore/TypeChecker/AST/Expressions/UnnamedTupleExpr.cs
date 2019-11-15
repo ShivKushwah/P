@@ -14,6 +14,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = new TupleType(tupleFields.Select(f => f.Type).ToArray());
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IReadOnlyList<IPExpr> TupleFields { get; }
 
         public ParserRuleContext SourceLocation { get; }

@@ -14,6 +14,8 @@ namespace Plang.Compiler.Backend.ASTExt
             Type = term.Type;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IExprTerm Term { get; }
 
         public ParserRuleContext SourceLocation { get; }

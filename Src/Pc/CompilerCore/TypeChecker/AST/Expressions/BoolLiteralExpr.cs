@@ -11,8 +11,10 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Value = value;
         }
 
-        public bool Value { get; }
+        public bool highSecurityLabel { get; set; } = false;
 
+        public bool Value { get; }
+        
         public PLanguageType Type { get; } = PrimitiveType.Bool;
         public ParserRuleContext SourceLocation { get; }
     }

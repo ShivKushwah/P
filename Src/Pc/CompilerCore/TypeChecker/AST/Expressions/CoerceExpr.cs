@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SubExpr = subExpr;
             NewType = newType;
         }
+    
+        public bool highSecurityLabel { get; set; } = false;
 
         public IPExpr SubExpr { get; }
         public PLanguageType NewType { get; }

@@ -15,6 +15,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Type = function.Signature.ReturnType;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public Function Function { get; }
         public IReadOnlyList<IPExpr> Arguments { get; }
 

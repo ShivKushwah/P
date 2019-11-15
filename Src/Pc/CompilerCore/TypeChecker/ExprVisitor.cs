@@ -291,10 +291,14 @@ namespace Plang.Compiler.TypeChecker
                     {
                         throw handler.BinOpTypeMismatch(context, lhs.Type, rhs.Type);
                     }
-
-                    BinOpExpr expr = (BinOpExpr) arithCtors[op](lhs, rhs);
-                    expr.highSecurityLabel = true;
-                    return (IPExpr) expr;
+                    
+                    IPExpr expr = arithCtors[op](lhs, rhs);
+                    if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
+                        expr.highSecurityLabel = true;
+                    } else {
+                        expr.highSecurityLabel = false;
+                    }
+                    return expr;
 
                 case "in":
                     PLanguageType rhsType = rhs.Type.Canonicalize();
@@ -332,7 +336,13 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.IncomparableTypes(context, lhs.Type, rhs.Type);
                     }
 
-                    return compCtors[op](lhs, rhs);
+                    IPExpr expr2 = compCtors[op](lhs, rhs);
+                    if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
+                        expr2.highSecurityLabel = true;
+                    } else {
+                        expr2.highSecurityLabel = false;
+                    }
+                    return expr2;
 
                 case "&&":
                 case "||":
@@ -346,7 +356,13 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.TypeMismatch(context.rhs, rhs.Type, PrimitiveType.Bool);
                     }
 
-                    return logicCtors[op](lhs, rhs);
+                    IPExpr expr3 = logicCtors[op](lhs, rhs);
+                    if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
+                        expr3.highSecurityLabel = true;
+                    } else {
+                        expr3.highSecurityLabel = false;
+                    }
+                    return expr3;
 
                 default:
                     throw handler.InternalError(context,

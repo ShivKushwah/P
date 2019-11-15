@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Entry = entry;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr SubExpr { get; }
         public NamedTupleEntry Entry { get; }
         public string FieldName => Entry.Name;
