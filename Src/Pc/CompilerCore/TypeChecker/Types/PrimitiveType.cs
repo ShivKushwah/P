@@ -20,11 +20,15 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             OriginalRepresentation = name;
             CanonicalRepresentation = name;
+            highSecurityLabel = false;
             switch (name)
             {
                 case "any":
                 case "machine":
                     AllowedPermissions = null;
+                    break;
+                case "secure_int":
+                    highSecurityLabel = true;
                     break;
 
                 default:
@@ -32,6 +36,8 @@ namespace Plang.Compiler.TypeChecker.Types
                     break;
             }
         }
+
+        public bool highSecurityLabel { get; set; }
 
         public override string OriginalRepresentation { get; }
         public override string CanonicalRepresentation { get; }

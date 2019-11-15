@@ -1698,6 +1698,10 @@ namespace Plang.Compiler.Backend.Prt
             {
                 binOpGetter = "PrtPrimGetInt";
                 binOpBuilder = "PrtMkIntValue";
+            } else if (type.IsSameTypeAs(PrimitiveType.Secure_Int)) 
+            {
+                binOpGetter = "PrtPrimGetInt";
+                binOpBuilder = "PrtMkIntValue";
             }
             else if (type.IsSameTypeAs(PrimitiveType.Bool))
             {

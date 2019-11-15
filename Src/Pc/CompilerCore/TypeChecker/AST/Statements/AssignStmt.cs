@@ -11,6 +11,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Value = value;
         }
 
+        public bool highSecurityLabel { get; set; }
         public IPExpr Location { get; }
         public IPExpr Value { get; }
 

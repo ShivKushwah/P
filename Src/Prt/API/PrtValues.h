@@ -53,8 +53,6 @@ typedef enum PRT_VALUE_KIND
 	/**< The kind of bool values                 */
 	PRT_VALUE_KIND_INT = 2,
 	/**< The kind of int values                  */
-	PRT_VALUE_KIND_SECURE_INT = 12,
-	/**< The kind of secure_int values                  */
 	PRT_VALUE_KIND_FLOAT = 3,
 	/**< The kind of int values                  */
 	PRT_VALUE_KIND_EVENT = 4,
@@ -332,6 +330,10 @@ PRT_API PRT_UINT32 PRT_CALL_CONV PrtSetCapacity(_In_ PRT_VALUE* set);
 	* @returns An integer.
 	*/
 	PRT_API PRT_INT PRT_CALL_CONV PrtPrimGetInt(_In_ PRT_VALUE* prmVal);
+
+	//PRT_API void PRT_CALL_CONV PrtPrimSetSecureInt(_Inout_ PRT_VALUE* prmVal, _In_ PRT_INT value);
+
+	//PRT_API PRT_INT PRT_CALL_CONV PrtPrimGetSecureInt(_In_ PRT_VALUE* prmVal);
 
 	/** Sets the value of a float.
 	* @param[in,out] prmVal A primitive float value to mutate.

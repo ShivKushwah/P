@@ -23,6 +23,8 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             }
         }
 
+        public bool highSecurityLabel { get; set; }
+
         public BinOpType Operation { get; }
         public IPExpr Lhs { get; }
         public IPExpr Rhs { get; }

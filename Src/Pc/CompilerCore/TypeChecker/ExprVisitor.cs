@@ -283,15 +283,18 @@ namespace Plang.Compiler.TypeChecker
                 case ">":
                 case ">=":
                 case "<=":
-                    if (!(PrimitiveType.Int.IsAssignableFrom(lhs.Type) &&
-                          PrimitiveType.Int.IsAssignableFrom(rhs.Type) ||
+                    if (!( (PrimitiveType.Int.IsAssignableFrom(lhs.Type) || PrimitiveType.Secure_Int.IsAssignableFrom(lhs.Type)) &&
+                          (PrimitiveType.Int.IsAssignableFrom(rhs.Type) || PrimitiveType.Secure_Int.IsAssignableFrom(rhs.Type)) ||
                           PrimitiveType.Float.IsAssignableFrom(lhs.Type) &&
-                          PrimitiveType.Float.IsAssignableFrom(rhs.Type)))
+                          PrimitiveType.Float.IsAssignableFrom(rhs.Type)
+                          ))
                     {
                         throw handler.BinOpTypeMismatch(context, lhs.Type, rhs.Type);
                     }
 
-                    return arithCtors[op](lhs, rhs);
+                    BinOpExpr expr = (BinOpExpr) arithCtors[op](lhs, rhs);
+                    expr.highSecurityLabel = true;
+                    return (IPExpr) expr;
 
                 case "in":
                     PLanguageType rhsType = rhs.Type.Canonicalize();
