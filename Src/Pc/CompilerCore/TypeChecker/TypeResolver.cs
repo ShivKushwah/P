@@ -137,6 +137,7 @@ namespace Plang.Compiler.TypeChecker
                 switch (name)
                 {
                     case "bool": return PrimitiveType.Bool;
+                    case "secure_bool": return PrimitiveType.Secure_Bool;
                     case "int": return PrimitiveType.Int;
                     case "secure_int": return PrimitiveType.Secure_Int;
                     case "float": return PrimitiveType.Float;

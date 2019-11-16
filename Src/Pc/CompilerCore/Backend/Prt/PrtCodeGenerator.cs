@@ -545,6 +545,10 @@ namespace Plang.Compiler.Backend.Prt
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Bool):
                     context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_BOOL, {{ NULL }} }};");
                     break;
+                
+                case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Secure_Bool):
+                    context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_SECURE_BOOL, {{ NULL }} }};");
+                    break;
 
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Machine):
                     context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_MACHINE, {{ NULL }} }};");
@@ -1694,16 +1698,12 @@ namespace Plang.Compiler.Backend.Prt
         {
             string binOpGetter;
             string binOpBuilder;
-            if (type.IsSameTypeAs(PrimitiveType.Int) || type.TypeKind.Equals(TypeKind.Enum))
-            {
-                binOpGetter = "PrtPrimGetInt";
-                binOpBuilder = "PrtMkIntValue";
-            } else if (type.IsSameTypeAs(PrimitiveType.Secure_Int)) 
+            if (type.IsSameTypeAs(PrimitiveType.Int) || type.TypeKind.Equals(TypeKind.Enum) || type.IsSameTypeAs(PrimitiveType.Secure_Int))
             {
                 binOpGetter = "PrtPrimGetInt";
                 binOpBuilder = "PrtMkIntValue";
             }
-            else if (type.IsSameTypeAs(PrimitiveType.Bool))
+            else if (type.IsSameTypeAs(PrimitiveType.Bool) || type.IsSameTypeAs(PrimitiveType.Secure_Bool))
             {
                 binOpGetter = "PrtPrimGetBool";
                 binOpBuilder = "PrtMkBoolValue";

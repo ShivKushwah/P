@@ -35,6 +35,8 @@ extern "C" {
 		/**< The kind of the `any` type        */
 		PRT_KIND_BOOL = 1,
 		/**< The kind of the `bool` type       */
+		PRT_KIND_SECURE_BOOL = 15,
+		/**< The kind of the `secure_bool` type        */
 		PRT_KIND_EVENT = 2,
 		/**< The kind of the `event` type      */
 		PRT_KIND_FOREIGN = 3,

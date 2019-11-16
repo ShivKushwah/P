@@ -7,6 +7,7 @@ namespace Plang.Compiler.TypeChecker.Types
     public class PrimitiveType : PLanguageType
     {
         public static readonly PrimitiveType Bool = new PrimitiveType("bool");
+        public static readonly PrimitiveType Secure_Bool = new PrimitiveType("secure_bool");
         public static readonly PrimitiveType Int = new PrimitiveType("int");
         public static readonly PrimitiveType Secure_Int = new PrimitiveType("secure_int");
         public static readonly PrimitiveType Float = new PrimitiveType("float");
@@ -27,6 +28,7 @@ namespace Plang.Compiler.TypeChecker.Types
                     AllowedPermissions = null;
                     break;
                 case "secure_int":
+                case "secure_bool":
                     highSecurityLabel = true;
                     break;
 
@@ -67,6 +69,14 @@ namespace Plang.Compiler.TypeChecker.Types
                 case "event":
                     return otherType.CanonicalRepresentation.Equals("event") ||
                            otherType.CanonicalRepresentation.Equals("null");
+                
+                case "bool":
+                    return otherType.CanonicalRepresentation.Equals("bool") ||
+                           otherType.CanonicalRepresentation.Equals("secure_bool");
+                
+                case "secure_bool":
+                    return otherType.CanonicalRepresentation.Equals("bool") ||
+                           otherType.CanonicalRepresentation.Equals("secure_bool");
 
                 default:
                     return CanonicalRepresentation.Equals(otherType.CanonicalRepresentation);

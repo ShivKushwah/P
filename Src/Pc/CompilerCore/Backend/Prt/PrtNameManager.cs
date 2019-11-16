@@ -180,6 +180,9 @@ namespace Plang.Compiler.Backend.Prt
 
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Bool):
                     return "b";
+                
+                case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Secure_Bool):
+                    return "sb";
 
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Int):
                     return "i";

@@ -33,6 +33,7 @@ type : SEQ LBRACK type RBRACK     # SeqType
      | LPAREN tupTypes+=type (COMMA tupTypes+=type)* RPAREN # TupleType
      | LPAREN idenTypeList RPAREN # NamedTupleType
      | BOOL      # PrimitiveType
+     | SECURE_BOOL # PrimitiveType
      | INT       # PrimitiveType
      | SECURE_INT # PrimitiveType
      | FLOAT     # PrimitiveType

@@ -9,6 +9,7 @@ PRT_TYPE* PRT_CALL_CONV PrtMkPrimitiveType(_In_ PRT_TYPE_KIND primType)
 	{
 	case PRT_KIND_ANY:
 	case PRT_KIND_BOOL:
+	case PRT_KIND_SECURE_BOOL:
 	case PRT_KIND_EVENT:
 	case PRT_KIND_MACHINE:
 	case PRT_KIND_INT:
@@ -158,6 +159,7 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsSubtype(_In_ PRT_TYPE* subType, _In_ PRT_TYPE* su
 		return (subKind == supKind || subKind == PRT_KIND_NULL) ? PRT_TRUE : PRT_FALSE;
 	}
 	case PRT_KIND_BOOL:
+	case PRT_KIND_SECURE_BOOL:
 	case PRT_KIND_INT:
 	case PRT_KIND_SECURE_INT:
 	case PRT_KIND_FLOAT:
@@ -296,6 +298,7 @@ PRT_TYPE* PRT_CALL_CONV PrtCloneType(_In_ PRT_TYPE* type)
 	{
 	case PRT_KIND_ANY:
 	case PRT_KIND_BOOL:
+	case PRT_KIND_SECURE_BOOL:
 	case PRT_KIND_EVENT:
 	case PRT_KIND_MACHINE:
 	case PRT_KIND_INT:
@@ -362,6 +365,7 @@ void PRT_CALL_CONV PrtFreeType(_Inout_ PRT_TYPE* type)
 	{
 	case PRT_KIND_ANY:
 	case PRT_KIND_BOOL:
+	case PRT_KIND_SECURE_BOOL:
 	case PRT_KIND_EVENT:
 	case PRT_KIND_MACHINE:
 	case PRT_KIND_INT:
@@ -450,6 +454,7 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsValidType(_In_ PRT_TYPE* type)
 	{
 	case PRT_KIND_ANY:
 	case PRT_KIND_BOOL:
+	case PRT_KIND_SECURE_BOOL:
 	case PRT_KIND_EVENT:
 	case PRT_KIND_MACHINE:
 	case PRT_KIND_INT:

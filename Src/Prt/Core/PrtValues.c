@@ -263,6 +263,8 @@ PRT_VALUE* PRT_CALL_CONV PrtMkDefaultValue(_In_ PRT_TYPE* type)
 		return PrtMkNullValue();
 	case PRT_KIND_BOOL:
 		return PrtMkBoolValue(PRT_FALSE);
+	case PRT_KIND_SECURE_BOOL:
+		return PrtMkBoolValue(PRT_FALSE);
 	case PRT_KIND_EVENT:
 		return PrtMkEventValue(PRT_SPECIAL_EVENT_NULL);
 	case PRT_KIND_MACHINE:
@@ -1908,6 +1910,8 @@ PRT_BOOLEAN PRT_CALL_CONV PrtInhabitsType(_In_ PRT_VALUE* value, _In_ PRT_TYPE* 
 	case PRT_KIND_NULL:
 		return PrtIsNullValue(value);
 	case PRT_KIND_BOOL:
+		return vkind == PRT_VALUE_KIND_BOOL ? PRT_TRUE : PRT_FALSE;
+	case PRT_KIND_SECURE_BOOL:
 		return vkind == PRT_VALUE_KIND_BOOL ? PRT_TRUE : PRT_FALSE;
 	case PRT_KIND_EVENT:
 		return (vkind == PRT_VALUE_KIND_EVENT || PrtIsNullValue(value)) ? PRT_TRUE : PRT_FALSE;

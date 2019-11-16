@@ -346,14 +346,14 @@ namespace Plang.Compiler.TypeChecker
 
                 case "&&":
                 case "||":
-                    if (!PrimitiveType.Bool.IsAssignableFrom(lhs.Type))
+                    if (!(PrimitiveType.Bool.IsAssignableFrom(lhs.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(lhs.Type)))
                     {
-                        throw handler.TypeMismatch(context.lhs, lhs.Type, PrimitiveType.Bool);
+                        throw handler.TypeMismatch(context.lhs, lhs.Type, PrimitiveType.Bool); //TODO SHIV make this display either bool or secure_bool
                     }
 
-                    if (!PrimitiveType.Bool.IsAssignableFrom(rhs.Type))
+                    if (!(PrimitiveType.Bool.IsAssignableFrom(rhs.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(rhs.Type)))
                     {
-                        throw handler.TypeMismatch(context.rhs, rhs.Type, PrimitiveType.Bool);
+                        throw handler.TypeMismatch(context.rhs, rhs.Type, PrimitiveType.Bool); //TODO same as above
                     }
 
                     IPExpr expr3 = logicCtors[op](lhs, rhs);

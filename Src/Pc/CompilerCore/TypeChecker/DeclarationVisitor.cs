@@ -527,6 +527,10 @@ namespace Plang.Compiler.TypeChecker
         {
             // COLON type
             PLanguageType variableType = ResolveType(context.type());
+            bool highSecurityLabelBool = false;
+            if (variableType is PrimitiveType) {
+                highSecurityLabelBool = ((PrimitiveType) variableType).highSecurityLabel;
+            }
 
             // VAR idenList
             Variable[] variables = new Variable[context.idenList()._names.Count];
@@ -534,6 +538,7 @@ namespace Plang.Compiler.TypeChecker
             for (int i = 0; i < varNameCtxs.Count; i++)
             {
                 Variable variable = (Variable)nodesToDeclarations.Get(varNameCtxs[i]);
+                variable.highSecurityLabel = highSecurityLabelBool;
                 variable.Type = variableType;
                 variables[i] = variable;
             }

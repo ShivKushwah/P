@@ -4,6 +4,7 @@
 
 ANY       : 'any' ;
 BOOL      : 'bool' ;
+SECURE_BOOL  : 'secure_bool' ;
 ENUM      : 'enum' ;
 EVENT     : 'event' ;
 EVENTSET  : 'eventset' ;
