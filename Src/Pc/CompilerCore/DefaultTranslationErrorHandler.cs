@@ -113,6 +113,12 @@ namespace Plang.Compiler
                 $"Security Issue: Secret Variables are leaked. got type: {actual.OriginalRepresentation}, expected: {string.Join("; ", expected.Select(t => t.OriginalRepresentation))}");
         }
 
+        public Exception InformationFlowException(ParserRuleContext location)
+        {
+            return IssueError(location,
+                $"Security Issue: Secret Variables are leaked.");
+        }
+
         public Exception MissingNamedTupleEntry(PParser.IdenContext location,
             NamedTupleType namedTuple)
         {

@@ -313,8 +313,43 @@ namespace Plang.Compiler.TypeChecker
                 throw handler.TypeMismatch(context.expr(), condition.Type, PrimitiveType.Bool);
             }
 
+            bool highSecurityConditionExpressionLabel = condition.highSecurityLabel;
+
             IPStmt thenBody = Visit(context.thenBranch);
             IPStmt elseBody = context.elseBranch == null ? new NoStmt(context) : Visit(context.elseBranch);
+
+
+            // If the condition has a High Security Label, then both the body expression expressions need to be high security
+            if (highSecurityConditionExpressionLabel) { 
+
+                CompoundStmt cStmt = (CompoundStmt) thenBody;
+                bool isHighSecurity = true;
+                foreach (IPStmt stmt in cStmt.Statements) {
+                    if (stmt is AssignStmt) {
+                        isHighSecurity = isHighSecurity && ((AssignStmt) stmt).highSecurityLabel; //TODO SHIV unhardcode this for all statements
+                    }
+                }
+
+                cStmt = (CompoundStmt) elseBody; 
+                foreach (IPStmt stmt in cStmt.Statements) {
+                    if (stmt is AssignStmt) {
+                        isHighSecurity = isHighSecurity && ((AssignStmt) stmt).highSecurityLabel; //TODO SHIV unhardcode this for all statements
+                    }
+                }
+
+                if (!isHighSecurity) {
+                    //hanlder.throw
+                    throw handler.InformationFlowException(context.expr()); //TODO make a better error message
+
+                }
+
+            }
+            
+
+
+
+            //do same with elseBody
+
             return new IfStmt(context, condition, thenBody, elseBody);
         }
 

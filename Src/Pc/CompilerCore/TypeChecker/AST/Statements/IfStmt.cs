@@ -8,9 +8,12 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
         {
             SourceLocation = sourceLocation;
             Condition = condition;
+            highSecurityLabel = condition.highSecurityLabel;
             ThenBranch = CompoundStmt.FromStatement(thenBranch);
             ElseBranch = elseBranch == null ? null : CompoundStmt.FromStatement(elseBranch);
         }
+
+        public bool highSecurityLabel { get; set; } = false;
 
         public IPExpr Condition { get; }
         public CompoundStmt ThenBranch { get; }

@@ -9,6 +9,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             SourceLocation = sourceLocation;
             Location = location;
             Value = value;
+            highSecurityLabel = location.highSecurityLabel;
         }
 
         public bool highSecurityLabel { get; set; } = false;
