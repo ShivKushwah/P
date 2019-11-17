@@ -322,15 +322,22 @@ namespace Plang.Compiler.TypeChecker
             // If the condition has a High Security Label, then both the body expression expressions need to be high security
             if (highSecurityConditionExpressionLabel) { 
 
-                CompoundStmt cStmt = (CompoundStmt) thenBody;
                 bool isHighSecurity = true;
-                foreach (IPStmt stmt in cStmt.Statements) {
-                    isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
+
+                if (thenBody is CompoundStmt) { //TODO check if we need to watch out for other types of statements
+                    CompoundStmt cStmt = (CompoundStmt) thenBody;
+                    foreach (IPStmt stmt in cStmt.Statements) {
+                        isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
+                    }
+
                 }
 
-                cStmt = (CompoundStmt) elseBody; 
-                foreach (IPStmt stmt in cStmt.Statements) {
-                    isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
+                if (elseBody is CompoundStmt) {
+                    CompoundStmt cStmt = (CompoundStmt) elseBody; 
+                    foreach (IPStmt stmt in cStmt.Statements) {
+                        isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
+                    }
+
                 }
 
                 if (!isHighSecurity) {

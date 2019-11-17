@@ -14,7 +14,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Arguments = arguments;
         }
 
-        public bool highSecurityLabel { get; set; } = true;
+        public bool highSecurityLabel { get; set; } = false;
 
         public IPExpr MachineExpr { get; }
         public IPExpr Evt { get; }

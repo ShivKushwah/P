@@ -527,7 +527,7 @@ namespace Plang.Compiler.TypeChecker
         {
             // COLON type
             PLanguageType variableType = ResolveType(context.type());
-            bool highSecurityLabelBool = ((PrimitiveType) variableType).highSecurityLabel;
+            bool highSecurityLabelBool = variableType.highSecurityLabel;
 
             // VAR idenList
             Variable[] variables = new Variable[context.idenList()._names.Count];
