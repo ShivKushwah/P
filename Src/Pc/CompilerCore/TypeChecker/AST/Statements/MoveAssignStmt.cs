@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             FromVariable = fromVariable;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr ToLocation { get; }
         public Variable FromVariable { get; }
 

@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Value = value;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr Variable { get; }
         public IPExpr Value { get; }
         public ParserRuleContext SourceLocation { get; }

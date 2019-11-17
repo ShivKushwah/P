@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             OldLocation = oldLocation;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr NewLocation { get; }
         public Variable OldLocation { get; }
 

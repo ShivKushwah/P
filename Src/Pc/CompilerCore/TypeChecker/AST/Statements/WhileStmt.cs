@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Body = CompoundStmt.FromStatement(body);
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr Condition { get; }
         public CompoundStmt Body { get; }
 

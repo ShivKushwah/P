@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             ReturnValue = returnValue;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr ReturnValue { get; }
         public PLanguageType ReturnType => ReturnValue == null ? PrimitiveType.Null : ReturnValue.Type;
         public ParserRuleContext SourceLocation { get; }

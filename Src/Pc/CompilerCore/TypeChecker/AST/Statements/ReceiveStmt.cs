@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Cases = cases;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IReadOnlyDictionary<PEvent, Function> Cases { get; }
         public ParserRuleContext SourceLocation { get; }
     }

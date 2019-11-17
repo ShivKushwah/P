@@ -24,6 +24,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             }
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IReadOnlyList<IPStmt> Statements => statements;
 
         public ParserRuleContext SourceLocation { get; }

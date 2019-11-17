@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Message = message;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public IPExpr Assertion { get; }
         public string Message { get; }
 

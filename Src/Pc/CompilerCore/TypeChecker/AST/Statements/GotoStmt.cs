@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Payload = payload;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public State State { get; }
         public IPExpr Payload { get; }
 

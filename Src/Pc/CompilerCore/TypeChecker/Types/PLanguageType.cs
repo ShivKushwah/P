@@ -11,6 +11,8 @@ namespace Plang.Compiler.TypeChecker.Types
             TypeKind = kind;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         /// <summary>
         ///     The category of type this is (eg. sequence, map, base)
         /// </summary>

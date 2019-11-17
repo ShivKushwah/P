@@ -12,6 +12,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Function = function;
             ArgsList = argsList;
         }
+        
+        public bool highSecurityLabel { get; set; } = false;
 
         public Function Function { get; }
         public IReadOnlyList<IPExpr> ArgsList { get; }

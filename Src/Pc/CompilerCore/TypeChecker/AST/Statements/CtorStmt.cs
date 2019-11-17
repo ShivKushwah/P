@@ -13,6 +13,8 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             Arguments = arguments;
         }
 
+        public bool highSecurityLabel { get; set; } = false;
+
         public Interface Interface { get; }
         public IReadOnlyList<IPExpr> Arguments { get; }
 

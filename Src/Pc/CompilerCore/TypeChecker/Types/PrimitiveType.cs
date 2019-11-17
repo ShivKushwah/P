@@ -38,8 +38,6 @@ namespace Plang.Compiler.TypeChecker.Types
             }
         }
 
-        public bool highSecurityLabel { get; set; } = false;
-
         public override string OriginalRepresentation { get; }
         public override string CanonicalRepresentation { get; }
 

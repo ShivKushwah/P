@@ -68,11 +68,8 @@ namespace Plang.Compiler.TypeChecker
                 Variable variable = method.Scope.Put(varName.GetText(), varName, VariableRole.Local);
                 PLanguageType type = TypeResolver.ResolveType(context.type(), method.Scope, handler);
                 variable.Type = type;
-                
-                if (type is PrimitiveType) {
-                    variable.highSecurityLabel = ((PrimitiveType)type).highSecurityLabel;
-                }
-                
+                variable.highSecurityLabel = ((PrimitiveType)type).highSecurityLabel;
+
                 method.AddLocalVariable(variable);
             }
 

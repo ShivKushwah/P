@@ -325,16 +325,12 @@ namespace Plang.Compiler.TypeChecker
                 CompoundStmt cStmt = (CompoundStmt) thenBody;
                 bool isHighSecurity = true;
                 foreach (IPStmt stmt in cStmt.Statements) {
-                    if (stmt is AssignStmt) {
-                        isHighSecurity = isHighSecurity && ((AssignStmt) stmt).highSecurityLabel; //TODO SHIV unhardcode this for all statements
-                    }
+                    isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
                 }
 
                 cStmt = (CompoundStmt) elseBody; 
                 foreach (IPStmt stmt in cStmt.Statements) {
-                    if (stmt is AssignStmt) {
-                        isHighSecurity = isHighSecurity && ((AssignStmt) stmt).highSecurityLabel; //TODO SHIV unhardcode this for all statements
-                    }
+                    isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
                 }
 
                 if (!isHighSecurity) {
