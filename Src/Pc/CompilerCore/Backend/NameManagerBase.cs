@@ -23,7 +23,7 @@ namespace Plang.Compiler.Backend
             return UniquifyName(NamePrefix + baseName);
         }
 
-        protected string UniquifyName(string baseName)
+        public string UniquifyName(string baseName)
         {
             string name = baseName;
             while (nameUsages.TryGetValue(name, out int usages))

@@ -1191,14 +1191,61 @@ namespace Plang.Compiler.Backend.Prt
                     break;
                 
                 case SecureSendStmt secureSendStmt:
+                 // Put all the arguments in the args array
+                    // foreach (var arg in funArgs.Select((arg, i) => new { arg, i }))
+                    // {
+                    //     context.WriteLine(
+                    //         output, $"{FunCallArgsArrayName}[{arg.i}] = {GetVariableReference(function, arg.arg)};");
+                    // }
+
+                    string intLiteralName = context.RegisterLiteral(function, secureSendStmt.Arguments.Count);
+                    string uniqueTempVariable = context.Names.UniquifyName("PTMP_tmp");
+
+                    context.WriteLine(output, $"PRT_VALUE* {uniqueTempVariable} = PrtCloneValue(&({intLiteralName}));");
+
+                    
+
                     context.Write(output, "_P_GEN_funargs[0] = ");
-                    IVariableRef kirat = (IVariableRef)secureSendStmt.MachineExpr;
-                    context.Write(output, $"{GetVariableReference(function, kirat)}");
+                    IVariableRef mExpr = (IVariableRef)secureSendStmt.MachineExpr;
+                    context.Write(output, $"{GetVariableReference(function, mExpr)}");
                     context.WriteLine(output, ";");
 
                     context.Write(output, "_P_GEN_funargs[1] = &(");
                     WriteExpr(output, function, secureSendStmt.Evt);
                     context.WriteLine(output, ");");
+
+                    context.Write(output, $"_P_GEN_funargs[2] = ");
+                    context.WriteLine(output, $"&({uniqueTempVariable});");
+
+                    
+
+                    // context.Write(output, "_P_GEN_funargs[2] = &(");
+                    // WriteExpr(output, function, secureSendStmt.Arguments.Count);
+                    // context.WriteLine(output, ");");
+
+                    
+
+
+                    // context.WriteLine(output, $"_P_GEN_funargs[2] = {GetVariableReference(function, secureSendStmt.Arguments.Count)};");
+
+                    // {GetVariableReference(function, argVar)}
+
+                    int i_in_loop = 3;
+
+                    foreach (IPExpr sendArgExpr in secureSendStmt.Arguments)
+                    {
+                        Debug.Assert(sendArgExpr is IVariableRef);
+                        IVariableRef argVar = (IVariableRef)sendArgExpr;
+                        context.WriteLine(output, $"_P_GEN_funargs[{i_in_loop}] = {GetVariableReference(function, argVar)};");
+                        i_in_loop++;
+                    }
+
+                    // context.WriteLine(
+                    //         output, $"_P_GEN_funargs[3] = {secureSendStmt.Arguments[0]};");
+                    // WriteExpr(output, function, secureSendStmt.Arguments.Count);
+                    // context.WriteLine(output, ");");
+
+
 
                     context.WriteLine(output, "PrtFreeValue(P_SecureSend_IMPL(context, _P_GEN_funargs));");
 
