@@ -915,13 +915,16 @@ namespace Plang.Compiler.Backend.Prt
                     if (assignStmt.Value is CtorExpr) {
                         CtorExpr ctorExpr = (CtorExpr)assignStmt.Value;
                         context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
-                        context.WriteLine(output, $"_P_GEN_funargs[1] = \"0\";");
+                        context.WriteLine(output, $"_P_GEN_funargs[1] = \"{ctorExpr.Arguments.Count}\";");
+
+                        int i = 2;
 
                         foreach (IPExpr pExpr in ctorExpr.Arguments)
                         {
                             Debug.Assert(pExpr is IVariableRef);
                             IVariableRef argVar = (IVariableRef)pExpr;
-                            context.WriteLine(output, $"_P_GEN_funargs[2] = {GetVariableReference(function, argVar)};");
+                            context.WriteLine(output, $"_P_GEN_funargs[{i}] = {GetVariableReference(function, argVar)};");
+                            i++;
                         }
 
                     }
