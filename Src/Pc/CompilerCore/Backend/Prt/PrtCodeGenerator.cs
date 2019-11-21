@@ -911,6 +911,21 @@ namespace Plang.Compiler.Backend.Prt
 
                 case AssignStmt assignStmt:
                     // Lookup lvalue
+                    //Case of = new SecureMachine()
+                    if (assignStmt.Value is CtorExpr) {
+                        CtorExpr ctorExpr = (CtorExpr)assignStmt.Value;
+                        context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
+                        context.WriteLine(output, $"_P_GEN_funargs[1] = \"0\";");
+
+                        foreach (IPExpr pExpr in ctorExpr.Arguments)
+                        {
+                            Debug.Assert(pExpr is IVariableRef);
+                            IVariableRef argVar = (IVariableRef)pExpr;
+                            context.WriteLine(output, $"_P_GEN_funargs[2] = {GetVariableReference(function, argVar)};");
+                        }
+
+                    }
+
                     string lvalName = context.Names.GetTemporaryName("LVALUE");
                     context.Write(output, $"PRT_VALUE** {lvalName} = &(");
                     WriteLValue(output, function, assignStmt.Location);
@@ -918,13 +933,6 @@ namespace Plang.Compiler.Backend.Prt
 
                     // Free old value
                     context.WriteLine(output, $"PrtFreeValue(*{lvalName});");
-
-                    //Case of = new SecureMachine()
-                    if (assignStmt.Value is CtorExpr) {
-                        CtorExpr ctorExpr = (CtorExpr)assignStmt.Value;
-                        context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
-
-                    }
 
                     // Assign new value
                     context.Write(output, $"*{lvalName} = ");
@@ -950,6 +958,7 @@ namespace Plang.Compiler.Backend.Prt
                     break;
 
                 case CtorStmt ctorStmt:
+                    //TODO make the changes for = new SecureMachine here as well
                     context.Write(
                         output,
                         $"PrtMkInterface(context, {context.GetDeclNumber(ctorStmt.Interface)}, {ctorStmt.Arguments.Count}");
@@ -1506,6 +1515,9 @@ namespace Plang.Compiler.Backend.Prt
                 case CtorExpr ctorExpr:
                     //TODO do we not need to declare variables here like in securesend?
                     if (ctorExpr.Interface.IsSecure) {
+
+                        // context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
+
                         context.Write(
                             output,
                             $"((_P_GEN_funval = P_CreateMachineSecureChild_IMPL(context, _P_GEN_funargs)), (_P_GEN_funval))");
