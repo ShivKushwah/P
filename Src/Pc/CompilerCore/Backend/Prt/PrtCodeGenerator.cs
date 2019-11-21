@@ -1192,7 +1192,7 @@ namespace Plang.Compiler.Backend.Prt
                 
                 case SecureSendStmt secureSendStmt:
                     string intLiteralName = context.RegisterLiteral(function, secureSendStmt.Arguments.Count);
-                    string uniqueTempVariable = context.Names.GetTemporaryName("PTMP_tmp");
+                    string uniqueTempVariable = context.Names.GetTemporaryName("PTMP_tmp"); //TODO find a cleaner way to do this
 
                     context.WriteLine(output, $"PRT_VALUE* {uniqueTempVariable} = PrtCloneValue(&({intLiteralName}));");
 

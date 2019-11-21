@@ -2055,115 +2055,115 @@ PRT_BOOLEAN PRT_CALL_CONV PrtInhabitsType(_In_ PRT_VALUE* value, _In_ PRT_TYPE* 
 
 void PRT_CALL_CONV PrtFreeValue(_Inout_ PRT_VALUE* value)
 {
-	if (value == NULL)
-	{
-		return;
-	}
+	// if (value == NULL)
+	// {
+	// 	return;
+	// }
 
-	const PRT_VALUE_KIND kind = value->discriminator;
-	switch (kind)
-	{
-	case PRT_VALUE_KIND_BOOL:
-	case PRT_VALUE_KIND_EVENT:
-	case PRT_VALUE_KIND_INT:
-	// case PRT_VALUE_KIND_SECURE_INT:
-	case PRT_VALUE_KIND_FLOAT:
-	case PRT_VALUE_KIND_NULL:
-	{
-		PrtFree(value);
-		break;
-	}
-	case PRT_VALUE_KIND_MID:
-	{
-		PRT_MACHINEID* id = value->valueUnion.mid;
-		PrtFree(id);
-		PrtFree(value);
-		break;
-	}
-	case PRT_VALUE_KIND_FOREIGN:
-	{
-		PRT_FOREIGNVALUE* fVal = value->valueUnion.frgn;
-		program->foreignTypes[fVal->typeTag]->freeFun(fVal->value);
-		PrtFree(fVal);
-		PrtFree(value);
-		break;
-	}
-	case PRT_VALUE_KIND_MAP:
-	{
-		PRT_MAPVALUE* mVal = value->valueUnion.map;
-		PRT_MAPNODE* next = mVal->first;
-		PRT_MAPNODE* tmp;
-		while (next != NULL)
-		{
-			tmp = next->insertNext;
-			PrtFreeValue(next->key);
-			PrtFreeValue(next->value);
-			PrtFree(next);
-			next = tmp;
-		}
+	// const PRT_VALUE_KIND kind = value->discriminator;
+	// switch (kind)
+	// {
+	// case PRT_VALUE_KIND_BOOL:
+	// case PRT_VALUE_KIND_EVENT:
+	// case PRT_VALUE_KIND_INT:
+	// // case PRT_VALUE_KIND_SECURE_INT:
+	// case PRT_VALUE_KIND_FLOAT:
+	// case PRT_VALUE_KIND_NULL:
+	// {
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// case PRT_VALUE_KIND_MID:
+	// {
+	// 	PRT_MACHINEID* id = value->valueUnion.mid;
+	// 	PrtFree(id);
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// case PRT_VALUE_KIND_FOREIGN:
+	// {
+	// 	PRT_FOREIGNVALUE* fVal = value->valueUnion.frgn;
+	// 	program->foreignTypes[fVal->typeTag]->freeFun(fVal->value);
+	// 	PrtFree(fVal);
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// case PRT_VALUE_KIND_MAP:
+	// {
+	// 	PRT_MAPVALUE* mVal = value->valueUnion.map;
+	// 	PRT_MAPNODE* next = mVal->first;
+	// 	PRT_MAPNODE* tmp;
+	// 	while (next != NULL)
+	// 	{
+	// 		tmp = next->insertNext;
+	// 		PrtFreeValue(next->key);
+	// 		PrtFreeValue(next->value);
+	// 		PrtFree(next);
+	// 		next = tmp;
+	// 	}
 
-		PrtFree(mVal->buckets);
-		PrtFree(mVal);
-		PrtFree(value);
-		break;
-	}
-	case PRT_VALUE_KIND_SET:
-	{
-		PRT_SETVALUE* uVal = value->valueUnion.set;
-		PRT_SETNODE* next = uVal->first;
-		PRT_SETNODE* tmp;
-		while (next != NULL)
-		{
-			tmp = next->insertNext;
-			PrtFreeValue(next->item);
-			PrtFree(next);
-			next = tmp;
-		}
+	// 	PrtFree(mVal->buckets);
+	// 	PrtFree(mVal);
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// case PRT_VALUE_KIND_SET:
+	// {
+	// 	PRT_SETVALUE* uVal = value->valueUnion.set;
+	// 	PRT_SETNODE* next = uVal->first;
+	// 	PRT_SETNODE* tmp;
+	// 	while (next != NULL)
+	// 	{
+	// 		tmp = next->insertNext;
+	// 		PrtFreeValue(next->item);
+	// 		PrtFree(next);
+	// 		next = tmp;
+	// 	}
 
-		PrtFree(uVal->buckets);
-		PrtFree(uVal);
-		PrtFree(value);
-		break;
-	}
-	case PRT_VALUE_KIND_TUPLE:
-	{
-		PRT_UINT32 i;
-		PRT_TUPVALUE* tVal = value->valueUnion.tuple;
-		PRT_UINT32 arity = tVal->size;
-		for (i = 0; i < arity; ++i)
-		{
-			PrtFreeValue(tVal->values[i]);
-		}
+	// 	PrtFree(uVal->buckets);
+	// 	PrtFree(uVal);
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// case PRT_VALUE_KIND_TUPLE:
+	// {
+	// 	PRT_UINT32 i;
+	// 	PRT_TUPVALUE* tVal = value->valueUnion.tuple;
+	// 	PRT_UINT32 arity = tVal->size;
+	// 	for (i = 0; i < arity; ++i)
+	// 	{
+	// 		PrtFreeValue(tVal->values[i]);
+	// 	}
 
-		PrtFree(tVal->values);
-		PrtFree(tVal);
-		PrtFree(value);
-		break;
-	}
-	case PRT_VALUE_KIND_SEQ:
-	{
-		PRT_SEQVALUE* sVal = value->valueUnion.seq;
-		if (sVal->values != NULL)
-		{
-			PRT_UINT32 i;
-			for (i = 0; i < sVal->size; ++i)
-			{
-				PrtFreeValue(sVal->values[i]);
-			}
+	// 	PrtFree(tVal->values);
+	// 	PrtFree(tVal);
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// case PRT_VALUE_KIND_SEQ:
+	// {
+	// 	PRT_SEQVALUE* sVal = value->valueUnion.seq;
+	// 	if (sVal->values != NULL)
+	// 	{
+	// 		PRT_UINT32 i;
+	// 		for (i = 0; i < sVal->size; ++i)
+	// 		{
+	// 			PrtFreeValue(sVal->values[i]);
+	// 		}
 
-			PrtFree(sVal->values);
-		}
+	// 		PrtFree(sVal->values);
+	// 	}
 
-		PrtFree(sVal);
-		PrtFree(value);
-		break;
-	}
-	default:
-	{
-		PrtAssert(PRT_FALSE, "PrtFreeValue: Invalid value");
-		break;
-	}
-	}
+	// 	PrtFree(sVal);
+	// 	PrtFree(value);
+	// 	break;
+	// }
+	// default:
+	// {
+	// 	PrtAssert(PRT_FALSE, "PrtFreeValue: Invalid value");
+	// 	break;
+	// }
+	// }
 }
 
 PRT_BOOLEAN PRT_CALL_CONV PrtIsValidValue(_In_ PRT_VALUE* value)
