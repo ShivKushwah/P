@@ -1705,7 +1705,7 @@ PrtAssertDefaultFn(
 		PrtPrintf(": ");
 		PrtPrintf(message);
 	}
-	abort();
+	//abort();
 }
 
 void PRT_CALL_CONV
