@@ -107,10 +107,10 @@ namespace Plang.Compiler
                 $"got type: {expr.Type.OriginalRepresentation}, expected: {string.Join(", ", expected.Select(e => e.Name))}");
         }
 
-        public Exception InformationFlowException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected)
+        public Exception InformationFlowAssignmentException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected)
         {
             return IssueError(location,
-                $"Security Issue: Secret Variables are leaked. got type: {actual.OriginalRepresentation}, expected: {string.Join("; ", expected.Select(t => t.OriginalRepresentation))}");
+                $"Security Issue: Assigning high security value \"{actual.OriginalRepresentation}\" to insecure variable \"{string.Join("; ", expected.Select(t => t.OriginalRepresentation))}\". Secret Variable potentially leaked");
         }
 
         public Exception InformationFlowException(ParserRuleContext location)
