@@ -5,12 +5,14 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
 {
     public class UnaryOpExpr : IPExpr
     {
-        public UnaryOpExpr(ParserRuleContext sourceLocation, UnaryOpType operation, IPExpr subExpr)
+        public UnaryOpExpr(ParserRuleContext sourceLocation, UnaryOpType operation, IPExpr subExpr, bool securityLabel)
         {
             SourceLocation = sourceLocation;
             Operation = operation;
             SubExpr = subExpr;
             Type = subExpr.Type;
+            highSecurityLabel = securityLabel;
+
         }
 
         public bool highSecurityLabel { get; set; } = false;

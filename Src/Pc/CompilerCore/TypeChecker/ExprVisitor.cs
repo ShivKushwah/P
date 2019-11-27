@@ -227,7 +227,7 @@ namespace Plang.Compiler.TypeChecker
                             PrimitiveType.Float);
                     }
 
-                    return new UnaryOpExpr(context, UnaryOpType.Negate, subExpr);
+                    return new UnaryOpExpr(context, UnaryOpType.Negate, subExpr, subExpr.highSecurityLabel);
 
                 case "!":
                     if (!PrimitiveType.Bool.IsAssignableFrom(subExpr.Type))
@@ -235,7 +235,7 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.TypeMismatch(context.expr(), subExpr.Type, PrimitiveType.Bool);
                     }
 
-                    return new UnaryOpExpr(context, UnaryOpType.Not, subExpr);
+                    return new UnaryOpExpr(context, UnaryOpType.Not, subExpr, subExpr.highSecurityLabel);
 
                 default:
                     throw handler.InternalError(context,

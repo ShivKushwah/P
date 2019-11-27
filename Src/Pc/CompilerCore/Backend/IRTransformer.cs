@@ -241,7 +241,7 @@ namespace Plang.Compiler.Backend
 
                 case UnaryOpExpr unaryOpExpr:
                     (IExprTerm unExpr, List<IPStmt> unDeps) = SimplifyExpression(unaryOpExpr.SubExpr);
-                    (VariableAccessExpr unTemp, IPStmt unStore) = SaveInTemporary(new UnaryOpExpr(location, unaryOpExpr.Operation, unExpr));
+                    (VariableAccessExpr unTemp, IPStmt unStore) = SaveInTemporary(new UnaryOpExpr(location, unaryOpExpr.Operation, unExpr, unaryOpExpr.highSecurityLabel));
                     deps.AddRange(unDeps);
                     deps.Add(unStore);
                     return (unTemp, deps);
