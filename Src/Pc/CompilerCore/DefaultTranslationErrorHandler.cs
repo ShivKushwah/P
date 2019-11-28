@@ -127,6 +127,13 @@ namespace Plang.Compiler
             
         }
 
+        public Exception InformationFlowWhileException(ParserRuleContext location, PLanguageType whileType, bool bodySecurity) 
+        {
+            return IssueError(location,
+                $"Security Issue: Evaluation of \"{whileType.OriginalRepresentation}\" in While expression should be secret but is potentially leaked by an insecure operation in the body of the while loop");
+
+        }
+
         public Exception MissingNamedTupleEntry(PParser.IdenContext location,
             NamedTupleType namedTuple)
         {

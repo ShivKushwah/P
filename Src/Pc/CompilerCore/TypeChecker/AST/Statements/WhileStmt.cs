@@ -9,6 +9,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             SourceLocation = sourceLocation;
             Condition = condition;
             Body = CompoundStmt.FromStatement(body);
+            highSecurityLabel = condition.highSecurityLabel;
         }
 
         public bool highSecurityLabel { get; set; } = false;

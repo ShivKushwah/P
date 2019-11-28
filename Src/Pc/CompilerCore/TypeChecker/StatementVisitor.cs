@@ -302,6 +302,10 @@ namespace Plang.Compiler.TypeChecker
             }
 
             IPStmt body = Visit(context.statement());
+
+            if (condition.highSecurityLabel && (!body.highSecurityLabel)) {
+                throw handler.InformationFlowWhileException(context.expr(), condition.Type, body.highSecurityLabel);
+            }
             return new WhileStmt(context, condition, body);
         }
 

@@ -9,7 +9,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             SourceLocation = sourceLocation;
         }
 
-        public bool highSecurityLabel { get; set; } = false;
+        public bool highSecurityLabel { get; set; } = true;
 
         public ParserRuleContext SourceLocation { get; }
     }
