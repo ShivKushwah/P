@@ -113,10 +113,18 @@ namespace Plang.Compiler
                 $"Security Issue: Assigning high security value \"{actual.OriginalRepresentation}\" to insecure variable \"{string.Join("; ", expected.Select(t => t.OriginalRepresentation))}\". Secret Variable potentially leaked");
         }
 
-        public Exception InformationFlowException(ParserRuleContext location)
+        public Exception InformationFlowIfException(ParserRuleContext location, PLanguageType ifType, bool thenBodySecurity, bool elseBodySecurity)
         {
-            return IssueError(location,
-                $"Security Issue: Secret Variables are leaked.");
+            if (thenBodySecurity == false) {
+                return IssueError(location,
+                $"Security Issue: Evaluation of \"{ifType.OriginalRepresentation}\" in If expression should be secret but is potentially leaked by an insecure operation in the thenBody block of the expression");
+
+            } else {
+                return IssueError(location,
+                $"Security Issue: If expression \"{ifType.OriginalRepresentation}\" evaluation should be secret but is potentially leaked by an insecure operation in the elseBody block of the expression");
+
+            }
+            
         }
 
         public Exception MissingNamedTupleEntry(PParser.IdenContext location,

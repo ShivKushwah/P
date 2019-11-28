@@ -320,39 +320,10 @@ namespace Plang.Compiler.TypeChecker
 
 
             // If the condition has a High Security Label, then both the body expression expressions need to be high security
-            if (highSecurityConditionExpressionLabel) { 
-
-                bool isHighSecurity = true;
-
-                if (thenBody is CompoundStmt) { //TODO check if we need to watch out for other types of statements
-                    CompoundStmt cStmt = (CompoundStmt) thenBody;
-                    foreach (IPStmt stmt in cStmt.Statements) {
-                        isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
-                    }
-
-                }
-
-                if (elseBody is CompoundStmt) {
-                    CompoundStmt cStmt = (CompoundStmt) elseBody; 
-                    foreach (IPStmt stmt in cStmt.Statements) {
-                        isHighSecurity = isHighSecurity && stmt.highSecurityLabel;
-                    }
-
-                }
-
-                if (!isHighSecurity) {
-                    //hanlder.throw
-                    throw handler.InformationFlowException(context.expr()); //TODO make a better error message
-
-                }
-
+            if (highSecurityConditionExpressionLabel && ( (!thenBody.highSecurityLabel) || (!elseBody.highSecurityLabel) ) ) {
+                throw handler.InformationFlowIfException(context.expr(), condition.Type, thenBody.highSecurityLabel, elseBody.highSecurityLabel);
             }
             
-
-
-
-            //do same with elseBody
-
             return new IfStmt(context, condition, thenBody, elseBody);
         }
 

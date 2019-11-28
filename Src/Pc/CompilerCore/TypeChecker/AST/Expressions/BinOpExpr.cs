@@ -12,14 +12,29 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             Operation = operation;
             Lhs = lhs;
             Rhs = rhs;
+
+            if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
+                highSecurityLabel = true;
+            } else {
+                highSecurityLabel = false;
+            }
+            
             if (IsArithmetic(operation))
             {
                 Debug.Assert(Lhs.Type.IsSameTypeAs(Rhs.Type));
-                Type = Lhs.Type;
+                if (highSecurityLabel) {
+                    Type = PrimitiveType.Secure_Int; //TODO Shiv modify this when I add secure_float
+                } else {
+                    Type = Lhs.Type;
+                }
             }
             else
             {
-                Type = PrimitiveType.Bool;
+                if (highSecurityLabel) {
+                    Type = PrimitiveType.Secure_Bool;
+                } else {
+                    Type = PrimitiveType.Bool;
+                }
             }
         }
 

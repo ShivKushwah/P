@@ -226,8 +226,8 @@ namespace Plang.Compiler.TypeChecker
                             PrimitiveType.Int,
                             PrimitiveType.Float);
                     }
-
-                    return new UnaryOpExpr(context, UnaryOpType.Negate, subExpr, subExpr.highSecurityLabel);
+                    //NOTE: Security label is computed in constructor using subExpr's security label
+                    return new UnaryOpExpr(context, UnaryOpType.Negate, subExpr);
 
                 case "!":
                     if (!PrimitiveType.Bool.IsAssignableFrom(subExpr.Type))
@@ -235,7 +235,7 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.TypeMismatch(context.expr(), subExpr.Type, PrimitiveType.Bool);
                     }
 
-                    return new UnaryOpExpr(context, UnaryOpType.Not, subExpr, subExpr.highSecurityLabel);
+                    return new UnaryOpExpr(context, UnaryOpType.Not, subExpr);
 
                 default:
                     throw handler.InternalError(context,
@@ -249,6 +249,7 @@ namespace Plang.Compiler.TypeChecker
             IPExpr rhs = Visit(context.rhs);
             string op = context.op.Text;
 
+            //NOTE I made changes to new BinOpExpr so that the security label is computed in the constructor
             Dictionary<string, Func<IPExpr, IPExpr, IPExpr>> arithCtors = new Dictionary<string, Func<IPExpr, IPExpr, IPExpr>>
             {
                 {"*", (elhs, erhs) => new BinOpExpr(context, BinOpType.Mul, elhs, erhs)},
@@ -292,13 +293,7 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.BinOpTypeMismatch(context, lhs.Type, rhs.Type);
                     }
                     
-                    IPExpr expr = arithCtors[op](lhs, rhs);
-                    if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
-                        expr.highSecurityLabel = true;
-                    } else {
-                        expr.highSecurityLabel = false;
-                    }
-                    return expr;
+                    return arithCtors[op](lhs, rhs);
 
                 case "in":
                     PLanguageType rhsType = rhs.Type.Canonicalize();
@@ -336,13 +331,7 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.IncomparableTypes(context, lhs.Type, rhs.Type);
                     }
 
-                    IPExpr expr2 = compCtors[op](lhs, rhs);
-                    if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
-                        expr2.highSecurityLabel = true;
-                    } else {
-                        expr2.highSecurityLabel = false;
-                    }
-                    return expr2;
+                    return compCtors[op](lhs, rhs);
 
                 case "&&":
                 case "||":
@@ -356,13 +345,7 @@ namespace Plang.Compiler.TypeChecker
                         throw handler.TypeMismatch(context.rhs, rhs.Type, PrimitiveType.Bool); //TODO same as above
                     }
 
-                    IPExpr expr3 = logicCtors[op](lhs, rhs);
-                    if (lhs.highSecurityLabel || rhs.highSecurityLabel) {
-                        expr3.highSecurityLabel = true;
-                    } else {
-                        expr3.highSecurityLabel = false;
-                    }
-                    return expr3;
+                    return logicCtors[op](lhs, rhs);
 
                 default:
                     throw handler.InternalError(context,

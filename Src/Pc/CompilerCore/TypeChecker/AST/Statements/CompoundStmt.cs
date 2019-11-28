@@ -11,8 +11,10 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
         {
             SourceLocation = sourceLocation;
             this.statements = new List<IPStmt>();
+            bool isHighSecurity = true;
             foreach (IPStmt statement in statements)
             {
+                isHighSecurity = isHighSecurity && statement.highSecurityLabel;
                 if (statement is CompoundStmt compound)
                 {
                     this.statements.AddRange(compound.statements);
@@ -22,6 +24,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
                     this.statements.Add(statement);
                 }
             }
+            highSecurityLabel = isHighSecurity;
         }
 
         public bool highSecurityLabel { get; set; } = false;

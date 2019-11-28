@@ -40,7 +40,7 @@ namespace Plang.Compiler
 
         Exception InformationFlowAssignmentException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected);
 
-        Exception InformationFlowException(ParserRuleContext location);
+        Exception InformationFlowIfException(ParserRuleContext location, PLanguageType ifType, bool thenBodySecurity, bool elseBodySecurity);
 
         Exception MissingNamedTupleEntry(PParser.IdenContext location, NamedTupleType namedTuple);
 
