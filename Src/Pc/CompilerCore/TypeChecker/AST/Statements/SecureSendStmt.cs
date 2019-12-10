@@ -12,6 +12,12 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             MachineExpr = machineExpr;
             Evt = evt;
             Arguments = arguments;
+            // bool isHighSecurity = false;
+            // foreach (IPExpr argument in arguments) {
+            //     isHighSecurity = isHighSecurity || argument.highSecurityLabel;
+            // }
+            // highSecurityLabel = isHighSecurity;
+            highSecurityLabel = true; //Since this function only sends to trusted machines, it should be high security and not regarded to leak secrets
         }
 
         public bool highSecurityLabel { get; set; } = false;

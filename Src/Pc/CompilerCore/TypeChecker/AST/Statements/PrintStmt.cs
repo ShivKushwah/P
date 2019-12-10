@@ -10,6 +10,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
             SourceLocation = sourceLocation;
             Message = message;
             Args = args;
+            highSecurityLabel = false;
         }
 
         public bool highSecurityLabel { get; set; } = false;
