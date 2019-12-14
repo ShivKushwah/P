@@ -47,8 +47,7 @@ extern "C" {
 #include <crtdbg.h>
 #endif
 
-
-#include "PrtLinuxUserConfig.h"
+#include "PrtSGXUserConfig.h"
 
 
 /** Function for Assertion will be called whenever an assertion is checked */
