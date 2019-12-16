@@ -347,6 +347,11 @@ namespace Plang.Compiler.TypeChecker
             return null;
         }
 
+        public override object VisitUntrustedSendStmt(PParser.UntrustedSendStmtContext context)
+        {
+            return null;
+        }
+
         public override object VisitCtorStmt(PParser.CtorStmtContext context)
         {
             return null;

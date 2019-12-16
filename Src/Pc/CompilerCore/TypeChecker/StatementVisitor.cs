@@ -461,6 +461,40 @@ namespace Plang.Compiler.TypeChecker
             return new SecureSendStmt(context, machineExpr, evtExpr, args);
         }
 
+        public override IPStmt VisitUntrustedSendStmt(PParser.UntrustedSendStmtContext context)
+        {
+            if (machine?.IsSpec == true)
+            {
+                throw handler.IllegalMonitorOperation(context, context.UNTRUSTED_SEND().Symbol, machine);
+            }
+
+            IPExpr machineExpr = exprVisitor.Visit(context.machine);
+            // if (!PrimitiveType.Machine.IsAssignableFrom(machineExpr.Type)) //TODO Shiv once we have a secure_machine type in Primitive types, uncomment this 
+            // {
+            //     throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine);
+            // }
+
+            IPExpr evtExpr = exprVisitor.Visit(context.@event);
+            if (IsDefinitelyNullEvent(evtExpr))
+            {
+                throw handler.EmittedNullEvent(evtExpr);
+            }
+
+            if (!PrimitiveType.Event.IsAssignableFrom(evtExpr.Type))
+            {
+                throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.Event);
+            }
+
+            IPExpr[] args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), exprVisitor).ToArray();
+
+            if (evtExpr is EventRefExpr eventRef)
+            {
+                TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
+            }
+
+            return new UntrustedSendStmt(context, machineExpr, evtExpr, args);
+        }
+
         private static bool IsDefinitelyNullEvent(IPExpr evtExpr)
         {
             return evtExpr is NullLiteralExpr || evtExpr is EventRefExpr evtRef && evtRef.Value.Name.Equals("null");

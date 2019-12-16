@@ -505,6 +505,26 @@ namespace Plang.Compiler.Backend
                             new SecureSendStmt(location, secureSendMachineAccessExpr, secureSendEventAccessExpr, secureSendArgs)
                         })
                         .ToList();
+                
+                case UntrustedSendStmt untrustedSendStmt:
+                    (IExprTerm untrustedSendMachine, List<IPStmt> untrustedSendMachineDeps) = SimplifyExpression(untrustedSendStmt.MachineExpr);
+                    (VariableAccessExpr untrustedSendMachineAccessExpr, IPStmt untrustedSendMachineAssn) = SaveInTemporary(new CloneExpr(untrustedSendMachine));
+
+                    (IExprTerm untrustedSendEvent, List<IPStmt> untrustedSendEventDeps) = SimplifyExpression(untrustedSendStmt.Evt);
+                    (VariableAccessExpr untrustedSendEventAccessExpr, IPStmt untrustedSendEventAssn) = SaveInTemporary(new CloneExpr(untrustedSendEvent));
+
+                    (IReadOnlyList<IVariableRef> untrustedSendArgs, List<IPStmt> untrustedSendArgDeps) = SimplifyArgPack(untrustedSendStmt.Arguments);
+
+                    return untrustedSendMachineDeps
+                        .Concat(new[] { untrustedSendMachineAssn })
+                        .Concat(untrustedSendEventDeps)
+                        .Concat(new[] { untrustedSendEventAssn })
+                        .Concat(untrustedSendArgDeps)
+                        .Concat(new[]
+                        {
+                            new UntrustedSendStmt(location, untrustedSendMachineAccessExpr, untrustedSendEventAccessExpr, untrustedSendArgs)
+                        })
+                        .ToList();
 
                 case SwapAssignStmt swapAssignStmt:
                     (IPExpr swapVar, List<IPStmt> swapVarDeps) = SimplifyLvalue(swapAssignStmt.NewLocation);

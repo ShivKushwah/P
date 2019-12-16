@@ -115,6 +115,11 @@ namespace Plang.Compiler.TypeChecker
                         .Union(InferCreatesForExpr(secureSendStmt.Evt, handler))
                         .Union(secureSendStmt.Arguments.SelectMany(expr => InferCreatesForExpr(expr, handler)));
 
+                case UntrustedSendStmt untrustedSendStmt:
+                    return InferCreatesForExpr(untrustedSendStmt.MachineExpr, handler)
+                        .Union(InferCreatesForExpr(untrustedSendStmt.Evt, handler))
+                        .Union(untrustedSendStmt.Arguments.SelectMany(expr => InferCreatesForExpr(expr, handler)));
+
                 case SwapAssignStmt swapAssignStmt:
                     return InferCreatesForExpr(swapAssignStmt.NewLocation, handler);
 

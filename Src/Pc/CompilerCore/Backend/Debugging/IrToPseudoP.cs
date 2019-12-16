@@ -290,6 +290,10 @@ namespace Plang.Compiler.Backend.Debugging
                 case SecureSendStmt secureSendStmt:
                     WriteStmt("send ", secureSendStmt.MachineExpr, ", ", secureSendStmt.Evt, ", ", secureSendStmt.Arguments, ";");
                     break;
+                
+                case UntrustedSendStmt untrustedSendStmt:
+                    WriteStmt("send ", untrustedSendStmt.MachineExpr, ", ", untrustedSendStmt.Evt, ", ", untrustedSendStmt.Arguments, ";");
+                    break;
 
                 case SwapAssignStmt swapAssignStmt:
                     WriteStmt(swapAssignStmt.NewLocation,

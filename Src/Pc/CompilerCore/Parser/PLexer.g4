@@ -56,6 +56,7 @@ RECEIVE   : 'receive' ;
 RETURN    : 'return' ;
 SEND      : 'send' ;
 SECURE_SEND : 'secure_send' ;
+UNTRUSTED_SEND : 'untrusted_send' ;
 SIZEOF    : 'sizeof' ;
 SPEC      : 'spec' ;
 START     : 'start' ;
