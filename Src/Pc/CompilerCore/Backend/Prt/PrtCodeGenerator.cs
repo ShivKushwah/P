@@ -1528,15 +1528,19 @@ namespace Plang.Compiler.Backend.Prt
                     } else {
                         context.Write(
                             output,
-                            $"PrtCloneValue(PrtMkInterface(context, {context.GetDeclNumber(ctorExpr.Interface)}, {ctorExpr.Arguments.Count}");
-                        foreach (IPExpr pExpr in ctorExpr.Arguments)
-                        {
-                            Debug.Assert(pExpr is IVariableRef);
-                            IVariableRef argVar = (IVariableRef)pExpr;
-                            context.Write(output, $", {GetVariableReference(function, argVar)}");
-                        }
+                            $"((_P_GEN_funval = P_CreateUSMMachineRequest_IMPL(context, _P_GEN_funargs)), (_P_GEN_funval))");
+                   
+                        // context.Write(
+                        //     output,
+                        //     $"PrtCloneValue(PrtMkInterface(context, {context.GetDeclNumber(ctorExpr.Interface)}, {ctorExpr.Arguments.Count}");
+                        // foreach (IPExpr pExpr in ctorExpr.Arguments)
+                        // {
+                        //     Debug.Assert(pExpr is IVariableRef);
+                        //     IVariableRef argVar = (IVariableRef)pExpr;
+                        //     context.Write(output, $", {GetVariableReference(function, argVar)}");
+                        // }
 
-                        context.Write(output, ")->id)");
+                        // context.Write(output, ")->id)");
                 
                     }
                     break;
