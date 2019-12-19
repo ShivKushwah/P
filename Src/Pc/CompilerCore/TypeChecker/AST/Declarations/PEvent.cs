@@ -18,6 +18,7 @@ namespace Plang.Compiler.TypeChecker.AST.Declarations
             Assume = -1;
         }
 
+        public bool isTrustedEvent { get; set; }
         public int Assume { get; set; }
         public int Assert { get; set; }
         public PLanguageType PayloadType { get; set; }

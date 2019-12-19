@@ -455,6 +455,9 @@ namespace Plang.Compiler.TypeChecker
 
             if (evtExpr is EventRefExpr eventRef)
             {
+                if (!((EventRefExpr) evtExpr).Value.isTrustedEvent) {
+                    throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.TrustedEvent); //TODO shiv mke this a custom error message
+                }
                 TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
             }
 
@@ -489,6 +492,9 @@ namespace Plang.Compiler.TypeChecker
 
             if (evtExpr is EventRefExpr eventRef)
             {
+                if (((EventRefExpr) evtExpr).Value.isTrustedEvent) {
+                    throw handler.TypeMismatch(context.@event, PrimitiveType.TrustedEvent, PrimitiveType.Event); //TODO shiv mke this a custom error message
+                }
                 TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
             }
 

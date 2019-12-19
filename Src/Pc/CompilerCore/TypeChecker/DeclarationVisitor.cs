@@ -55,6 +55,10 @@ namespace Plang.Compiler.TypeChecker
             pEvent.Assume = hasAssume ? cardinality : -1;
             pEvent.Assert = hasAssert ? cardinality : -1;
 
+            //trusted?
+            bool isTrustedEventBool = context.eventSecurity()?.TRUSTED() != null;
+            pEvent.isTrustedEvent = isTrustedEventBool;
+
             // (COLON type)?
             pEvent.PayloadType = ResolveType(context.type());
 

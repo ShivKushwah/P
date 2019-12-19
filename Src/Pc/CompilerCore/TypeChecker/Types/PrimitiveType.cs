@@ -12,6 +12,7 @@ namespace Plang.Compiler.TypeChecker.Types
         public static readonly PrimitiveType Secure_Int = new PrimitiveType("secure_int");
         public static readonly PrimitiveType Float = new PrimitiveType("float");
         public static readonly PrimitiveType Event = new PrimitiveType("event");
+        public static readonly PrimitiveType TrustedEvent = new PrimitiveType("trusted_event");
         public static readonly PrimitiveType Machine = new PrimitiveType("machine");
         public static readonly DataType Data = new DataType(null);
         public static readonly PrimitiveType Any = new PrimitiveType("any");
