@@ -77,7 +77,7 @@ enumElem : name=iden ;
 numberedEnumElemList : numberedEnumElem (COMMA numberedEnumElem)* ;
 numberedEnumElem : name=iden ASSIGN value=IntLiteral ;
 
-eventDecl : EVENT eventSecurity? name=iden cardinality? (COLON type)? SEMI;
+eventDecl : eventSecurity? EVENT name=iden cardinality? (COLON type)? SEMI;
 cardinality : ASSERT IntLiteral
             | ASSUME IntLiteral
             ;
