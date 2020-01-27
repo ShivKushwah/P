@@ -68,7 +68,14 @@ namespace Plang.Compiler.TypeChecker
                 Variable variable = method.Scope.Put(varName.GetText(), varName, VariableRole.Local);
                 PLanguageType type = TypeResolver.ResolveType(context.type(), method.Scope, handler);
                 variable.Type = type;
-                variable.highSecurityLabel = ((PrimitiveType)type).highSecurityLabel;
+
+                //TODO Shiv Check if we can do this by cases, doesn't work for map type
+                try {
+                    variable.highSecurityLabel = ((PrimitiveType)type).highSecurityLabel;
+                } catch {
+                    variable.highSecurityLabel = false;
+                }
+                
 
                 method.AddLocalVariable(variable);
             }
