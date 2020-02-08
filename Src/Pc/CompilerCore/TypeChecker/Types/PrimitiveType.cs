@@ -58,8 +58,8 @@ namespace Plang.Compiler.TypeChecker.Types
                            otherType is PermissionType;
 
                 case "int":
-                    //return otherType.CanonicalRepresentation.Equals("int");
-                    return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");
+                    return otherType.CanonicalRepresentation.Equals("int");
+                    // return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");
 
                 
                 case "secure_int":
@@ -70,8 +70,8 @@ namespace Plang.Compiler.TypeChecker.Types
                            otherType.CanonicalRepresentation.Equals("null");
                 
                 case "bool":
-                    return otherType.CanonicalRepresentation.Equals("bool") ||
-                           otherType.CanonicalRepresentation.Equals("secure_bool");
+                    return otherType.CanonicalRepresentation.Equals("bool"); //||
+                           //otherType.CanonicalRepresentation.Equals("secure_bool");
                 
                 case "secure_bool":
                     return otherType.CanonicalRepresentation.Equals("bool") ||
