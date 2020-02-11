@@ -435,10 +435,10 @@ namespace Plang.Compiler.TypeChecker
             }
 
             IPExpr machineExpr = exprVisitor.Visit(context.machine);
-            // if (!PrimitiveType.Machine.IsAssignableFrom(machineExpr.Type)) //TODO Shiv once we have a secure_machine type in Primitive types, uncomment this 
-            // {
-            //     throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine);
-            // }
+            if (!machineExpr.Type.CanonicalRepresentation.Equals("secure_machine_handle")) 
+            {
+                throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine); //TODO fix this error message
+            }
 
             IPExpr evtExpr = exprVisitor.Visit(context.@event);
             if (IsDefinitelyNullEvent(evtExpr))
