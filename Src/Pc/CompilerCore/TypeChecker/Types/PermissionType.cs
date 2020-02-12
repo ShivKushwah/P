@@ -13,12 +13,14 @@ namespace Plang.Compiler.TypeChecker.Types
         public PermissionType(Machine machine) : base(TypeKind.Base)
         {
             origin = machine;
+            highSecurityLabel = machine.IsSecure;
             AllowedPermissions = new Lazy<IReadOnlyList<PEvent>>(() => machine.Receives.Events.ToList());
         }
 
         public PermissionType(Interface pInterface) : base(TypeKind.Base)
         {
             origin = pInterface;
+            highSecurityLabel = pInterface.IsSecure;
             AllowedPermissions = new Lazy<IReadOnlyList<PEvent>>(() => pInterface.ReceivableEvents.Events.ToList());
         }
 

@@ -20,12 +20,21 @@ namespace Plang.Compiler.TypeChecker.Types
         public override bool IsAssignableFrom(PLanguageType otherType)
         {
             //NOTE I added below
-            if (CanonicalRepresentation == "secure_machine_handle" || CanonicalRepresentation == "machine_handle") {
+            if (CanonicalRepresentation == "secure_machine_handle") {
+                bool check = (otherType.Canonicalize() is ForeignType other &&
+                   CanonicalRepresentation == other.CanonicalRepresentation) 
+                   || (otherType.CanonicalRepresentation.Equals("machine") && otherType.highSecurityLabel) ||
+                           (otherType.CanonicalRepresentation.Equals("null") && otherType.highSecurityLabel) ||    
+                           (otherType is PermissionType && otherType.highSecurityLabel);
+                return check;
+
+
+            } else if (CanonicalRepresentation == "machine_handle") {
                 return (otherType.Canonicalize() is ForeignType other &&
                    CanonicalRepresentation == other.CanonicalRepresentation) 
-                   || otherType.CanonicalRepresentation.Equals("machine") ||
-                           otherType.CanonicalRepresentation.Equals("null") ||    
-                           otherType is PermissionType; //TODO code different cases for secure_machine_handle and machine_handle
+                   || otherType.CanonicalRepresentation.Equals("machine") 
+                   || otherType.CanonicalRepresentation.Equals("null")
+                    ||   otherType is PermissionType; 
             } else {
                 return (otherType.Canonicalize() is ForeignType other &&
                    CanonicalRepresentation == other.CanonicalRepresentation);
