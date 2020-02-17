@@ -10,6 +10,13 @@ namespace Plang.Compiler.TypeChecker.Types
         public TupleType(params PLanguageType[] types) : base(TypeKind.Tuple)
         {
             Types = new List<PLanguageType>(types);
+            bool highSecurity = false;
+            foreach (PLanguageType t in Types) {
+                if (t.highSecurityLabel) {
+                    highSecurity = true;
+                }
+            }
+            highSecurityLabel = highSecurity;
             OriginalRepresentation = $"({string.Join(",", Types.Select(type => type.OriginalRepresentation))})";
             CanonicalRepresentation = $"({string.Join(",", Types.Select(type => type.CanonicalRepresentation))})";
             AllowedPermissions = Types.Any(t => t.AllowedPermissions == null)

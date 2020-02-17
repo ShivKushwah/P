@@ -62,6 +62,10 @@ namespace Plang.Compiler.TypeChecker
             // (COLON type)?
             pEvent.PayloadType = ResolveType(context.type());
 
+            if (pEvent.PayloadType.highSecurityLabel && !pEvent.isTrustedEvent) {
+                throw Handler.InformationFlowEventDeclarationException(context, pEvent.PayloadType);
+            }
+
             // SEMI
             return pEvent;
         }

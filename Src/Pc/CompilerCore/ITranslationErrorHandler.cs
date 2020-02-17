@@ -38,6 +38,8 @@ namespace Plang.Compiler
 
         Exception TypeMismatch(IPExpr expr, params TypeKind[] expected);
 
+        Exception InformationFlowEventDeclarationException(ParserRuleContext location, PLanguageType payloadType);
+
         Exception InformationFlowAssignmentException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected);
 
         Exception InformationFlowIfException(ParserRuleContext location, PLanguageType ifType, bool thenBodySecurity, bool elseBodySecurity);

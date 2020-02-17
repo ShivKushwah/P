@@ -9,6 +9,7 @@ namespace Plang.Compiler.TypeChecker.Types
         public SequenceType(PLanguageType elementType) : base(TypeKind.Sequence)
         {
             ElementType = elementType;
+            highSecurityLabel = elementType.highSecurityLabel;
         }
 
         public PLanguageType ElementType { get; }

@@ -21,6 +21,11 @@ namespace Plang.Compiler.TypeChecker.Types
                     .AllowedPermissions.Value.Concat(ValueType.AllowedPermissions.Value)
                     .ToList());
             }
+            if (keyType.highSecurityLabel  || valueType.highSecurityLabel) {
+                highSecurityLabel = true;
+            } else {
+                highSecurityLabel = false;
+            }
         }
 
         public PLanguageType KeyType { get; }

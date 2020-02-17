@@ -689,6 +689,7 @@ PrtPopState(
 		// We currently do not distinguish between the two in our logging.
 		if (isPopStatement)
 		{
+			PrtPrintf("PrtPopState error: isPopStatement");
 			PrtHandleError(PRT_STATUS_EVENT_UNHANDLED, context);
 		}
 		else if (PrtPrimGetEvent(context->currentTrigger) == PRT_SPECIAL_EVENT_HALT)
@@ -698,6 +699,7 @@ PrtPopState(
 		}
 		else
 		{
+			PrtPrintf("PrtPopState error: Else case");
 			PrtHandleError(PRT_STATUS_EVENT_UNHANDLED, context);
 		}
 		return PRT_FALSE;
