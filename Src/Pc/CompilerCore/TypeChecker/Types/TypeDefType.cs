@@ -10,6 +10,7 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             TypeDefDecl = typeDef;
             AllowedPermissions = TypeDefDecl.Type.Canonicalize().AllowedPermissions;
+            highSecurityLabel = typeDef.Type.highSecurityLabel;
         }
 
         public TypeDef TypeDefDecl { get; }
