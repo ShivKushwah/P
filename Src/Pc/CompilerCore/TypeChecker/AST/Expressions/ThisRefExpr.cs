@@ -10,7 +10,7 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
         {
             SourceLocation = sourceLocation;
             Value = value;
-            Type = new PermissionType(value);
+            Type = new ForeignType("machine_handle");//new PermissionType(value);
         }
 
         public bool highSecurityLabel { get; set; } = false;

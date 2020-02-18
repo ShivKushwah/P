@@ -1686,7 +1686,7 @@ namespace Plang.Compiler.Backend.Prt
                     break;
 
                 case ThisRefExpr _:
-                    context.Write(output, "(p_this->id)");
+                    context.Write(output, "(P_GetThis_IMPL(context, _P_GEN_funargs))");
                     break;
 
                 case TupleAccessExpr tupleAccessExpr:
