@@ -412,6 +412,7 @@ namespace Plang.Compiler.TypeChecker
                 case NondetExpr _:
                 case NullLiteralExpr _:
                 case ThisRefExpr _:
+                case ThisSecureRefExpr _:
                     // nothing to do
                     break;
 

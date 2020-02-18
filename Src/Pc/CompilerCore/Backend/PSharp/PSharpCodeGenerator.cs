@@ -1300,6 +1300,10 @@ namespace Plang.Compiler.Backend.PSharp
                 case ThisRefExpr _:
                     context.Write(output, "currentMachine.self");
                     break;
+                    
+                case ThisSecureRefExpr _:
+                    context.Write(output, "currentMachine.self");
+                    break;
 
                 case UnaryOpExpr unaryOpExpr:
                     context.Write(output, $"{UnOpToStr(unaryOpExpr.Operation)}(");

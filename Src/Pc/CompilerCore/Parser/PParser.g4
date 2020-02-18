@@ -211,6 +211,7 @@ primitive : iden
           | FAIRNONDET
           | HALT
           | THIS
+          | SECURE_THIS
           ;
 
 floatLiteral : pre=IntLiteral? DOT post=IntLiteral # DecimalFloat

@@ -64,6 +64,7 @@ START     : 'start' ;
 STATE     : 'state' ;
 SWAP      : 'swap' ;
 THIS      : 'this' ;
+SECURE_THIS : 'secure_this' ;
 TYPE      : 'type' ;
 VALUES    : 'values' ;
 VAR       : 'var' ;

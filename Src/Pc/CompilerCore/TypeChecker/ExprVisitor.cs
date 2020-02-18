@@ -533,6 +533,21 @@ namespace Plang.Compiler.TypeChecker
                 return new ThisRefExpr(context, method.Owner);
             }
 
+            if (context.SECURE_THIS() != null)
+            {
+                if (method.Owner == null)
+                {
+                    throw handler.MisplacedThis(context);
+                }
+
+                if (method.Owner.IsSpec)
+                {
+                    throw handler.IllegalMonitorOperation(context, context.SECURE_THIS().Symbol, method.Owner);
+                }
+
+                return new ThisSecureRefExpr(context, method.Owner);
+            }
+
             throw handler.InternalError(context, new ArgumentOutOfRangeException(nameof(context), "unknown primitive"));
         }
 

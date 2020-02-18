@@ -602,6 +602,9 @@ namespace Plang.Compiler.Backend.Debugging
                 case ThisRefExpr _:
                     WriteParts("this");
                     break;
+                case ThisSecureRefExpr _:
+                    WriteParts("secure_this");
+                    break;
 
                 case TupleAccessExpr tupleAccessExpr:
                     WriteParts("(", tupleAccessExpr.SubExpr, ").", tupleAccessExpr.FieldNo);
