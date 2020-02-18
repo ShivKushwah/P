@@ -11,9 +11,10 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SourceLocation = sourceLocation;
             TupleFields = tupleFields;
             Type = type;
+            highSecurityLabel = type.highSecurityLabel;
         }
 
-        public bool highSecurityLabel { get; set; } = false;
+        public bool highSecurityLabel { get; set; }
 
         public IReadOnlyList<IPExpr> TupleFields { get; }
 

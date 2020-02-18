@@ -11,9 +11,10 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SubExpr = subExpr;
             FieldNo = fieldNo;
             Type = type;
+            highSecurityLabel = type.highSecurityLabel;
         }
 
-        public bool highSecurityLabel { get; set; } = false;
+        public bool highSecurityLabel { get; set; }
 
         public IPExpr SubExpr { get; }
         public int FieldNo { get; }

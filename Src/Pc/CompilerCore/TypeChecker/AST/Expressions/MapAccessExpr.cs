@@ -11,9 +11,10 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             MapExpr = mapExpr;
             IndexExpr = indexExpr;
             Type = type;
+            highSecurityLabel = type.highSecurityLabel;
         }
 
-        public bool highSecurityLabel { get; set; } = false;
+        public bool highSecurityLabel { get; set; }
 
         public IPExpr MapExpr { get; }
         public IPExpr IndexExpr { get; }

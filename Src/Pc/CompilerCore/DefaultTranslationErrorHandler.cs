@@ -107,6 +107,13 @@ namespace Plang.Compiler
                 $"got type: {expr.Type.OriginalRepresentation}, expected: {string.Join(", ", expected.Select(e => e.Name))}");
         }
 
+        public Exception InformationFlowPrintException(ParserRuleContext location)
+        {
+            return IssueError(location,
+                $"Security Issue: Printing high security expression is not allowed!");
+        }
+
+
         public Exception InformationFlowEventDeclarationException(ParserRuleContext location, PLanguageType payloadType)
         {
             return IssueError(location,

@@ -91,6 +91,10 @@ namespace Plang.Compiler.TypeChecker
             List<IPExpr> args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), exprVisitor).ToList();
             foreach (IPExpr arg in args)
             {
+                if ((arg.highSecurityLabel) || (arg is IVariableRef && ((IVariableRef) arg).Variable.Type.highSecurityLabel)) {
+                    throw handler.InformationFlowPrintException(arg.SourceLocation);
+
+                }
                 if (arg is LinearAccessRefExpr)
                 {
                     throw handler.PrintStmtLinearArgument(arg.SourceLocation);

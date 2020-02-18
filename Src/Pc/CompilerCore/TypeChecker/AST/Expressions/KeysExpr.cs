@@ -10,9 +10,10 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SourceLocation = sourceLocation;
             Expr = expr;
             Type = type;
+            highSecurityLabel = type.highSecurityLabel;
         }
 
-        public bool highSecurityLabel { get; set; } = false;
+        public bool highSecurityLabel { get; set; }
 
         public IPExpr Expr { get; }
 
