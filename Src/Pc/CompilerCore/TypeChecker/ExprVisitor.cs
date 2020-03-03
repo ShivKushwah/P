@@ -534,23 +534,27 @@ namespace Plang.Compiler.TypeChecker
                     throw handler.IllegalMonitorOperation(context, context.THIS().Symbol, method.Owner);
                 }
 
+                if (method.Owner.IsSecure) {
+                    return new ThisSecureRefExpr(context, method.Owner);
+                }
+
                 return new ThisRefExpr(context, method.Owner);
             }
 
-            if (context.SECURE_THIS() != null)
-            {
-                if (method.Owner == null)
-                {
-                    throw handler.MisplacedThis(context);
-                }
+            // if (context.SECURE_THIS() != null) //TODO Remove all instances of "secure_this" but not ThisSecureRefExpr
+            // {
+            //     if (method.Owner == null)
+            //     {
+            //         throw handler.MisplacedThis(context);
+            //     }
 
-                if (method.Owner.IsSpec)
-                {
-                    throw handler.IllegalMonitorOperation(context, context.SECURE_THIS().Symbol, method.Owner);
-                }
+            //     if (method.Owner.IsSpec)
+            //     {
+            //         throw handler.IllegalMonitorOperation(context, context.SECURE_THIS().Symbol, method.Owner);
+            //     }
 
-                return new ThisSecureRefExpr(context, method.Owner);
-            }
+            //     return new ThisSecureRefExpr(context, method.Owner);
+            // }
 
             throw handler.InternalError(context, new ArgumentOutOfRangeException(nameof(context), "unknown primitive"));
         }

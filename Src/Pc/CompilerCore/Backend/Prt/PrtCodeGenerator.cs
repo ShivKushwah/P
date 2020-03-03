@@ -1754,11 +1754,8 @@ namespace Plang.Compiler.Backend.Prt
                     break;
 
                 case ThisRefExpr _:
-                    context.Write(output, "(P_GetThis_IMPL(context, _P_GEN_funargs))");
-                    break;
-                
                 case ThisSecureRefExpr _:
-                    context.Write(output, "(P_GetThisSecure_IMPL(context, _P_GEN_funargs))");
+                    context.Write(output, "(P_GetThis_IMPL(context, _P_GEN_funargs))");
                     break;
 
                 case TupleAccessExpr tupleAccessExpr:
