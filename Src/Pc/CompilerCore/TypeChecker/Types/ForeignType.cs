@@ -23,30 +23,30 @@ namespace Plang.Compiler.TypeChecker.Types
         public override bool IsAssignableFrom(PLanguageType otherType)
         {
             //NOTE I added below
-            if (CanonicalRepresentation == "secure_machine_handle") {
-                bool check = (otherType.Canonicalize() is ForeignType other &&
-                   CanonicalRepresentation == other.CanonicalRepresentation) 
-                   || (otherType.CanonicalRepresentation.Equals("machine") && otherType.highSecurityLabel) ||
-                           (otherType.CanonicalRepresentation.Equals("null") && otherType.highSecurityLabel) ||    
-                           (otherType is PermissionType && otherType.highSecurityLabel);
-                return check;
+            // if (CanonicalRepresentation == "secure_machine_handle") {
+            //     bool check = (otherType.Canonicalize() is ForeignType other &&
+            //        CanonicalRepresentation == other.CanonicalRepresentation) 
+            //        || (otherType.CanonicalRepresentation.Equals("machine") && otherType.highSecurityLabel) ||
+            //                (otherType.CanonicalRepresentation.Equals("null") && otherType.highSecurityLabel) ||    
+            //                (otherType is PermissionType && otherType.highSecurityLabel);
+            //     return check;
 
 
-            } else if (CanonicalRepresentation == "machine_handle") {
-                return (otherType.Canonicalize() is ForeignType other &&
-                   CanonicalRepresentation == other.CanonicalRepresentation) 
-                   || otherType.CanonicalRepresentation.Equals("machine") 
-                   || otherType.CanonicalRepresentation.Equals("null")
-                    ||   otherType is PermissionType; 
-            } else {
-                return (otherType.Canonicalize() is ForeignType other &&
-                   CanonicalRepresentation == other.CanonicalRepresentation);
-            }
+            // } else if (CanonicalRepresentation == "machine_handle") {
+            //     return (otherType.Canonicalize() is ForeignType other &&
+            //        CanonicalRepresentation == other.CanonicalRepresentation) 
+            //        || otherType.CanonicalRepresentation.Equals("machine") 
+            //        || otherType.CanonicalRepresentation.Equals("null")
+            //         ||   otherType is PermissionType; 
+            // } else {
+            //     return (otherType.Canonicalize() is ForeignType other &&
+            //        CanonicalRepresentation == other.CanonicalRepresentation);
+            // }
             
             // return (otherType.Canonicalize() is ForeignType other &&
             //        CanonicalRepresentation == other.CanonicalRepresentation) || true;
-            // return otherType.Canonicalize() is ForeignType other &&
-            //        CanonicalRepresentation == other.CanonicalRepresentation;
+            return otherType.Canonicalize() is ForeignType other &&
+                   CanonicalRepresentation == other.CanonicalRepresentation;
         }
 
         public override PLanguageType Canonicalize()
