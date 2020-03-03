@@ -189,11 +189,24 @@ namespace Plang.Compiler.TypeChecker
 
             } else if (variable.Type.CanonicalRepresentation.Equals("machine_handle")) {
 
-                bool check = (value.Type.Canonicalize() is ForeignType other &&
+                bool check;
+
+                if (method.Owner.IsSecure) {
+                    check = (value.Type.Canonicalize() is ForeignType other &&
                    variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
-                   || value.Type.CanonicalRepresentation.Equals("machine") 
+                   || (value.Type.CanonicalRepresentation.Equals("machine") && !value.Type.highSecurityLabel)
+                   || (value.Type.CanonicalRepresentation.Equals("null") && !value.Type.highSecurityLabel)
+                    ||   (value.Type is PermissionType && !value.Type.highSecurityLabel);
+
+                } else {
+                    check = (value.Type.Canonicalize() is ForeignType other &&
+                   variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
+                   || value.Type.CanonicalRepresentation.Equals("machine")
                    || value.Type.CanonicalRepresentation.Equals("null")
-                    ||   value.Type is PermissionType; 
+                    ||   value.Type is PermissionType;
+                }
+
+                
                 if (!check) {
                     throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
                 } else {
