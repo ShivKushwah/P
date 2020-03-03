@@ -405,9 +405,15 @@ namespace Plang.Compiler.TypeChecker
             }
 
             IPExpr machineExpr = exprVisitor.Visit(context.machine);
-            if (!PrimitiveType.Machine.IsAssignableFrom(machineExpr.Type))
+
+            bool isSecureSend = false;
+            if (machineExpr.Type.CanonicalRepresentation.Equals("secure_machine_handle")) {
+                isSecureSend = true;
+            }
+            
+            if (!machineExpr.Type.CanonicalRepresentation.Equals("secure_machine_handle") && !machineExpr.Type.CanonicalRepresentation.Equals("machine_handle")) 
             {
-                throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine);
+                throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine); 
             }
 
             IPExpr evtExpr = exprVisitor.Visit(context.@event);
@@ -425,10 +431,18 @@ namespace Plang.Compiler.TypeChecker
 
             if (evtExpr is EventRefExpr eventRef)
             {
+                if ( (!((EventRefExpr) evtExpr).Value.isTrustedEvent) && isSecureSend) {
+                    throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.TrustedEvent); //TODO shiv mke this a custom error message
+                }
+                if (((EventRefExpr) evtExpr).Value.isTrustedEvent && !isSecureSend) {
+                    throw handler.TypeMismatch(context.@event, PrimitiveType.TrustedEvent, PrimitiveType.Event); //TODO shiv mke this a custom error message
+                }
                 TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
             }
 
-            return new SendStmt(context, machineExpr, evtExpr, args);
+            SendStmt returnSendStmt = new SendStmt(context, machineExpr, evtExpr, args);
+            returnSendStmt.highSecurityLabel = isSecureSend;
+            return returnSendStmt;
         }
 
         public override IPStmt VisitSecureSendStmt(PParser.SecureSendStmtContext context)
