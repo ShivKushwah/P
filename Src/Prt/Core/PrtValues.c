@@ -1884,12 +1884,26 @@ PRT_VALUE* PRT_CALL_CONV PrtConvertValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* t
 	}
 }
 
+extern PRT_TYPE* P_TYPEDEF_machine_handle;
+extern PRT_TYPE* P_TYPEDEF_secure_machine_handle;
+extern PRT_VALUE* P_CastSecureMachineHandleToMachineHandle_IMPL(PRT_VALUE* value);
+
 PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type)
 {
 	PrtAssert(PrtIsValidValue(value), "Invalid value expression.");
 	PrtAssert(PrtIsValidType(type), "Invalid type expression.");
-	PrtAssert(PrtInhabitsType(value, type), "Invalid type cast");
-	return value;
+	PRT_TYPE_KIND tkind = type->typeKind;
+	PRT_VALUE_KIND vkind = value->discriminator;
+	if (tkind == PRT_KIND_FOREIGN) {
+		if (vkind == PRT_VALUE_KIND_FOREIGN && value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex) {
+				return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
+			}
+	} else {
+		PrtAssert(PrtInhabitsType(value, type), "Invalid type cast");
+		return value;
+	}
+	
 }
 
 PRT_BOOLEAN PRT_CALL_CONV PrtInhabitsType(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type)

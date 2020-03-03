@@ -10,6 +10,7 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
             SourceLocation = sourceLocation;
             SubExpr = subExpr;
             NewType = newType;
+            highSecurityLabel = newType.highSecurityLabel;
         }
     
         public bool highSecurityLabel { get; set; } = false;

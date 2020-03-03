@@ -360,6 +360,10 @@ namespace Plang.Compiler.TypeChecker
             PLanguageType newType = TypeResolver.ResolveType(context.type(), table, handler);
             if (context.cast.Text.Equals("as"))
             {
+                if (oldType.CanonicalRepresentation.Equals("secure_machine_handle") && newType.CanonicalRepresentation.Equals("machine_handle")) {
+                    return new CastExpr(context, subExpr, newType);
+                }
+
                 if (!newType.IsAssignableFrom(oldType) && !oldType.IsAssignableFrom(newType))
                 {
                     throw handler.IncomparableTypes(context, oldType, newType);
