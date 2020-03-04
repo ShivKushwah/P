@@ -214,6 +214,14 @@ namespace Plang.Compiler.TypeChecker
                 }
 
             }  
+            else if (variable.Type.CanonicalRepresentation.Equals("secure_StringType")) {
+                if (value.Type.CanonicalRepresentation.Equals("StringType") || value.Type.CanonicalRepresentation.Equals("secure_StringType")) {
+                    return new AssignStmt(context, variable, value);
+                } else {
+                    throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+                }
+
+            }
             // If this is a value assignment, we just need subtyping
             else if (!variable.Type.IsAssignableFrom(value.Type))
             {

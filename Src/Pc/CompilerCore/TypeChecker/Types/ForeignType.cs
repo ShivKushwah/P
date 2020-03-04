@@ -10,7 +10,7 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             OriginalRepresentation = name;
             CanonicalRepresentation = name;
-            if (name == "secure_machine_handle") {
+            if (name == "secure_machine_handle" || name == "secure_StringType") {
                 highSecurityLabel = true;
             }
         }
