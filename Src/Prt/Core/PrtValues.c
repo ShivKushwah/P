@@ -1886,10 +1886,17 @@ PRT_VALUE* PRT_CALL_CONV PrtConvertValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* t
 
 extern PRT_TYPE* P_TYPEDEF_machine_handle;
 extern PRT_TYPE* P_TYPEDEF_secure_machine_handle;
+extern PRT_TYPE* P_TYPEDEF_secure_StringType;
+extern PRT_TYPE* P_TYPEDEF_StringType;
+
 extern PRT_VALUE* P_CastSecureMachineHandleToMachineHandle_IMPL(PRT_VALUE* value);
+extern PRT_VALUE* P_CastSecureStringTypeToStringType_IMPL(PRT_VALUE* value);
+extern int ocall_print(char* str);
+extern int ocall_print_int(int str);
 
 PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type)
 {
+	ocall_print("Inside PrtCastValue");
 	PrtAssert(PrtIsValidValue(value), "Invalid value expression.");
 	PrtAssert(PrtIsValidType(type), "Invalid type expression.");
 	PRT_TYPE_KIND tkind = type->typeKind;
@@ -1898,6 +1905,17 @@ PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type
 		if (vkind == PRT_VALUE_KIND_FOREIGN && value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
 		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex) {
 				return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
+			}
+		else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex || P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex) {
+				ocall_print("Going to P_CastSecureString");
+				return P_CastSecureStringTypeToStringType_IMPL(value);
+			} else {
+				ocall_print("ERROR");
+				ocall_print_int(value->valueUnion.frgn->typeTag);
+				ocall_print_int(P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex);
+				ocall_print_int(type->typeUnion.foreignType->declIndex);
+				ocall_print_int(P_TYPEDEF_StringType->typeUnion.foreignType->declIndex);
 			}
 	} else {
 		PrtAssert(PrtInhabitsType(value, type), "Invalid type cast");
