@@ -71,7 +71,7 @@ namespace Plang.Compiler.TypeChecker
 
                 //TODO Shiv Check if we can do this by cases, doesn't work for map type
                 try {
-                    variable.highSecurityLabel = ((PrimitiveType)type).highSecurityLabel;
+                    variable.highSecurityLabel = type.highSecurityLabel;
                 } catch {
                     variable.highSecurityLabel = false;
                 }
