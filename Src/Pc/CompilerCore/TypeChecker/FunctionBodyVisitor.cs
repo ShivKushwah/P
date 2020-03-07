@@ -69,7 +69,6 @@ namespace Plang.Compiler.TypeChecker
                 PLanguageType type = TypeResolver.ResolveType(context.type(), method.Scope, handler);
                 variable.Type = type;
 
-                //TODO Shiv Check if we can do this by cases, doesn't work for map type
                 try {
                     variable.highSecurityLabel = type.highSecurityLabel;
                 } catch {
