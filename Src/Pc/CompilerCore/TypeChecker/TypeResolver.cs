@@ -49,10 +49,10 @@ namespace Plang.Compiler.TypeChecker
 
                 if (scope.Lookup(typeName, out TypeDef typeDef))
                 {
-                    if (visitedTypeDefs.Contains(typeDef))
-                    {
-                        throw handler.CircularTypeDef(context.name, typeDef);
-                    }
+                    // if (visitedTypeDefs.Contains(typeDef))
+                    // {
+                    //     throw handler.CircularTypeDef(context.name, typeDef);
+                    // }
 
                     if (typeDef.Type == null)
                     {
