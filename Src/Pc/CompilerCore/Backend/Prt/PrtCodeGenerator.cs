@@ -296,7 +296,12 @@ namespace Plang.Compiler.Backend.Prt
                     context.WriteLine(output, "{ PRT_VALUE_KIND_EVENT, 0U },");
                     context.WriteLine(output, $"\"{pEvent.Name}\",");
                     context.WriteLine(output, $"{eventBound}U,");
-                    context.WriteLine(output, $"&{context.Names.GetNameForType(pEvent.PayloadType)}");
+                    context.WriteLine(output, $"&{context.Names.GetNameForType(pEvent.PayloadType)},");
+                    if (pEvent.isTrustedEvent) {
+                        context.WriteLine(output, "1");
+                    } else {
+                        context.WriteLine(output, "0");
+                    }
                     context.WriteLine(output, "};");
                     break;
 
