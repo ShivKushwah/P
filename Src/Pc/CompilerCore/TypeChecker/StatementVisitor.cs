@@ -493,9 +493,11 @@ namespace Plang.Compiler.TypeChecker
                 TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
             }
 
-            SendStmt returnSendStmt = new SendStmt(context, machineExpr, evtExpr, args);
-            returnSendStmt.highSecurityLabel = isSecureSend;
-            return returnSendStmt;
+            if (isSecureSend) {
+                return new SecureSendStmt(context, machineExpr, evtExpr, args);
+            } else {
+                return new SendStmt(context, machineExpr, evtExpr, args);
+            }
         }
 
         public override IPStmt VisitSecureSendStmt(PParser.SecureSendStmtContext context)
