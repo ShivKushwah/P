@@ -297,6 +297,7 @@ namespace Plang.Compiler.TypeChecker
 
                 case "in":
                     PLanguageType rhsType = rhs.Type.Canonicalize();
+
                     if (rhsType is MapType rhsMap)
                     {
                         if (!rhsMap.KeyType.IsAssignableFrom(lhs.Type))
@@ -322,7 +323,14 @@ namespace Plang.Compiler.TypeChecker
                     {
                         throw handler.TypeMismatch(rhs, TypeKind.Map, TypeKind.Sequence);
                     }
-                    return new ContainsExpr(context, lhs, rhs);
+
+                    if (!lhs.Type.highSecurityLabel && rhs.Type.highSecurityLabel) {
+                        throw handler.InformationFlowAssignmentException(context, rhs.Type, lhs.Type);
+                    }
+
+                    ContainsExpr cExpr = new ContainsExpr(context, lhs, rhs);
+                    cExpr.highSecurityLabel = rhs.Type.highSecurityLabel;
+                    return cExpr;
 
                 case "==":
                 case "!=":
