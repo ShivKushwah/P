@@ -1904,7 +1904,8 @@ PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type
 	if (tkind == PRT_KIND_FOREIGN) {
 		if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
 		|| type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
-				return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
+				// return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
+				return value;
 			}
 		else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
 		|| type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
