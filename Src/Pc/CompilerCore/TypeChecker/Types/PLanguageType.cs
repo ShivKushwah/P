@@ -11,7 +11,9 @@ namespace Plang.Compiler.TypeChecker.Types
             TypeKind = kind;
         }
 
-        public bool highSecurityLabel { get; set; } = false;
+        public bool highSecurityLabel { get; set; } = false; //Overall type -> (int, secure_int) -> overall is a highSecurityLabel and should not be leaked
+        public bool allSubtypesAreHighSecurityLabel { get; set; } = false; //Stronger property needed for Trusted Send Observational 
+        // Determinism proof -> (int, secure_int) = false, (secure_int, secure_int) = true
 
         /// <summary>
         ///     The category of type this is (eg. sequence, map, base)

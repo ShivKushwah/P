@@ -17,6 +17,15 @@ namespace Plang.Compiler.TypeChecker.Types
                 }
             }
             highSecurityLabel = highSecurity;
+
+            bool highSecurityAllSubtypes = true;
+            foreach (PLanguageType t in Types) {
+                if (!t.allSubtypesAreHighSecurityLabel) {
+                    highSecurityAllSubtypes = false;
+                }
+            }
+            allSubtypesAreHighSecurityLabel = highSecurityAllSubtypes;
+
             OriginalRepresentation = $"({string.Join(",", Types.Select(type => type.OriginalRepresentation))})";
             CanonicalRepresentation = $"({string.Join(",", Types.Select(type => type.CanonicalRepresentation))})";
             AllowedPermissions = Types.Any(t => t.AllowedPermissions == null)

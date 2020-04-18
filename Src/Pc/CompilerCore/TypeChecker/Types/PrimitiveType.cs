@@ -31,6 +31,7 @@ namespace Plang.Compiler.TypeChecker.Types
                 case "secure_int":
                 case "secure_bool":
                     highSecurityLabel = true;
+                    allSubtypesAreHighSecurityLabel = true;
                     break;
 
                 default:

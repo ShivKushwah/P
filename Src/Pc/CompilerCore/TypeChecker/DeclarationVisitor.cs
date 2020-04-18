@@ -62,7 +62,11 @@ namespace Plang.Compiler.TypeChecker
             // (COLON type)?
             pEvent.PayloadType = ResolveType(context.type());
 
-            if (pEvent.PayloadType.highSecurityLabel && !pEvent.isTrustedEvent) {
+            if (pEvent.PayloadType.highSecurityLabel && !pEvent.isTrustedEvent) { //Untrusted Events can't have highSecurity payloads
+                throw Handler.InformationFlowEventDeclarationException(context, pEvent.PayloadType);
+            }
+
+            if (pEvent.isTrustedEvent && !pEvent.PayloadType.highSecurityLabel) {//Trusted Events must only contain highSecurity payloads
                 throw Handler.InformationFlowEventDeclarationException(context, pEvent.PayloadType);
             }
 

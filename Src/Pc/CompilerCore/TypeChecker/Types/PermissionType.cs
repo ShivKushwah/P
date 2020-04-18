@@ -14,6 +14,7 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             origin = machine;
             highSecurityLabel = machine.IsSecure;
+            allSubtypesAreHighSecurityLabel = highSecurityLabel;
             AllowedPermissions = new Lazy<IReadOnlyList<PEvent>>(() => machine.Receives.Events.ToList());
         }
 
@@ -21,6 +22,7 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             origin = pInterface;
             highSecurityLabel = pInterface.IsSecure;
+            allSubtypesAreHighSecurityLabel = highSecurityLabel;
             AllowedPermissions = new Lazy<IReadOnlyList<PEvent>>(() => pInterface.ReceivableEvents.Events.ToList());
         }
 

@@ -370,7 +370,11 @@ namespace Plang.Compiler.TypeChecker
             {
                 if (oldType.CanonicalRepresentation.Equals("secure_machine_handle") && newType.CanonicalRepresentation.Equals("machine_handle")) {
                     return new CastExpr(context, subExpr, newType);
+                } else if (newType.CanonicalRepresentation.Equals("secure_machine_handle") && oldType.CanonicalRepresentation.Equals("machine_handle")) {
+                    return new CastExpr(context, subExpr, newType);
                 } else if (oldType.CanonicalRepresentation.Equals("secure_StringType") && newType.CanonicalRepresentation.Equals("StringType")) {
+                    return new CastExpr(context, subExpr, newType);
+                } else if (newType.CanonicalRepresentation.Equals("secure_StringType") && oldType.CanonicalRepresentation.Equals("StringType")) {
                     return new CastExpr(context, subExpr, newType);
                 }
 

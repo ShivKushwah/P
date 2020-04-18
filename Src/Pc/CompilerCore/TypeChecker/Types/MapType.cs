@@ -26,6 +26,11 @@ namespace Plang.Compiler.TypeChecker.Types
             } else {
                 highSecurityLabel = false;
             }
+            if (keyType.allSubtypesAreHighSecurityLabel && valueType.allSubtypesAreHighSecurityLabel) {
+                allSubtypesAreHighSecurityLabel = true;
+            } else {
+                allSubtypesAreHighSecurityLabel = false;
+            }
         }
 
         public PLanguageType KeyType { get; }

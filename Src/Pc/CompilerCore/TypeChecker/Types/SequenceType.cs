@@ -10,6 +10,7 @@ namespace Plang.Compiler.TypeChecker.Types
         {
             ElementType = elementType;
             highSecurityLabel = elementType.highSecurityLabel;
+            allSubtypesAreHighSecurityLabel = elementType.allSubtypesAreHighSecurityLabel;
         }
 
         public PLanguageType ElementType { get; }

@@ -1890,7 +1890,9 @@ extern PRT_TYPE* P_TYPEDEF_secure_StringType;
 extern PRT_TYPE* P_TYPEDEF_StringType;
 
 extern PRT_VALUE* P_CastSecureMachineHandleToMachineHandle_IMPL(PRT_VALUE* value);
+extern PRT_VALUE* P_CastMachineHandleToSecureMachineHandle_IMPL(PRT_VALUE* value);
 extern PRT_VALUE* P_CastSecureStringTypeToStringType_IMPL(PRT_VALUE* value);
+extern PRT_VALUE* P_CastStringTypeToSecureStringType_IMPL(PRT_VALUE* value);
 extern int ocall_print(char* str);
 extern int ocall_print_int(int str);
 
@@ -1903,15 +1905,36 @@ PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type
 	PRT_VALUE_KIND vkind = value->discriminator;
 	if (tkind == PRT_KIND_FOREIGN) {
 		if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
-		|| type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
-				// return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
-				return value;
-			}
-		else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
-		|| type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
-				ocall_print("Going to P_CastSecureString");
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
+				return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex)) {
+				return P_CastMachineHandleToSecureMachineHandle_IMPL(value);
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
+				ocall_print("Going to P_CastSecureStringToRegular");
 				return P_CastSecureStringTypeToStringType_IMPL(value);
-			} else {
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex)) {
+				ocall_print("Going to P_CastStringToSecure");
+				return P_CastStringTypeToSecureStringType_IMPL(value);
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
+				ocall_print("Cast from StringType to StringType");
+				return value;
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex)) {
+				ocall_print("Cast from secure_StringType to secure_StringType");
+				return value;
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
+				ocall_print("Cast from machine_handle to machine_handle");
+				return value;
+		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
+		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex)) {
+				ocall_print("Cast from secure_machine_handle to secure_machine_handle");
+				return value;
+		}else {
 				ocall_print("ERROR");
 				ocall_print_int(value->valueUnion.frgn->typeTag);
 				ocall_print_int(P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex);
