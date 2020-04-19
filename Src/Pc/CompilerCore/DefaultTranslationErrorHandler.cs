@@ -120,6 +120,12 @@ namespace Plang.Compiler
                 $"Security Issue: Assigning high security payload \"{payloadType.OriginalRepresentation}\" to Untrusted Event type. Change event type to Trusted or change the payload type.");
         }
 
+        public Exception InformationFlowTrustedEventDeclarationException(ParserRuleContext location, PLanguageType payloadType)
+        {
+            return IssueError(location,
+                $"Security Issue: Assigning low security payload \"{payloadType.OriginalRepresentation}\" to Trusted Event type. Change event type to Untrusted or change the payload type.");
+        }
+
         public Exception InformationFlowAssignmentException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected)
         {
             return IssueError(location,

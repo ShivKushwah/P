@@ -42,6 +42,8 @@ namespace Plang.Compiler
 
         Exception InformationFlowEventDeclarationException(ParserRuleContext location, PLanguageType payloadType);
 
+        Exception InformationFlowTrustedEventDeclarationException(ParserRuleContext location, PLanguageType payloadType);
+
         Exception InformationFlowAssignmentException(ParserRuleContext location, PLanguageType actual, params PLanguageType[] expected);
 
         Exception InformationFlowIfException(ParserRuleContext location, PLanguageType ifType, bool thenBodySecurity, bool elseBodySecurity);

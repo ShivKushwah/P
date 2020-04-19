@@ -66,8 +66,8 @@ namespace Plang.Compiler.TypeChecker
                 throw Handler.InformationFlowEventDeclarationException(context, pEvent.PayloadType);
             }
 
-            if (pEvent.isTrustedEvent && !pEvent.PayloadType.highSecurityLabel) {//Trusted Events must only contain highSecurity payloads
-                throw Handler.InformationFlowEventDeclarationException(context, pEvent.PayloadType);
+            if (pEvent.isTrustedEvent && !pEvent.PayloadType.highSecurityLabel && !pEvent.PayloadType.CanonicalRepresentation.Equals("null")) {//Trusted Events must only contain highSecurity payloads or null payloads
+                throw Handler.InformationFlowTrustedEventDeclarationException(context, pEvent.PayloadType);
             }
 
             // SEMI
