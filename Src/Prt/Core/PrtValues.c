@@ -428,6 +428,21 @@ PRT_INT PRT_CALL_CONV PrtPrimGetSecureInt(_In_ PRT_VALUE* prmVal)
 	return prmVal->valueUnion.nt;
 }
 
+void PRT_CALL_CONV PrtPrimSetSecureBool(_Inout_ PRT_VALUE* prmVal, _In_ PRT_BOOLEAN value)
+{
+	PrtAssert(value == PRT_TRUE || value == PRT_FALSE, "Expected a bool value");
+	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
+	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_BOOL, "Invalid type on primitive set");
+	prmVal->valueUnion.bl = value;
+}
+
+PRT_BOOLEAN PRT_CALL_CONV PrtPrimGetSecureBool(_In_ PRT_VALUE* prmVal)
+{
+	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
+	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_BOOL, "Invalid type on primitive get");
+	return prmVal->valueUnion.bl;
+}
+
 void PRT_CALL_CONV PrtPrimSetFloat(_Inout_ PRT_VALUE* prmVal, _In_ PRT_FLOAT value)
 {
 	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
@@ -1403,6 +1418,8 @@ PRT_UINT32 PRT_CALL_CONV PrtGetHashCodeValue(_In_ PRT_VALUE* inputValue)
 		return PrtGetHashCodePrtInt(0x02000000 ^ ((PRT_INT)inputValue->valueUnion.nt));
 	case PRT_VALUE_KIND_SECURE_INT:
 		return PrtGetHashCodePrtInt(0x02000001 ^ ((PRT_INT)inputValue->valueUnion.nt)); //TODO SHIV is this correct?
+	case PRT_VALUE_KIND_SECURE_BOOL:
+		return PrtGetHashCodeUInt32(0x00400001 ^ ((PRT_UINT32)inputValue->valueUnion.bl));
 	case PRT_VALUE_KIND_FLOAT:
 		return PrtGetHashCodePrtFloat((inputValue->valueUnion.ft));
 	case PRT_VALUE_KIND_FOREIGN:
@@ -1553,6 +1570,7 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsEqualValue(_In_ PRT_VALUE* value1, _In_ PRT_VALUE
 	case PRT_VALUE_KIND_NULL:
 		//// Checked for equality with null earlier.
 		return PRT_FALSE;
+	case PRT_VALUE_KIND_SECURE_BOOL:
 	case PRT_VALUE_KIND_BOOL:
 		return
 			value1->valueUnion.bl == value2->valueUnion.bl ? PRT_TRUE : PRT_FALSE;
@@ -1572,10 +1590,8 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsEqualValue(_In_ PRT_VALUE* value1, _In_ PRT_VALUE
 			? PRT_TRUE
 			: PRT_FALSE;
 	}
-	case PRT_VALUE_KIND_INT:
-		return
-			value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
 	case PRT_VALUE_KIND_SECURE_INT:
+	case PRT_VALUE_KIND_INT:
 		return
 			value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
 	case PRT_VALUE_KIND_FLOAT:
@@ -1694,6 +1710,12 @@ PRT_VALUE* PRT_CALL_CONV PrtCloneValue(_In_ PRT_VALUE* value)
 		return PrtMkNullValue();
 	case PRT_VALUE_KIND_BOOL:
 		return PrtMkBoolValue(value->valueUnion.bl);
+	case PRT_VALUE_KIND_SECURE_BOOL:
+	{
+		PRT_VALUE* prtVal = PrtMkBoolValue(value->valueUnion.bl);
+		prtVal->discriminator = PRT_VALUE_KIND_SECURE_BOOL;
+		return prtVal;
+	}
 	case PRT_VALUE_KIND_EVENT:
 		return PrtMkEventValue(value->valueUnion.ev);
 	case PRT_VALUE_KIND_MID:
@@ -1839,6 +1861,7 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsNullValue(_In_ PRT_VALUE* value)
 	}
 	case PRT_VALUE_KIND_BOOL:
 	case PRT_VALUE_KIND_INT:
+	case PRT_VALUE_KIND_SECURE_BOOL:
 	case PRT_VALUE_KIND_SECURE_INT:
 	case PRT_VALUE_KIND_FLOAT:
 	case PRT_VALUE_KIND_FOREIGN:
@@ -2264,6 +2287,9 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsValidValue(_In_ PRT_VALUE* value)
 	{
 	case PRT_VALUE_KIND_BOOL:
 		return value->discriminator == PRT_VALUE_KIND_BOOL &&
+			(value->valueUnion.bl == PRT_TRUE || value->valueUnion.bl == PRT_FALSE);
+	case PRT_VALUE_KIND_SECURE_BOOL:
+		return value->discriminator == PRT_VALUE_KIND_SECURE_BOOL &&
 			(value->valueUnion.bl == PRT_TRUE || value->valueUnion.bl == PRT_FALSE);
 	case PRT_VALUE_KIND_EVENT:
 		return value->discriminator == PRT_VALUE_KIND_EVENT;
