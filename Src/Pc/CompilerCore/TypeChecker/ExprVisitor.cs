@@ -163,6 +163,15 @@ namespace Plang.Compiler.TypeChecker
 
             IPExpr[] arguments = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), this).ToArray();
             TypeCheckingUtils.ValidatePayloadTypes(handler, context, @interface.PayloadType, arguments);
+            if (method.Owner.IsSecure) {
+                if (@interface.IsSecure) {
+                    @interface.IsSecure = true; //SSM creates SSM -> secure_machine_handle
+                } else {
+                    @interface.IsSecure = false; //SSM creates USM -> machine_handle
+                }
+            } else {
+                @interface.IsSecure = false; //All handles returned to USMs must be non secure, regardless of the case when a USM creates an SSM
+            }
             return new CtorExpr(context, @interface, arguments);
         }
 

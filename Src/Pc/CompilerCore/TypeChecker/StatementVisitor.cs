@@ -169,64 +169,62 @@ namespace Plang.Compiler.TypeChecker
                 }
             }
 
-            if (variable.Type.CanonicalRepresentation.Equals("secure_machine_handle")) {
-                if (method.Owner.IsSecure) {
-                    bool check = (value.Type.Canonicalize() is ForeignType other &&
-                            variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
-                            || (value.Type.CanonicalRepresentation.Equals("machine") && value.Type.highSecurityLabel) ||
-                                    (value.Type.CanonicalRepresentation.Equals("null") && value.Type.highSecurityLabel) ||    
-                                    (value.Type is PermissionType && value.Type.highSecurityLabel);
+            // if (variable.Type.CanonicalRepresentation.Equals("secure_machine_handle")) {
+            //     if (method.Owner.IsSecure) {
+            //         bool check = (value.Type.Canonicalize() is ForeignType other &&
+            //                 variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
+            //                 || (value.Type.CanonicalRepresentation.Equals("machine") && value.Type.highSecurityLabel) ||
+            //                         (value.Type.CanonicalRepresentation.Equals("null") && value.Type.highSecurityLabel) ||    
+            //                         (value.Type is PermissionType && value.Type.highSecurityLabel);
 
-                    if (!check) {
-                        throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
-                    } else {
-                        return new AssignStmt(context, variable, value);
-                    }
+            //         if (!check) {
+            //             throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+            //         } else {
+            //             return new AssignStmt(context, variable, value);
+            //         }
                     
-                } else {
-                    throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
-                }
+            //     } else {
+            //         throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+            //     }
 
-            } else if (variable.Type.CanonicalRepresentation.Equals("machine_handle")) {
+            // } else if (variable.Type.CanonicalRepresentation.Equals("machine_handle")) {
 
-                bool check;
+            // // if (variable.Type.CanonicalRepresentation.Equals("machine_handle")) {
 
-                if (method.Owner.IsSecure) {
-                    check = (value.Type.Canonicalize() is ForeignType other &&
-                   variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
-                   || (value.Type.CanonicalRepresentation.Equals("machine") && !value.Type.highSecurityLabel)
-                   || (value.Type.CanonicalRepresentation.Equals("null") && !value.Type.highSecurityLabel)
-                    ||   (value.Type is PermissionType && !value.Type.highSecurityLabel);
+            //     bool check;
 
-                } else {
-                    check = (value.Type.Canonicalize() is ForeignType other &&
-                   variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
-                   || value.Type.CanonicalRepresentation.Equals("machine")
-                   || value.Type.CanonicalRepresentation.Equals("null")
-                    ||   value.Type is PermissionType;
-                }
+            //     if (method.Owner.IsSecure) {
+            //         check = (value.Type.Canonicalize() is ForeignType other &&
+            //        variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
+            //        || (value.Type.CanonicalRepresentation.Equals("machine") && !value.Type.highSecurityLabel)
+            //        || (value.Type.CanonicalRepresentation.Equals("null") && !value.Type.highSecurityLabel)
+            //         ||   (value.Type is PermissionType && !value.Type.highSecurityLabel);
+
+            //     } else {
+            //         check = (value.Type.Canonicalize() is ForeignType other &&
+            //        variable.Type.CanonicalRepresentation == other.CanonicalRepresentation) 
+            //        || value.Type.CanonicalRepresentation.Equals("machine")
+            //        || value.Type.CanonicalRepresentation.Equals("null")
+            //         ||   value.Type is PermissionType;
+            //     }
 
                 
-                if (!check) {
-                    throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
-                } else {
-                    return new AssignStmt(context, variable, value);
-                }
+            //     if (!check) {
+            //         throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+            //     } else {
+            //         return new AssignStmt(context, variable, value);
+            //     }
 
-            }  
-            else if (variable.Type.CanonicalRepresentation.Equals("secure_StringType")) {
-                if (value.Type.CanonicalRepresentation.Equals("StringType") || value.Type.CanonicalRepresentation.Equals("secure_StringType")) {
-                    return new AssignStmt(context, variable, value);
-                } else {
-                    throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
-                }
+            // }  
+            // else if (!variable.Type.IsAssignableFrom(value.Type))
+            // {
+            //     throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+            // }
 
-            }
-            // If this is a value assignment, we just need subtyping
-            else if (!variable.Type.IsAssignableFrom(value.Type))
-            {
-                throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
-            }
+            // if (!variable.Type.IsAssignableFrom(value.Type))
+            // {
+            //     throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+            // }
 
             //Check if this assignment is a security risk
             if (!variable.highSecurityLabel && value.highSecurityLabel) {
