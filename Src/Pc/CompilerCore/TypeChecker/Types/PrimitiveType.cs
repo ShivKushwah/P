@@ -64,19 +64,23 @@ namespace Plang.Compiler.TypeChecker.Types
 
                 
                 case "secure_int":
-                    return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");
+                    // return otherType.CanonicalRepresentation.Equals("secure_int") || otherType.CanonicalRepresentation.Equals("int");
+                    return otherType.CanonicalRepresentation.Equals("secure_int");
 
                 case "event":
                     return otherType.CanonicalRepresentation.Equals("event") ||
                            otherType.CanonicalRepresentation.Equals("null");
                 
                 case "bool":
-                    return otherType.CanonicalRepresentation.Equals("bool") ||
-                           otherType.CanonicalRepresentation.Equals("secure_bool"); //TODO why did I need to recomment this? Why do secure_int comparisions not work?
-                
+                    // return otherType.CanonicalRepresentation.Equals("bool") ||
+                    //        otherType.CanonicalRepresentation.Equals("secure_bool"); //TODO why did I need to recomment this? Why do secure_int comparisions not work?
+                    return otherType.CanonicalRepresentation.Equals("bool");
+
+
                 case "secure_bool":
-                    return otherType.CanonicalRepresentation.Equals("bool") ||
-                           otherType.CanonicalRepresentation.Equals("secure_bool");
+                    // return otherType.CanonicalRepresentation.Equals("bool") ||
+                    //         otherType.CanonicalRepresentation.Equals("secure_bool");
+                    return otherType.CanonicalRepresentation.Equals("secure_bool");
 
                 default:
                     return CanonicalRepresentation.Equals(otherType.CanonicalRepresentation);

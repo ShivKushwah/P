@@ -414,19 +414,19 @@ PRT_INT PRT_CALL_CONV PrtPrimGetInt(_In_ PRT_VALUE* prmVal)
 }
 
 //TODO SHIV are these necessary? would this leak?
-// void PRT_CALL_CONV PrtPrimSetSecureInt(_Inout_ PRT_VALUE* prmVal, _In_ PRT_INT value)
-// {
-// 	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
-// 	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid type on primitive set");
-// 	prmVal->valueUnion.nt = value;
-// }
+void PRT_CALL_CONV PrtPrimSetSecureInt(_Inout_ PRT_VALUE* prmVal, _In_ PRT_INT value)
+{
+	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
+	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid type on primitive set");
+	prmVal->valueUnion.nt = value;
+}
 
-// PRT_INT PRT_CALL_CONV PrtPrimGetSecureInt(_In_ PRT_VALUE* prmVal)
-// {
-// 	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
-// 	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid type on primitive get");
-// 	return prmVal->valueUnion.nt;
-// }
+PRT_INT PRT_CALL_CONV PrtPrimGetSecureInt(_In_ PRT_VALUE* prmVal)
+{
+	PrtAssert(PrtIsValidValue(prmVal), "Invalid value expression.");
+	PrtAssert(prmVal->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid type on primitive get");
+	return prmVal->valueUnion.nt;
+}
 
 void PRT_CALL_CONV PrtPrimSetFloat(_Inout_ PRT_VALUE* prmVal, _In_ PRT_FLOAT value)
 {
@@ -513,7 +513,7 @@ void PRT_CALL_CONV PrtSeqUpdateEx(_Inout_ PRT_VALUE* seq, _In_ PRT_VALUE* index,
 	PrtAssert(PrtIsValidValue(value), "Invalid value expression.");
 	PrtAssert(seq->discriminator == PRT_VALUE_KIND_SEQ, "Invalid value");
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
-	// PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 	PrtAssert(0 <= (PRT_UINT32)index->valueUnion.nt && (PRT_UINT32)index->valueUnion.nt <= seq->valueUnion.seq->size,
 		"Invalid index");
 
@@ -607,7 +607,7 @@ void PRT_CALL_CONV PrtSeqInsertEx(_Inout_ PRT_VALUE* seq, _In_ PRT_VALUE* index,
 	PRT_BOOLEAN cloneValue)
 {
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
-	// PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 
 	PrtSeqInsertExIntIndex(seq, index->valueUnion.nt, value, cloneValue);
 }
@@ -640,7 +640,7 @@ void PRT_CALL_CONV PrtSeqRemove(_Inout_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 	PrtAssert(PrtIsValidValue(seq), "Invalid value expression.");
 	PrtAssert(seq->discriminator == PRT_VALUE_KIND_SEQ, "Invalid value");
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
-	// PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 	PrtAssert(0 <= index->valueUnion.nt && (PRT_UINT32)index->valueUnion.nt < seq->valueUnion.seq->size, "Invalid index"
 	);
 
@@ -661,7 +661,7 @@ PRT_VALUE* PRT_CALL_CONV PrtSeqGet(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 	PrtAssert(PrtIsValidValue(seq), "Invalid value expression.");
 	PrtAssert(seq->discriminator == PRT_VALUE_KIND_SEQ, "Invalid value");
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
-	// PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 	PrtAssert(0 <= index->valueUnion.nt && (PRT_UINT32)index->valueUnion.nt < seq->valueUnion.seq->size, "Invalid index"
 	);
 
@@ -671,7 +671,7 @@ PRT_VALUE* PRT_CALL_CONV PrtSeqGet(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 PRT_VALUE* PRT_CALL_CONV PrtSeqGetNC(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 {
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
-	// PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 
 	return *PrtSeqGetNCIntIndex(seq, index->valueUnion.nt);
 }
@@ -679,7 +679,7 @@ PRT_VALUE* PRT_CALL_CONV PrtSeqGetNC(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 PRT_VALUE** PRT_CALL_CONV PrtSeqGetLValue(_In_ PRT_VALUE* seq, _In_ PRT_VALUE* index)
 {
 	PrtAssert(index->discriminator == PRT_VALUE_KIND_INT, "Invalid value");
-	// PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
+	PrtAssert(index->discriminator == PRT_VALUE_KIND_SECURE_INT, "Invalid value");
 
 	return PrtSeqGetNCIntIndex(seq, index->valueUnion.nt);
 }
@@ -1401,8 +1401,8 @@ PRT_UINT32 PRT_CALL_CONV PrtGetHashCodeValue(_In_ PRT_VALUE* inputValue)
 		return PrtGetHashCodeUInt32(0x01000000 ^ PrtGetHashCodeMachineId(*inputValue->valueUnion.mid));
 	case PRT_VALUE_KIND_INT:
 		return PrtGetHashCodePrtInt(0x02000000 ^ ((PRT_INT)inputValue->valueUnion.nt));
-	// case PRT_VALUE_KIND_SECURE_INT:
-	// 	return PrtGetHashCodePrtInt(0x02000001 ^ ((PRT_INT)inputValue->valueUnion.nt)); //TODO SHIV is this correct?
+	case PRT_VALUE_KIND_SECURE_INT:
+		return PrtGetHashCodePrtInt(0x02000001 ^ ((PRT_INT)inputValue->valueUnion.nt)); //TODO SHIV is this correct?
 	case PRT_VALUE_KIND_FLOAT:
 		return PrtGetHashCodePrtFloat((inputValue->valueUnion.ft));
 	case PRT_VALUE_KIND_FOREIGN:
@@ -1575,9 +1575,9 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsEqualValue(_In_ PRT_VALUE* value1, _In_ PRT_VALUE
 	case PRT_VALUE_KIND_INT:
 		return
 			value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
-	// case PRT_VALUE_KIND_SECURE_INT:
-	// 	return
-	// 		value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
+	case PRT_VALUE_KIND_SECURE_INT:
+		return
+			value1->valueUnion.nt == value2->valueUnion.nt ? PRT_TRUE : PRT_FALSE;
 	case PRT_VALUE_KIND_FLOAT:
 		return
 			value1->valueUnion.ft == value2->valueUnion.ft ? PRT_TRUE : PRT_FALSE;
@@ -1700,8 +1700,12 @@ PRT_VALUE* PRT_CALL_CONV PrtCloneValue(_In_ PRT_VALUE* value)
 		return PrtMkMachineValue(*value->valueUnion.mid);
 	case PRT_VALUE_KIND_INT:
 		return PrtMkIntValue(value->valueUnion.nt);
-	// case PRT_VALUE_KIND_SECURE_INT:
-	// 	return PrtMkIntValue(value->valueUnion.nt); //TODO SHIV IS THIS OKAY?
+	case PRT_VALUE_KIND_SECURE_INT:
+	{
+		PRT_VALUE* prtVal = PrtMkIntValue(value->valueUnion.nt);
+		prtVal->discriminator = PRT_VALUE_KIND_SECURE_INT;
+		return prtVal;
+	}
 	case PRT_VALUE_KIND_FLOAT:
 		return PrtMkFloatValue(value->valueUnion.ft);
 	case PRT_VALUE_KIND_FOREIGN:
@@ -1835,7 +1839,7 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsNullValue(_In_ PRT_VALUE* value)
 	}
 	case PRT_VALUE_KIND_BOOL:
 	case PRT_VALUE_KIND_INT:
-	// case PRT_VALUE_KIND_SECURE_INT:
+	case PRT_VALUE_KIND_SECURE_INT:
 	case PRT_VALUE_KIND_FLOAT:
 	case PRT_VALUE_KIND_FOREIGN:
 	case PRT_VALUE_KIND_SET:
@@ -1854,7 +1858,7 @@ PRT_VALUE* PRT_CALL_CONV PrtConvertValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* t
 	PrtAssert(
 		value->discriminator == PRT_VALUE_KIND_FLOAT
 		|| value->discriminator == PRT_VALUE_KIND_INT
-		// || value->discriminator == PRT_VALUE_KIND_SECURE_INT
+		|| value->discriminator == PRT_VALUE_KIND_SECURE_INT
 		|| value->discriminator == PRT_VALUE_KIND_MID, "Invalid value expression.");
 	PrtAssert(
 		type->typeKind == PRT_KIND_INT
@@ -1904,21 +1908,45 @@ PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type
 	PRT_TYPE_KIND tkind = type->typeKind;
 	PRT_VALUE_KIND vkind = value->discriminator;
 	if (tkind == PRT_KIND_FOREIGN) {
-		if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
-		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
-				return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
-		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex
-		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex)) {
-				return P_CastMachineHandleToSecureMachineHandle_IMPL(value);
-		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
-		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
-				ocall_print("Going to P_CastSecureStringToRegular");
-				return P_CastSecureStringTypeToStringType_IMPL(value);
-		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
-		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex)) {
-				ocall_print("Going to P_CastStringToSecure");
-				return P_CastStringTypeToSecureStringType_IMPL(value);
-		} else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
+		// if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
+		// 		return P_CastSecureMachineHandleToMachineHandle_IMPL(value);
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex)) {
+		// 		return P_CastMachineHandleToSecureMachineHandle_IMPL(value);
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
+		// 		ocall_print("Going to P_CastSecureStringToRegular");
+		// 		return P_CastSecureStringTypeToStringType_IMPL(value);
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex)) {
+		// 		ocall_print("Going to P_CastStringToSecure");
+		// 		return P_CastStringTypeToSecureStringType_IMPL(value);
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
+		// 		ocall_print("Cast from StringType to StringType");
+		// 		return value;
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex)) {
+		// 		ocall_print("Cast from secure_StringType to secure_StringType");
+		// 		return value;
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_machine_handle->typeUnion.foreignType->declIndex)) {
+		// 		ocall_print("Cast from machine_handle to machine_handle");
+		// 		return value;
+		// } else if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex
+		// && type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex)) {
+		// 		ocall_print("Cast from secure_machine_handle to secure_machine_handle");
+		// 		return value;
+		// }else {
+		// 		ocall_print("ERROR");
+		// 		ocall_print_int(value->valueUnion.frgn->typeTag);
+		// 		ocall_print_int(P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex);
+		// 		ocall_print_int(type->typeUnion.foreignType->declIndex);
+		// 		ocall_print_int(P_TYPEDEF_StringType->typeUnion.foreignType->declIndex);
+		// 	}
+
+		if (vkind == PRT_VALUE_KIND_FOREIGN && (value->valueUnion.frgn->typeTag == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex
 		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_StringType->typeUnion.foreignType->declIndex)) {
 				ocall_print("Cast from StringType to StringType");
 				return value;
@@ -1934,13 +1962,15 @@ PRT_VALUE* PRT_CALL_CONV PrtCastValue(_In_ PRT_VALUE* value, _In_ PRT_TYPE* type
 		&& type->typeUnion.foreignType->declIndex == P_TYPEDEF_secure_machine_handle->typeUnion.foreignType->declIndex)) {
 				ocall_print("Cast from secure_machine_handle to secure_machine_handle");
 				return value;
-		}else {
+		} else {
 				ocall_print("ERROR");
 				ocall_print_int(value->valueUnion.frgn->typeTag);
 				ocall_print_int(P_TYPEDEF_secure_StringType->typeUnion.foreignType->declIndex);
 				ocall_print_int(type->typeUnion.foreignType->declIndex);
 				ocall_print_int(P_TYPEDEF_StringType->typeUnion.foreignType->declIndex);
 			}
+
+
 	} else {
 		PrtAssert(PrtInhabitsType(value, type), "Invalid type cast");
 		return value;
@@ -2241,8 +2271,8 @@ PRT_BOOLEAN PRT_CALL_CONV PrtIsValidValue(_In_ PRT_VALUE* value)
 		return value->discriminator == PRT_VALUE_KIND_MID;
 	case PRT_VALUE_KIND_INT:
 		return value->discriminator == PRT_VALUE_KIND_INT;
-	// case PRT_VALUE_KIND_SECURE_INT:
-	// 	return value->discriminator == PRT_VALUE_KIND_SECURE_INT;
+	case PRT_VALUE_KIND_SECURE_INT:
+		return value->discriminator == PRT_VALUE_KIND_SECURE_INT;
 	case PRT_VALUE_KIND_FLOAT:
 		return value->discriminator == PRT_VALUE_KIND_FLOAT;
 	case PRT_VALUE_KIND_NULL:

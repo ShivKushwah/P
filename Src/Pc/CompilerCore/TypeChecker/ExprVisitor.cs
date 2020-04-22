@@ -218,21 +218,32 @@ namespace Plang.Compiler.TypeChecker
             switch (context.op.Text)
             {
                 case "-":
+                    // if (!PrimitiveType.Int.IsAssignableFrom(subExpr.Type) &&
+                    //     !PrimitiveType.Float.IsAssignableFrom(subExpr.Type))
+                    // {
                     if (!PrimitiveType.Int.IsAssignableFrom(subExpr.Type) &&
-                        !PrimitiveType.Float.IsAssignableFrom(subExpr.Type))
+                        !PrimitiveType.Float.IsAssignableFrom(subExpr.Type) &&
+                        !PrimitiveType.Secure_Int.IsAssignableFrom(subExpr.Type))
                     {
+                        // throw handler.TypeMismatch(context.expr(),
+                        //     subExpr.Type,
+                        //     PrimitiveType.Int,
+                        //     PrimitiveType.Float);
                         throw handler.TypeMismatch(context.expr(),
                             subExpr.Type,
                             PrimitiveType.Int,
+                            PrimitiveType.Secure_Int,
                             PrimitiveType.Float);
                     }
                     //NOTE: Security label is computed in constructor using subExpr's security label
                     return new UnaryOpExpr(context, UnaryOpType.Negate, subExpr);
 
                 case "!":
-                    if (!PrimitiveType.Bool.IsAssignableFrom(subExpr.Type))
+                    // if (!PrimitiveType.Bool.IsAssignableFrom(subExpr.Type))
+                    // {
+                    if (!(PrimitiveType.Bool.IsAssignableFrom(subExpr.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(subExpr.Type)))
                     {
-                        throw handler.TypeMismatch(context.expr(), subExpr.Type, PrimitiveType.Bool);
+                        throw handler.TypeMismatch(context.expr(), subExpr.Type, PrimitiveType.Bool, PrimitiveType.Secure_Bool);
                     }
 
                     return new UnaryOpExpr(context, UnaryOpType.Not, subExpr);
@@ -284,10 +295,15 @@ namespace Plang.Compiler.TypeChecker
                 case ">":
                 case ">=":
                 case "<=":
-                    if (!( (PrimitiveType.Int.IsAssignableFrom(lhs.Type) || PrimitiveType.Secure_Int.IsAssignableFrom(lhs.Type)) &&
-                          (PrimitiveType.Int.IsAssignableFrom(rhs.Type) || PrimitiveType.Secure_Int.IsAssignableFrom(rhs.Type)) ||
-                          PrimitiveType.Float.IsAssignableFrom(lhs.Type) &&
-                          PrimitiveType.Float.IsAssignableFrom(rhs.Type)
+                    // if (!( (PrimitiveType.Int.IsAssignableFrom(lhs.Type) || PrimitiveType.Secure_Int.IsAssignableFrom(lhs.Type)) &&
+                    //       (PrimitiveType.Int.IsAssignableFrom(rhs.Type) || PrimitiveType.Secure_Int.IsAssignableFrom(rhs.Type)) ||
+                    //       PrimitiveType.Float.IsAssignableFrom(lhs.Type) &&
+                    //       PrimitiveType.Float.IsAssignableFrom(rhs.Type)
+                    //       ))
+                    // {
+                    if (!( (PrimitiveType.Int.IsAssignableFrom(lhs.Type) && PrimitiveType.Int.IsAssignableFrom(rhs.Type) ) || 
+                        (PrimitiveType.Secure_Int.IsAssignableFrom(lhs.Type) && PrimitiveType.Secure_Int.IsAssignableFrom(rhs.Type)) ||
+                          (PrimitiveType.Float.IsAssignableFrom(lhs.Type) && PrimitiveType.Float.IsAssignableFrom(rhs.Type))
                           ))
                     {
                         throw handler.BinOpTypeMismatch(context, lhs.Type, rhs.Type);
@@ -343,14 +359,18 @@ namespace Plang.Compiler.TypeChecker
 
                 case "&&":
                 case "||":
-                    if (!(PrimitiveType.Bool.IsAssignableFrom(lhs.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(lhs.Type)))
-                    {
-                        throw handler.TypeMismatch(context.lhs, lhs.Type, PrimitiveType.Bool); //TODO SHIV make this display either bool or secure_bool
-                    }
+                    // if (!(PrimitiveType.Bool.IsAssignableFrom(lhs.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(lhs.Type)))
+                    // {
+                    //     throw handler.TypeMismatch(context.lhs, lhs.Type, PrimitiveType.Bool); //TODO SHIV make this display either bool or secure_bool
+                    // }
 
-                    if (!(PrimitiveType.Bool.IsAssignableFrom(rhs.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(rhs.Type)))
+                    // if (!(PrimitiveType.Bool.IsAssignableFrom(rhs.Type) || PrimitiveType.Secure_Bool.IsAssignableFrom(rhs.Type)))
+                    // {
+                    //     throw handler.TypeMismatch(context.rhs, rhs.Type, PrimitiveType.Bool); //TODO same as above
+                    // }
+                    if (!( (PrimitiveType.Bool.IsAssignableFrom(lhs.Type) && PrimitiveType.Bool.IsAssignableFrom(rhs.Type)) || (PrimitiveType.Secure_Bool.IsAssignableFrom(lhs.Type) && PrimitiveType.Secure_Bool.IsAssignableFrom(rhs.Type))  ))
                     {
-                        throw handler.TypeMismatch(context.rhs, rhs.Type, PrimitiveType.Bool); //TODO same as above
+                        throw handler.TypeMismatch(context.lhs, lhs.Type, PrimitiveType.Bool); //TODO SHIV make this display either bool or secure_boo
                     }
 
                     return logicCtors[op](lhs, rhs);
@@ -368,15 +388,15 @@ namespace Plang.Compiler.TypeChecker
             PLanguageType newType = TypeResolver.ResolveType(context.type(), table, handler);
             if (context.cast.Text.Equals("as"))
             {
-                if (oldType.CanonicalRepresentation.Equals("secure_machine_handle") && newType.CanonicalRepresentation.Equals("machine_handle")) {
-                    return new CastExpr(context, subExpr, newType);
-                } else if (newType.CanonicalRepresentation.Equals("secure_machine_handle") && oldType.CanonicalRepresentation.Equals("machine_handle")) {
-                    return new CastExpr(context, subExpr, newType);
-                } else if (oldType.CanonicalRepresentation.Equals("secure_StringType") && newType.CanonicalRepresentation.Equals("StringType")) {
-                    return new CastExpr(context, subExpr, newType);
-                } else if (newType.CanonicalRepresentation.Equals("secure_StringType") && oldType.CanonicalRepresentation.Equals("StringType")) {
-                    return new CastExpr(context, subExpr, newType);
-                }
+                // if (oldType.CanonicalRepresentation.Equals("secure_machine_handle") && newType.CanonicalRepresentation.Equals("machine_handle")) {
+                //     return new CastExpr(context, subExpr, newType);
+                // } else if (newType.CanonicalRepresentation.Equals("secure_machine_handle") && oldType.CanonicalRepresentation.Equals("machine_handle")) {
+                //     return new CastExpr(context, subExpr, newType);
+                // } else if (oldType.CanonicalRepresentation.Equals("secure_StringType") && newType.CanonicalRepresentation.Equals("StringType")) {
+                //     return new CastExpr(context, subExpr, newType);
+                // } else if (newType.CanonicalRepresentation.Equals("secure_StringType") && oldType.CanonicalRepresentation.Equals("StringType")) {
+                //     return new CastExpr(context, subExpr, newType);
+                // }
 
                 if (!newType.IsAssignableFrom(oldType) && !oldType.IsAssignableFrom(newType))
                 {
