@@ -221,10 +221,14 @@ namespace Plang.Compiler.TypeChecker
             //     throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
             // }
 
-            // if (!variable.Type.IsAssignableFrom(value.Type))
-            // {
-            //     throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
-            // }
+            if (!variable.Type.IsAssignableFrom(value.Type))
+            {
+                if (value.Type is PermissionType kirat) {
+                    Console.WriteLine("YATDO");
+                }
+                Console.WriteLine("YE");
+                throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
+            }
 
             //Check if this assignment is a security risk
             if (!variable.highSecurityLabel && value.highSecurityLabel) {

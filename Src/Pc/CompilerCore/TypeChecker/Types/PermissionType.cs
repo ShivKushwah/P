@@ -46,7 +46,16 @@ namespace Plang.Compiler.TypeChecker.Types
                 eventSet1.AddEvents(otherType.AllowedPermissions.Value);
                 eventSet2.AddEvents(AllowedPermissions.Value);
                 return eventSet1.IsSame(eventSet2);
-            }
+            } 
+            // else if (otherType is PrimitiveType foreignType) {
+            //     if (highSecurityLabel && foreignType.CanonicalRepresentation.Equals("secure_machine_handle")) {
+            //         return true;
+            //     } else if (!highSecurityLabel && foreignType.CanonicalRepresentation.Equals("machine_handle")) {
+            //         return true;
+            //     } else {
+            //         return false;
+            //     }
+            // } 
 
             return false;
         }

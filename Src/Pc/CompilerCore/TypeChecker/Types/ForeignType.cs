@@ -46,6 +46,13 @@ namespace Plang.Compiler.TypeChecker.Types
             
             // return (otherType.Canonicalize() is ForeignType other &&
             //        CanonicalRepresentation == other.CanonicalRepresentation) || true;
+            if (otherType is PermissionType machineType) { //PermissionType is name of machine with security label
+                if (machineType.highSecurityLabel) {
+                    return CanonicalRepresentation == "secure_machine_handle";
+                } else {
+                    return CanonicalRepresentation == "machine_handle";
+                }
+            }
             return otherType.Canonicalize() is ForeignType other &&
                    CanonicalRepresentation == other.CanonicalRepresentation;
         }
