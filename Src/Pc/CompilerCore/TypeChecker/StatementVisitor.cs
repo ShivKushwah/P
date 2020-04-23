@@ -223,10 +223,6 @@ namespace Plang.Compiler.TypeChecker
 
             if (!variable.Type.IsAssignableFrom(value.Type))
             {
-                if (value.Type is PermissionType kirat) {
-                    Console.WriteLine("YATDO");
-                }
-                Console.WriteLine("YE");
                 throw handler.TypeMismatch(context.rvalue(), value.Type, variable.Type);
             }
 
