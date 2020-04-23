@@ -1607,16 +1607,30 @@ namespace Plang.Compiler.Backend.Prt
                     var isMap = PLanguageType.TypeIsOfKind(containsKeyExpr.Collection.Type, TypeKind.Map);
                     var isSeq = PLanguageType.TypeIsOfKind(containsKeyExpr.Collection.Type, TypeKind.Sequence);
                     var isSet = PLanguageType.TypeIsOfKind(containsKeyExpr.Collection.Type, TypeKind.Set);
+                    var isSecure = containsKeyExpr.highSecurityLabel;
+                    
                     if (isMap)
                     {
-                        context.Write(output, "PrtMkBoolValue(PrtMapExists(");
+                        if (isSecure) {
+                            context.Write(output, "PrtMkSecureBoolValue(PrtMapExists(");
+                        } else {
+                            context.Write(output, "PrtMkBoolValue(PrtMapExists(");
+                        }
                     }
                     else if (isSeq)
                     {
-                        context.Write(output, "PrtMkBoolValue(PrtSeqExists(");
+                        if (isSecure) {
+                            context.Write(output, "PrtMkSecureBoolValue(PrtSetExists(");
+                        } else {
+                            context.Write(output, "PrtMkBoolValue(PrtSetExists(");
+                        }
                     }
                     else if (isSet) {
-                        context.Write(output, "PrtMkBoolValue(PrtSetExists(");
+                        if (isSecure) {
+                            context.Write(output, "PrtMkSecureBoolValue(PrtSetExists(");
+                        } else {
+                            context.Write(output, "PrtMkBoolValue(PrtSetExists(");
+                        }
                     } else {
                         throw new InvalidOperationException("Unsupported operation for non-map or sequence type");
                     }
@@ -1853,10 +1867,15 @@ namespace Plang.Compiler.Backend.Prt
                 binOpGetter = "PrtPrimGetInt";
                 binOpBuilder = "PrtMkIntValue";
             }
-            else if (type.IsSameTypeAs(PrimitiveType.Bool) || type.IsSameTypeAs(PrimitiveType.Secure_Bool))
+            else if (type.IsSameTypeAs(PrimitiveType.Bool))
             {
                 binOpGetter = "PrtPrimGetBool";
                 binOpBuilder = "PrtMkBoolValue";
+            }
+            else if (type.IsSameTypeAs(PrimitiveType.Secure_Bool))
+            {
+                binOpGetter = "PrtPrimGetSecureBool";
+                binOpBuilder = "PrtMkSecureBoolValue";
             }
             else if (type.IsSameTypeAs(PrimitiveType.Float))
             {

@@ -354,7 +354,6 @@ namespace Plang.Compiler.TypeChecker
                     }
 
                     ContainsExpr cExpr = new ContainsExpr(context, lhs, rhs);
-                    cExpr.highSecurityLabel = rhs.Type.highSecurityLabel;
                     return cExpr;
 
                 case "==":

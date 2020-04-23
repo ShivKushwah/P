@@ -184,6 +184,16 @@ PRT_VALUE* PRT_CALL_CONV PrtMkBoolValue(_In_ PRT_BOOLEAN value)
 	return retVal;
 }
 
+PRT_VALUE* PRT_CALL_CONV PrtMkSecureBoolValue(_In_ PRT_BOOLEAN value)
+{
+	PrtAssert(value == PRT_TRUE || value == PRT_FALSE, "Expected a bool value");
+
+	PRT_VALUE* retVal = (PRT_VALUE*)PrtMalloc(sizeof(PRT_VALUE));
+	retVal->discriminator = PRT_VALUE_KIND_SECURE_BOOL;
+	retVal->valueUnion.bl = value;
+	return retVal;
+}
+
 PRT_VALUE* PRT_CALL_CONV PrtMkEventValue(_In_ PRT_UINT32 value)
 {
 	PRT_VALUE* retVal = (PRT_VALUE*)PrtMalloc(sizeof(PRT_VALUE));

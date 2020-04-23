@@ -367,7 +367,7 @@ namespace Plang.Compiler.TypeChecker
         public override IPStmt VisitIfStmt(PParser.IfStmtContext context)
         {
             IPExpr condition = exprVisitor.Visit(context.expr());
-            if (!Equals(condition.Type, PrimitiveType.Bool))
+            if (!(Equals(condition.Type, PrimitiveType.Bool) || Equals(condition.Type, PrimitiveType.Secure_Bool)))
             {
                 throw handler.TypeMismatch(context.expr(), condition.Type, PrimitiveType.Bool);
             }
