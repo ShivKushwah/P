@@ -1608,7 +1608,7 @@ namespace Plang.Compiler.Backend.Prt
                     var isSeq = PLanguageType.TypeIsOfKind(containsKeyExpr.Collection.Type, TypeKind.Sequence);
                     var isSet = PLanguageType.TypeIsOfKind(containsKeyExpr.Collection.Type, TypeKind.Set);
                     var isSecure = containsKeyExpr.highSecurityLabel;
-                    
+
                     if (isMap)
                     {
                         if (isSecure) {
@@ -1862,10 +1862,15 @@ namespace Plang.Compiler.Backend.Prt
         {
             string binOpGetter;
             string binOpBuilder;
-            if (type.IsSameTypeAs(PrimitiveType.Int) || type.TypeKind.Equals(TypeKind.Enum) || type.IsSameTypeAs(PrimitiveType.Secure_Int))
+            if (type.IsSameTypeAs(PrimitiveType.Int) || type.TypeKind.Equals(TypeKind.Enum))
             {
                 binOpGetter = "PrtPrimGetInt";
                 binOpBuilder = "PrtMkIntValue";
+            }
+            else if (type.IsSameTypeAs(PrimitiveType.Secure_Int))
+            {
+                binOpGetter = "PrtPrimGetSecureInt";
+                binOpBuilder = "PrtMkSecureIntValue";
             }
             else if (type.IsSameTypeAs(PrimitiveType.Bool))
             {

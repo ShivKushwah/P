@@ -210,6 +210,14 @@ PRT_VALUE* PRT_CALL_CONV PrtMkIntValue(_In_ PRT_INT value)
 	return retVal;
 }
 
+PRT_VALUE* PRT_CALL_CONV PrtMkSecureIntValue(_In_ PRT_INT value)
+{
+	PRT_VALUE* retVal = (PRT_VALUE*)PrtMalloc(sizeof(PRT_VALUE));
+	retVal->discriminator = PRT_VALUE_KIND_SECURE_INT;
+	retVal->valueUnion.nt = value;
+	return retVal;
+}
+
 PRT_VALUE* PRT_CALL_CONV PrtMkFloatValue(_In_ PRT_FLOAT value)
 {
 	PRT_VALUE* retVal = (PRT_VALUE*)PrtMalloc(sizeof(PRT_VALUE));
