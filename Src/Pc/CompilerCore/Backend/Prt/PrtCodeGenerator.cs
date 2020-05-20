@@ -1645,7 +1645,7 @@ namespace Plang.Compiler.Backend.Prt
                     if (ctorExpr.Interface.IsSecure) {
 
                         // context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
-                        //Add a check -> if the current machine is untrusted and it is trying to create a trusted machine, should use UntrustedCreateCoordinator
+                        //Add a check -> if the current machine is untrusted and it is trying to create a trusted machine, should use UntrustedCreateRequest
                         context.Write(
                             output,
                             $"((_P_GEN_funval = P_CreateSecureMachineRequest_IMPL(context, _P_GEN_funargs)), (_P_GEN_funval))");
