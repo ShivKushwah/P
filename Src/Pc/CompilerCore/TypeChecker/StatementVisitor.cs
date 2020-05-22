@@ -351,7 +351,7 @@ namespace Plang.Compiler.TypeChecker
         public override IPStmt VisitWhileStmt(PParser.WhileStmtContext context)
         {
             IPExpr condition = exprVisitor.Visit(context.expr());
-            if (!Equals(condition.Type, PrimitiveType.Bool))
+            if (!(Equals(condition.Type, PrimitiveType.Bool) || Equals(condition.Type, PrimitiveType.Secure_Bool)))
             {
                 throw handler.TypeMismatch(context.expr(), condition.Type, PrimitiveType.Bool);
             }
@@ -378,7 +378,7 @@ namespace Plang.Compiler.TypeChecker
             IPStmt elseBody = context.elseBranch == null ? new NoStmt(context) : Visit(context.elseBranch);
 
 
-            // If the condition has a High Security Label, then both the body expression expressions need to be high security
+            // If the condition has a High Security Label, then both the body expressions need to be high security
             if (highSecurityConditionExpressionLabel && ( (!thenBody.highSecurityLabel) || (!elseBody.highSecurityLabel) ) ) {
                 throw handler.InformationFlowIfException(context.expr(), condition.Type, thenBody.highSecurityLabel, elseBody.highSecurityLabel);
             }
