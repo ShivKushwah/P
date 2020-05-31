@@ -84,7 +84,7 @@ if(SGX)
     Publish_Library_Header(Prt_trusted_static)
 endif()
 
-#Creates Prt_static2 below
+#Creates Prt_untrusted_static below
 
 set ( P_Prt_Src_Path ${CMAKE_CURRENT_SOURCE_DIR} )
 set ( API_PATH2 ${P_Prt_Src_Path}/API/ )
@@ -137,7 +137,7 @@ ENDIF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
 
 # add_library(Prt_test OBJECT ${PrtUserSrc})
 
-    add_library(Prt_static2 STATIC $<TARGET_OBJECTS:Prt2>)
+    add_library(Prt_untrusted_static STATIC $<TARGET_OBJECTS:Prt2>)
     target_include_directories(Prt2 PUBLIC ${API_PATH2})
     target_include_directories(Prt2 PUBLIC ${LIBHANDLERINC_PATH})
     target_include_directories(Prt2 PUBLIC ${LIBHANDLEROUT_PATH})
@@ -145,7 +145,7 @@ ENDIF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
     target_include_directories(Prt2 PUBLIC ${User_PATH2})
     get_property(Prt_Published_Headers_PATHS2 TARGET Prt2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
 # need to manually set includes for static and shared libraries, from object library include path
-    target_include_directories(Prt_static2 PUBLIC ${Prt_Published_Headers_PATHS2})
+    target_include_directories(Prt_untrusted_static PUBLIC ${Prt_Published_Headers_PATHS2})
 # target_include_directories(Prt_test PUBLIC ${Prt_Published_Headers_PATHS})
 
-    Publish_Library_Header(Prt_static2)
+    Publish_Library_Header(Prt_untrusted_static)
