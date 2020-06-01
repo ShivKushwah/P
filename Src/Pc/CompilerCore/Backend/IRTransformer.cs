@@ -153,7 +153,7 @@ namespace Plang.Compiler.Backend
                 case CtorExpr ctorExpr:
                     (IReadOnlyList<IVariableRef> ctorArgs, List<IPStmt> ctorArgDeps) = SimplifyArgPack(ctorExpr.Arguments);
                     deps.AddRange(ctorArgDeps);
-                    (VariableAccessExpr ctorTemp, IPStmt ctorStore) = SaveInTemporary(new CtorExpr(location, ctorExpr.Interface, ctorArgs));
+                    (VariableAccessExpr ctorTemp, IPStmt ctorStore) = SaveInTemporary(new CtorExpr(location, ctorExpr.Interface, ctorArgs, ctorExpr.otherMachineHandleWithLocationInfo));
                     deps.Add(ctorStore);
                     return (ctorTemp, deps);
 
@@ -323,7 +323,7 @@ namespace Plang.Compiler.Backend
                     (IReadOnlyList<IVariableRef> ctorArgs, List<IPStmt> ctorArgDeps) = SimplifyArgPack(ctorStmt.Arguments);
                     return ctorArgDeps.Concat(new[]
                         {
-                            new CtorStmt(location, ctorStmt.Interface, ctorArgs)
+                            new CtorStmt(location, ctorStmt.Interface, ctorArgs, ctorStmt.otherMachineHandleWithLocationInfo)
                         })
                         .ToList();
 

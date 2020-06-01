@@ -9,12 +9,13 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
 {
     public class CtorExpr : IPExpr
     {
-        public CtorExpr(ParserRuleContext sourceLocation, Interface @interface, IReadOnlyList<IPExpr> arguments)
+        public CtorExpr(ParserRuleContext sourceLocation, Interface @interface, IReadOnlyList<IPExpr> arguments, IPExpr otherMachineHandleWithLocInfo)
         {
             Interface = @interface;
             Arguments = arguments;
             SourceLocation = sourceLocation;
             Type = new PermissionType(Interface);
+            otherMachineHandleWithLocationInfo = otherMachineHandleWithLocInfo;
         }
 
         public bool highSecurityLabel { get; set; } = false;
@@ -24,5 +25,7 @@ namespace Plang.Compiler.TypeChecker.AST.Expressions
 
         public PLanguageType Type { get; }
         public ParserRuleContext SourceLocation { get; }
+
+        public IPExpr otherMachineHandleWithLocationInfo { get; }
     }
 }

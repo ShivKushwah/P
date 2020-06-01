@@ -145,6 +145,7 @@ SEMI   : ';' ;
 COMMA  : ',' ;
 DOT    : '.' ;
 COLON  : ':' ;
+CREATE_LOC : '@' ;
 
 // Identifiers
 

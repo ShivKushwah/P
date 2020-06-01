@@ -6,11 +6,12 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
 {
     public class CtorStmt : IPStmt
     {
-        public CtorStmt(ParserRuleContext sourceLocation, Interface @interface, IReadOnlyList<IPExpr> arguments)
+        public CtorStmt(ParserRuleContext sourceLocation, Interface @interface, IReadOnlyList<IPExpr> arguments, IPExpr otherMachineHandleWithLocInfo)
         {
             SourceLocation = sourceLocation;
             Interface = @interface;
             Arguments = arguments;
+            otherMachineHandleWithLocationInfo = otherMachineHandleWithLocInfo;
         }
 
         public bool highSecurityLabel { get; set; } = false;
@@ -19,5 +20,7 @@ namespace Plang.Compiler.TypeChecker.AST.Statements
         public IReadOnlyList<IPExpr> Arguments { get; }
 
         public ParserRuleContext SourceLocation { get; }
+
+        public IPExpr otherMachineHandleWithLocationInfo { get; }
     }
 }

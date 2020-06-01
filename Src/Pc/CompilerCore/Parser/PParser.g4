@@ -154,7 +154,7 @@ statement : LBRACE statement* RBRACE                      # CompoundStmt
           | WHILE LPAREN expr RPAREN statement            # WhileStmt
           | IF LPAREN expr RPAREN thenBranch=statement 
                             (ELSE elseBranch=statement)?  # IfStmt
-          | NEW iden LPAREN rvalueList? RPAREN SEMI       # CtorStmt
+          | NEW iden LPAREN rvalueList? RPAREN (CREATE_LOC expr)? SEMI       # CtorStmt
           | fun=iden LPAREN rvalueList? RPAREN SEMI       # FunCallStmt
           | RAISE expr (COMMA rvalueList)? SEMI           # RaiseStmt
           | SEND machine=expr COMMA event=expr 
@@ -190,7 +190,7 @@ expr : primitive                                      # PrimitiveExpr
      | fun=VALUES LPAREN expr RPAREN                  # KeywordExpr
      | fun=SIZEOF LPAREN expr RPAREN                  # KeywordExpr
      | fun=DEFAULT LPAREN type RPAREN                 # KeywordExpr
-     | NEW interfaceName=iden LPAREN rvalueList? RPAREN # CtorExpr
+     | NEW interfaceName=iden LPAREN rvalueList? RPAREN (CREATE_LOC expr)? # CtorExpr
      | fun=iden LPAREN rvalueList? RPAREN             # FunCallExpr
      | op=(SUB | LNOT) expr                           # UnaryExpr
      | lhs=expr op=(MUL | DIV) rhs=expr               # BinExpr

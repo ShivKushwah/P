@@ -172,7 +172,10 @@ namespace Plang.Compiler.TypeChecker
             } else {
                 @interface.IsSecure = false; //All handles returned to USMs must be non secure, regardless of the case when a USM creates an SSM
             }
-            return new CtorExpr(context, @interface, arguments);
+
+            IPExpr otherMachineHandleWithLocationInformation = context.expr() == null ? null : Visit(context.expr());
+
+            return new CtorExpr(context, @interface, arguments, otherMachineHandleWithLocationInformation);
         }
 
         public override IPExpr VisitFunCallExpr(PParser.FunCallExprContext context)

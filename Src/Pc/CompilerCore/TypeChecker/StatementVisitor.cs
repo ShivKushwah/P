@@ -394,9 +394,11 @@ namespace Plang.Compiler.TypeChecker
                 throw handler.MissingDeclaration(context.iden(), "interface", interfaceName);
             }
 
+            IPExpr otherMachineHandleWithLocationInformation = context.expr() == null ? null : exprVisitor.Visit(context.expr());
+
             List<IPExpr> args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), exprVisitor).ToList();
             TypeCheckingUtils.ValidatePayloadTypes(handler, context, targetInterface.PayloadType, args);
-            return new CtorStmt(context, targetInterface, args);
+            return new CtorStmt(context, targetInterface, args, otherMachineHandleWithLocationInformation);
         }
 
         public override IPStmt VisitFunCallStmt(PParser.FunCallStmtContext context)
