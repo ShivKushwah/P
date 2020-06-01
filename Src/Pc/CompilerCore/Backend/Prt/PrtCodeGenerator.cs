@@ -916,7 +916,7 @@ namespace Plang.Compiler.Backend.Prt
 
                 case AssignStmt assignStmt:
                     // Lookup lvalue
-                    //Case of = new SecureMachine()
+                    //Case of = new SecureMachine() [P_CreateSecureMachineRequest_IMPL] or = new USM() [P_CreateUSMMachineRequest_IMPL]
                     if (assignStmt.Value is CtorExpr) {
                         CtorExpr ctorExpr = (CtorExpr)assignStmt.Value;
                         context.WriteLine(output, $"_P_GEN_funargs[0] = \"{ctorExpr.Interface.Name}\";");
@@ -930,6 +930,14 @@ namespace Plang.Compiler.Backend.Prt
                             IVariableRef argVar = (IVariableRef)pExpr;
                             context.WriteLine(output, $"_P_GEN_funargs[{i}] = {GetVariableReference(function, argVar)};");
                             i++;
+                        }
+
+                        //@ Command
+                        IVariableRef argVariable = (IVariableRef)ctorExpr.otherMachineHandleWithLocationInfo;
+                        if (argVariable == null) {
+                            context.WriteLine(output, $"_P_GEN_funargs[{i}] = NULL;");
+                        } else {
+                            context.WriteLine(output, $"_P_GEN_funargs[{i}] = {GetVariableReference(function, argVariable)};");
                         }
 
                     }
