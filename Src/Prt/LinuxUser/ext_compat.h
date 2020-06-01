@@ -11,9 +11,13 @@
 	TODO: move to a safer cleaner solution 
 */
 
-#define fprintf_s(stream, format, args...) fprintf(stream, format, ##args)
+// #define fprintf_s(stream, format, args...) fprintf(stream, format, ##args)
 
-#define printf_s(format, args...) printf(format, ##args)
+#define printf_s(f, message) \
+    do { \
+        printf(message); \
+        fflush(stdout); \
+    } while (0)
 
 #define strcpy_s(d, n, s) snprintf(d, n, "%s", s)
 

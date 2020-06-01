@@ -5,6 +5,8 @@
 #include <string.h>
 #include "PrtEnclave_t.h"
 
+//In ext_compat.h in LinuxUser, printf_s is defined as printf
+
 #define printf_s(f, message) ocall_enclave_print(message)
 
 #define strcpy_s(d, n, s) strncpy(d, s, n)
