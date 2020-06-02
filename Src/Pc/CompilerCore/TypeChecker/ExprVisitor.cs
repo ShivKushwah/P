@@ -174,6 +174,9 @@ namespace Plang.Compiler.TypeChecker
             }
 
             IPExpr otherMachineHandleWithLocationInformation = context.expr() == null ? null : Visit(context.expr());
+            if (otherMachineHandleWithLocationInformation != null && !(otherMachineHandleWithLocationInformation.Type.CanonicalRepresentation.Equals("secure_machine_handle") ||  otherMachineHandleWithLocationInformation.Type.CanonicalRepresentation.Equals("machine_handle") || otherMachineHandleWithLocationInformation is ThisRefExpr x || otherMachineHandleWithLocationInformation is ThisSecureRefExpr y)) {
+                throw handler.TypeMismatch(context.expr(), otherMachineHandleWithLocationInformation.Type, new ForeignType("secure_machine_handle"), new ForeignType("machine_handle"));
+            }
             //TODO verify that this IPExpr is of type secure_machine_handle or machine_handle or "this"
             return new CtorExpr(context, @interface, arguments, otherMachineHandleWithLocationInformation);
         }
