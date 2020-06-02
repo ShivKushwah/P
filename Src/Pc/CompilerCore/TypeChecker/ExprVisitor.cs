@@ -174,7 +174,7 @@ namespace Plang.Compiler.TypeChecker
             }
 
             IPExpr otherMachineHandleWithLocationInformation = context.expr() == null ? null : Visit(context.expr());
-
+            //TODO verify that this IPExpr is of type secure_machine_handle or machine_handle or "this"
             return new CtorExpr(context, @interface, arguments, otherMachineHandleWithLocationInformation);
         }
 
