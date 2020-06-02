@@ -939,10 +939,11 @@ namespace Plang.Compiler.Backend.Prt
                         } else if (argVariable is IVariableRef argVariableRef) {
                             context.WriteLine(output, $"_P_GEN_funargs[{i}] = {GetVariableReference(function, argVariableRef)};");
                         } else { //this ref or this secure ref
-                            context.Write(output, "PRT_VALUE* this_ref = ");
+                            string this_ref_temp = context.Names.GetTemporaryName("this_ref");
+                            context.Write(output, $"PRT_VALUE* {this_ref_temp} = ");
                             WriteExpr(output, function, argVariable);
                             context.WriteLine(output, ";");
-                            context.WriteLine(output, $"_P_GEN_funargs[{i}] = &this_ref;");
+                            context.WriteLine(output, $"_P_GEN_funargs[{i}] = &{this_ref_temp};");
 
                         }
 
