@@ -70,6 +70,17 @@ namespace Plang.Compiler.TypeChecker
                 throw Handler.InformationFlowTrustedEventDeclarationException(context, pEvent.PayloadType);
             }
 
+            //Special Cases for TupleType and MapType -> Need to verify all subtypes are highSecurity (e.g. (low, high) should not be allowed, needs to be (high, high))
+            if (pEvent.PayloadType is TupleType tupType) {    
+                if (pEvent.isTrustedEvent && !tupType.allSubtypesAreHighSecurityLabel && !pEvent.PayloadType.CanonicalRepresentation.Equals("null")) {
+                    throw Handler.InformationFlowTrustedEventDeclarationException(context, pEvent.PayloadType);
+                }
+            } else if (pEvent.PayloadType is MapType mapType) {
+                if (pEvent.isTrustedEvent && !mapType.allSubtypesAreHighSecurityLabel && !pEvent.PayloadType.CanonicalRepresentation.Equals("null")) {
+                    throw Handler.InformationFlowTrustedEventDeclarationException(context, pEvent.PayloadType);
+                }
+            }
+
             // SEMI
             return pEvent;
         }
