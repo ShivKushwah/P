@@ -677,6 +677,38 @@ namespace Plang.Compiler.TypeChecker
                 : new LinearAccessRefExpr(context, variable, LinearType.Swap);
         }
 
+        public override IPExpr VisitFormattedString(PParser.FormattedStringContext context)
+        {
+            string baseString = context.StringLiteral().GetText();
+            baseString = baseString.Substring(1, baseString.Length - 2); // strip beginning / end double quote
+            int numNecessaryArgs = TypeCheckingUtils.PrintStmtNumArgs(baseString);
+            if (numNecessaryArgs == -1)
+            {
+                throw handler.InvalidStringExprFormat(context, context.StringLiteral().Symbol);
+            }
+
+            List<IPExpr> args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), this).ToList();
+            foreach (IPExpr arg in args)
+            {
+                if (arg is LinearAccessRefExpr)
+                {
+                    throw handler.StringAssignStmtLinearArgument(arg.SourceLocation);
+                }
+            }
+
+            if (args.Count != numNecessaryArgs)
+            {
+                throw handler.IncorrectArgumentCount(context, args.Count, numNecessaryArgs);
+            }
+
+            return new StringExpr(context, baseString, args);
+        }
+
+        public override IPExpr VisitStringExpr(PParser.StringExprContext context)
+        {
+            return VisitFormattedString(context.formattedString());
+        }
+
         public override IPExpr VisitVarLvalue(PParser.VarLvalueContext context)
         {
             string varName = context.name.GetText();

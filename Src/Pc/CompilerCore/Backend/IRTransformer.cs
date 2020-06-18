@@ -260,6 +260,12 @@ namespace Plang.Compiler.Backend
                     deps.AddRange(valuesDeps);
                     deps.Add(valuesStore);
                     return (valuesTemp, deps);
+                case StringExpr stringExpr:
+                    (IPExpr[] stringArgs, List< IPStmt > stringArgsDeps) = SimplifyFunArgs(stringExpr.Args);
+                    (VariableAccessExpr stringTemp, IPStmt stringStore) = SaveInTemporary(new StringExpr(location, stringExpr.BaseString, stringArgs.ToList()));
+                    deps.AddRange(stringArgsDeps);
+                    deps.Add(stringStore);
+                    return (stringTemp, deps);
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(expr));

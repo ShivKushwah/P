@@ -201,7 +201,12 @@ expr : primitive                                      # PrimitiveExpr
      | lhs=expr op=(EQ | NE) rhs=expr                 # BinExpr
      | lhs=expr op=LAND rhs=expr                      # BinExpr
      | lhs=expr op=LOR rhs=expr                       # BinExpr
+     | formattedString                                # StringExpr
      ;
+
+formattedString	:	StringLiteral
+				|	FORMAT LPAREN StringLiteral (COMMA rvalueList)? RPAREN 
+				;
 
 primitive : iden
           | floatLiteral

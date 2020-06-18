@@ -249,6 +249,13 @@ namespace Plang.Compiler
                 "Print format placeholders must contain only digits. Escape braces by doubling them.");
         }
 
+        public Exception InvalidStringExprFormat(PParser.FormattedStringContext context, IToken symbol)
+        {
+            return IssueError(context,
+                symbol,
+                "String expr format placeholders must contain only digits. Escape braces by doubling them.");
+        }
+
         public Exception InvalidBindExpr(ParserRuleContext location, string message)
         {
             return IssueError(location, $"invalid bind operation. {message}");
@@ -347,6 +354,11 @@ namespace Plang.Compiler
         public Exception PrintStmtLinearArgument(ParserRuleContext argSourceLocation)
         {
             return IssueError(argSourceLocation, "Print is a pure statement and so does not require linear arguments.");
+        }
+
+        public Exception StringAssignStmtLinearArgument(ParserRuleContext argSourceLocation)
+        {
+            return IssueError(argSourceLocation, "String interpolation does not support linear arguments.");
         }
 
         public Exception DuplicateReceiveCase(ParserRuleContext location, PEvent pEvent)

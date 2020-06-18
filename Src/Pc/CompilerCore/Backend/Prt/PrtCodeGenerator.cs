@@ -547,6 +547,10 @@ namespace Plang.Compiler.Backend.Prt
                     context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_FLOAT, {{ NULL }} }};");
                     break;
 
+                case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.String):
+                    context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_STRING, {{ NULL }} }};");
+                    break;
+
                 case PrimitiveType primitiveType when Equals(primitiveType, PrimitiveType.Bool):
                     context.WriteLine(output, $"static PRT_TYPE {typeGenName} = {{ PRT_KIND_BOOL, {{ NULL }} }};");
                     break;
@@ -1493,6 +1497,38 @@ namespace Plang.Compiler.Backend.Prt
                     WriteExpr(output, function, seqAccessExpr.IndexExpr);
                     context.Write(output, "))");
                     break;
+                
+                case StringExpr stringExpr:
+                    // format is {str0, n1, str1, n2, ..., nK, strK}
+                    object[] assignBaseParts = PrtTranslationUtils.ParsePrintMessage(stringExpr.BaseString);
+
+                    // Build parameter pack
+                    int k = (assignBaseParts.Length - 1) / 2;
+                    context.Write(output, "PrtMkStringValue(PrtFormatString(\"");
+                    context.Write(output, (string)assignBaseParts[0]);
+                    context.Write(output, "\", ");
+                    context.Write(output, stringExpr.Args.Count.ToString());
+                    foreach (IPExpr arg in stringExpr.Args)
+                    {
+                        context.Write(output, ", ");
+                        WriteExpr(output, function, arg);
+                    }
+
+                    context.Write(output, ", ");
+                    context.Write(output, k.ToString());
+                    for (int i = 0; i < k; i++)
+                    {
+                        int n = (int)assignBaseParts[1 + 2 * i];
+                        string s = (string)assignBaseParts[1 + 2 * i + 1];
+                        context.Write(output, ", ");
+                        context.Write(output, n.ToString());
+                        context.Write(output, ", \"");
+                        context.Write(output, s);
+                        context.Write(output, "\"");
+                    }
+
+                    context.WriteLine(output, "));");
+                    break;
 
                 case TupleAccessExpr tupleAccessExpr:
                     context.Write(output, "*(PrtTupleGetLValue(");
@@ -1534,6 +1570,17 @@ namespace Plang.Compiler.Backend.Prt
                         context.Write(output, ", ");
                         WriteExpr(output, function, binOpRhs);
                         context.Write(output, "))");
+                    }
+                    // String Concatenation replaces + with strcat
+                    else if (PrimitiveType.String.IsSameTypeAs(binOpLhs.Type) &&
+                        PrimitiveType.String.IsSameTypeAs(binOpRhs.Type) &&
+                        binOpType == BinOpType.Add)
+                    {
+                        context.Write(output, $"PrtStringConcat(");
+                        WriteExpr(output, function, binOpLhs);
+                        context.Write(output, ",");
+                        WriteExpr(output, function, binOpRhs);
+                        context.Write(output, ")");
                     }
                     else
                     {
@@ -1901,6 +1948,11 @@ namespace Plang.Compiler.Backend.Prt
             {
                 binOpGetter = "PrtPrimGetFloat";
                 binOpBuilder = "PrtMkFloatValue";
+            }
+            else if (type.IsSameTypeAs(PrimitiveType.String))
+            {
+                binOpGetter = "PrtPrimGetString";
+                binOpBuilder = "PrtMkStringValue";
             }
             else
             {
