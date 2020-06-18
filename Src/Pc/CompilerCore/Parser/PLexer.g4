@@ -18,6 +18,7 @@ MAP       : 'map' ;
 SET       : 'set' ;
 SEQ       : 'seq' ;
 DATA      : 'data' ;
+STRING    : 'string';
 
 // Keywords
 

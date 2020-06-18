@@ -17,6 +17,7 @@ namespace Plang.Compiler.TypeChecker.Types
         public static readonly DataType Data = new DataType(null);
         public static readonly PrimitiveType Any = new PrimitiveType("any");
         public static readonly PrimitiveType Null = new PrimitiveType("null");
+        public static readonly PrimitiveType String = new PrimitiveType("string");
 
         private PrimitiveType(string name) : base(TypeKind.Base)
         {
@@ -81,6 +82,9 @@ namespace Plang.Compiler.TypeChecker.Types
                     // return otherType.CanonicalRepresentation.Equals("bool") ||
                     //         otherType.CanonicalRepresentation.Equals("secure_bool");
                     return otherType.CanonicalRepresentation.Equals("secure_bool");
+                
+                case "string":
+                    return otherType.CanonicalRepresentation.Equals("string");
 
                 default:
                     return CanonicalRepresentation.Equals(otherType.CanonicalRepresentation);

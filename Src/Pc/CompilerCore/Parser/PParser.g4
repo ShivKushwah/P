@@ -41,6 +41,7 @@ type : SEQ LBRACK type RBRACK     # SeqType
      | MACHINE   # PrimitiveType
      | DATA      # PrimitiveType
      | ANY       # PrimitiveType
+     | STRING    # PrimitiveType
      | name=iden # NamedType
      ;
 

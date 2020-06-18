@@ -73,6 +73,8 @@ typedef enum PRT_VALUE_KIND
 	/**< The number of value kinds               */
 	PRT_VALUE_KIND_SECURE_INT = 11,
 	/**< The number of value kinds               */
+	PRT_VALUE_KIND_STRING = 14,
+	/**< The kind of string values                  */
 	PRT_VALUE_KIND_SECURE_BOOL = 13,
 	/**< The number of value kinds               */
 } PRT_VALUE_KIND;
@@ -86,6 +88,7 @@ typedef struct PRT_VALUE
 		PRT_BOOLEAN bl; /**< A boolean value            */
 		PRT_INT nt; /**< An integer value           */
 		PRT_FLOAT ft; /**< An float value           */
+		PRT_STRING str; /*< A string value           */
 		PRT_UINT32 ev; /**< An event id value          */
 		struct PRT_MACHINEID* mid; /**< A machine id value */
 		struct PRT_FOREIGNVALUE* frgn; /**< A foreign value            */
