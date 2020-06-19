@@ -37,6 +37,7 @@ DO        : 'do' ;
 ELSE      : 'else' ;
 ENTRY     : 'entry' ;
 EXIT      : 'exit' ;
+FORMAT : 'format';
 FUN       : 'fun' ;
 GOTO      : 'goto' ;
 GROUP     : 'group' ;

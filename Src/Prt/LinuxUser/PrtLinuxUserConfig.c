@@ -110,6 +110,7 @@ PRT_API void PRT_CALL_CONV PrtYieldThread()
 void * PRT_CALL_CONV PrtMalloc(_In_ size_t size)
 {
   void *ptr = malloc(size);
+  PrtAssert(ptr != NULL, "Memory allocation error");
   return ptr;
 }
 

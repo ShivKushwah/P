@@ -276,6 +276,13 @@ PRT_API PRT_UINT32 PRT_CALL_CONV PrtSetCapacity(_In_ PRT_VALUE* set);
 	*/
 	PRT_API PRT_VALUE* PRT_CALL_CONV PrtMkFloatValue(_In_ PRT_FLOAT value);
 
+	/** Makes an string value.
+	* @param[in] value A string value.
+	* @returns A proper string value. Caller is responsible for freeing.
+	* @see PrtFreeValue
+	*/
+	PRT_API PRT_VALUE* PRT_CALL_CONV PrtMkStringValue(_In_ PRT_STRING value);
+
 	/** Makes null value.
 	* The types null, event, and machine all share the null value.
 	* The null value projected onto event is the id PRT_SPECIAL_EVENT_NULL.

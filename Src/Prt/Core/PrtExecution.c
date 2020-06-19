@@ -2806,3 +2806,31 @@ void PRT_CALL_CONV PrtFormatPrintf(_In_ PRT_CSTRING msg, ...)
 	va_end(argp);
 	PrtFree(args);
 }
+
+PRT_STRING PRT_CALL_CONV PrtFormatString(_In_ PRT_CSTRING baseString, ...)
+{
+	PRT_STRING ret = PrtMalloc(sizeof(PRT_CHAR) * (strlen(baseString) + 1));
+	strncpy(ret, baseString, strlen(baseString) + 1);
+	va_list argp;
+	va_start(argp, baseString);
+	PRT_UINT32 numArgs = va_arg(argp, PRT_UINT32);
+	PRT_VALUE** args = (PRT_VALUE **)PrtCalloc(numArgs, sizeof(PRT_VALUE *));
+	for (PRT_UINT32 i = 0; i < numArgs; i++)
+	{
+		args[i] = va_arg(argp, PRT_VALUE *);
+	}
+	PRT_UINT32 numSegs = va_arg(argp, PRT_UINT32);
+	for (PRT_UINT32 i = 0; i < numSegs; i++)
+	{
+		PRT_UINT32 argIndex = va_arg(argp, PRT_UINT32);
+		PRT_STRING arg = PrtToStringValue(args[argIndex]);
+		PRT_CSTRING seg = va_arg(argp, PRT_CSTRING);
+		ret = PrtRealloc(ret, sizeof(PRT_CHAR) * (strlen(ret) + 1 + strlen(arg) + strlen(seg)));
+		strncat(ret, arg, strlen(arg) + 1);
+		strncat(ret, seg, strlen(seg) + 2);
+		PrtFree(arg);
+	}
+	va_end(argp);
+	PrtFree(args);
+	return ret;
+}
