@@ -60,6 +60,7 @@ RETURN    : 'return' ;
 SEND      : 'send' ;
 SECURE_SEND : 'secure_send' ;
 UNTRUSTED_SEND : 'untrusted_send' ;
+UNENCRYPTED_SEND : 'unencrypted_send' ;
 SIZEOF    : 'sizeof' ;
 SPEC      : 'spec' ;
 START     : 'start' ;

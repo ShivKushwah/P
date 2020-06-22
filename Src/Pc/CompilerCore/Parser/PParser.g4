@@ -160,10 +160,12 @@ statement : LBRACE statement* RBRACE                      # CompoundStmt
           | RAISE expr (COMMA rvalueList)? SEMI           # RaiseStmt
           | SEND machine=expr COMMA event=expr 
                               (COMMA rvalueList)? SEMI    # SendStmt
-          | SECURE_SEND machine=expr COMMA event=expr 
-                              (COMMA rvalueList)? SEMI    # SecureSendStmt
-            | UNTRUSTED_SEND machine=expr COMMA event=expr 
-                              (COMMA rvalueList)? SEMI    # UntrustedSendStmt
+         // | SECURE_SEND machine=expr COMMA event=expr 
+         //                     (COMMA rvalueList)? SEMI    # SecureSendStmt
+         //   | UNTRUSTED_SEND machine=expr COMMA event=expr 
+        //                      (COMMA rvalueList)? SEMI    # UntrustedSendStmt
+          | UNENCRYPTED_SEND machine=expr COMMA event=expr 
+                              (COMMA rvalueList)? SEMI    # UnencryptedSendStmt
           | ANNOUNCE expr (COMMA rvalueList)? SEMI        # AnnounceStmt
           | GOTO stateName (COMMA rvalueList)? SEMI       # GotoStmt
           | RECEIVE LBRACE recvCase+ RBRACE               # ReceiveStmt

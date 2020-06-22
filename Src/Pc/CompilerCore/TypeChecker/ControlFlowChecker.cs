@@ -85,6 +85,7 @@ namespace Plang.Compiler.TypeChecker
                 case SendStmt _:
                 case SecureSendStmt _:
                 case UntrustedSendStmt _:
+                case UnencryptedSendStmt _:
                 case SwapAssignStmt _:
                     break;
 

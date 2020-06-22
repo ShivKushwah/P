@@ -531,6 +531,26 @@ namespace Plang.Compiler.Backend
                             new UntrustedSendStmt(location, untrustedSendMachineAccessExpr, untrustedSendEventAccessExpr, untrustedSendArgs)
                         })
                         .ToList();
+                
+                case UnencryptedSendStmt unencryptedSendStmt:
+                    (IExprTerm unencryptedSendMachine, List<IPStmt> unencryptedSendMachineDeps) = SimplifyExpression(unencryptedSendStmt.MachineExpr);
+                    (VariableAccessExpr unencryptedSendMachineAccessExpr, IPStmt unencryptedSendMachineAssn) = SaveInTemporary(new CloneExpr(unencryptedSendMachine));
+
+                    (IExprTerm unencryptedSendEvent, List<IPStmt> unencryptedSendEventDeps) = SimplifyExpression(unencryptedSendStmt.Evt);
+                    (VariableAccessExpr unencryptedSendEventAccessExpr, IPStmt unencryptedSendEventAssn) = SaveInTemporary(new CloneExpr(unencryptedSendEvent));
+
+                    (IReadOnlyList<IVariableRef> unencryptedSendArgs, List<IPStmt> unencryptedSendArgDeps) = SimplifyArgPack(unencryptedSendStmt.Arguments);
+
+                    return unencryptedSendMachineDeps
+                        .Concat(new[] { unencryptedSendMachineAssn })
+                        .Concat(unencryptedSendEventDeps)
+                        .Concat(new[] { unencryptedSendEventAssn })
+                        .Concat(unencryptedSendArgDeps)
+                        .Concat(new[]
+                        {
+                            new UnencryptedSendStmt(location, unencryptedSendMachineAccessExpr, unencryptedSendEventAccessExpr, unencryptedSendArgs)
+                        })
+                        .ToList();
 
                 case SwapAssignStmt swapAssignStmt:
                     (IPExpr swapVar, List<IPStmt> swapVarDeps) = SimplifyLvalue(swapAssignStmt.NewLocation);

@@ -500,48 +500,85 @@ namespace Plang.Compiler.TypeChecker
             }
         }
 
-        public override IPStmt VisitSecureSendStmt(PParser.SecureSendStmtContext context)
+        // public override IPStmt VisitSecureSendStmt(PParser.SecureSendStmtContext context)
+        // {
+            // if (machine?.IsSpec == true)
+            // {
+            //     throw handler.IllegalMonitorOperation(context, context.SECURE_SEND().Symbol, machine);
+            // }
+
+            // IPExpr machineExpr = exprVisitor.Visit(context.machine);
+            // if (!machineExpr.Type.CanonicalRepresentation.Equals("secure_machine_handle")) 
+            // {
+            //     throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine); //TODO fix this error message
+            // }
+
+            // IPExpr evtExpr = exprVisitor.Visit(context.@event);
+            // if (IsDefinitelyNullEvent(evtExpr))
+            // {
+            //     throw handler.EmittedNullEvent(evtExpr);
+            // }
+
+            // if (!PrimitiveType.Event.IsAssignableFrom(evtExpr.Type))
+            // {
+            //     throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.Event);
+            // }
+
+            // IPExpr[] args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), exprVisitor).ToArray();
+
+            // if (evtExpr is EventRefExpr eventRef)
+            // {
+            //     if (!((EventRefExpr) evtExpr).Value.isTrustedEvent) {
+            //         throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.TrustedEvent); //TODO shiv mke this a custom error message
+            //     }
+            //     TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
+            // }
+
+            // return new SecureSendStmt(context, machineExpr, evtExpr, args);
+        // }
+
+        // public override IPStmt VisitUntrustedSendStmt(PParser.UntrustedSendStmtContext context)
+        // {
+            // if (machine?.IsSpec == true)
+            // {
+            //     throw handler.IllegalMonitorOperation(context, context.UNTRUSTED_SEND().Symbol, machine);
+            // }
+
+            // IPExpr machineExpr = exprVisitor.Visit(context.machine);
+            // // if (!PrimitiveType.Machine.IsAssignableFrom(machineExpr.Type)) //TODO Shiv once we have a secure_machine type in Primitive types, uncomment this 
+            // // {
+            // //     throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine);
+            // // }
+
+            // IPExpr evtExpr = exprVisitor.Visit(context.@event);
+            // if (IsDefinitelyNullEvent(evtExpr))
+            // {
+            //     throw handler.EmittedNullEvent(evtExpr);
+            // }
+
+            // if (!PrimitiveType.Event.IsAssignableFrom(evtExpr.Type))
+            // {
+            //     throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.Event);
+            // }
+
+            // IPExpr[] args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), exprVisitor).ToArray();
+
+            // if (evtExpr is EventRefExpr eventRef)
+            // {
+            //     if (((EventRefExpr) evtExpr).Value.isTrustedEvent) {
+            //         throw handler.TypeMismatch(context.@event, PrimitiveType.TrustedEvent, PrimitiveType.Event); //TODO shiv mke this a custom error message
+            //     }
+            //     TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
+            // }
+
+            // return new UntrustedSendStmt(context, machineExpr, evtExpr, args);
+        // }
+
+        public override IPStmt VisitUnencryptedSendStmt(PParser.UnencryptedSendStmtContext context)
         {
             if (machine?.IsSpec == true)
             {
-                throw handler.IllegalMonitorOperation(context, context.SECURE_SEND().Symbol, machine);
-            }
-
-            IPExpr machineExpr = exprVisitor.Visit(context.machine);
-            if (!machineExpr.Type.CanonicalRepresentation.Equals("secure_machine_handle")) 
-            {
-                throw handler.TypeMismatch(context.machine, machineExpr.Type, PrimitiveType.Machine); //TODO fix this error message
-            }
-
-            IPExpr evtExpr = exprVisitor.Visit(context.@event);
-            if (IsDefinitelyNullEvent(evtExpr))
-            {
-                throw handler.EmittedNullEvent(evtExpr);
-            }
-
-            if (!PrimitiveType.Event.IsAssignableFrom(evtExpr.Type))
-            {
-                throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.Event);
-            }
-
-            IPExpr[] args = TypeCheckingUtils.VisitRvalueList(context.rvalueList(), exprVisitor).ToArray();
-
-            if (evtExpr is EventRefExpr eventRef)
-            {
-                if (!((EventRefExpr) evtExpr).Value.isTrustedEvent) {
-                    throw handler.TypeMismatch(context.@event, evtExpr.Type, PrimitiveType.TrustedEvent); //TODO shiv mke this a custom error message
-                }
-                TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
-            }
-
-            return new SecureSendStmt(context, machineExpr, evtExpr, args);
-        }
-
-        public override IPStmt VisitUntrustedSendStmt(PParser.UntrustedSendStmtContext context)
-        {
-            if (machine?.IsSpec == true)
-            {
-                throw handler.IllegalMonitorOperation(context, context.UNTRUSTED_SEND().Symbol, machine);
+                throw handler.IllegalMonitorOperation(context, context.UNENCRYPTED_SEND().Symbol, machine);
             }
 
             IPExpr machineExpr = exprVisitor.Visit(context.machine);
@@ -571,7 +608,7 @@ namespace Plang.Compiler.TypeChecker
                 TypeCheckingUtils.ValidatePayloadTypes(handler, context, eventRef.Value.PayloadType, args);
             }
 
-            return new UntrustedSendStmt(context, machineExpr, evtExpr, args);
+            return new UnencryptedSendStmt(context, machineExpr, evtExpr, args);
         }
 
         private static bool IsDefinitelyNullEvent(IPExpr evtExpr)

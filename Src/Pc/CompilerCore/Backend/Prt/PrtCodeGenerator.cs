@@ -1298,6 +1298,42 @@ namespace Plang.Compiler.Backend.Prt
                         WriteCleanupCheck(output, function);
                     }
                     break;
+                
+                case UnencryptedSendStmt unencryptedSendStmt:
+                    {
+                        string intLiteralName = context.RegisterLiteral(function, unencryptedSendStmt.Arguments.Count);
+                        string uniqueTempVariable = context.Names.GetTemporaryName("PTMP_tmp"); //TODO find a cleaner way to do this
+
+                        context.WriteLine(output, $"PRT_VALUE* {uniqueTempVariable} = PrtCloneValue(&({intLiteralName}));");
+
+                        
+                        context.Write(output, "_P_GEN_funargs[0] = ");
+                        IVariableRef mExpr = (IVariableRef)unencryptedSendStmt.MachineExpr;
+                        context.Write(output, $"{GetVariableReference(function, mExpr)}");
+                        context.WriteLine(output, ";");
+
+                        context.Write(output, "_P_GEN_funargs[1] = &(");
+                        WriteExpr(output, function, unencryptedSendStmt.Evt);
+                        context.WriteLine(output, ");");
+
+                        context.Write(output, $"_P_GEN_funargs[2] = ");
+                        context.WriteLine(output, $"&({uniqueTempVariable});");
+
+                        int i_in_loop = 3;
+
+                        foreach (IPExpr sendArgExpr in unencryptedSendStmt.Arguments)
+                        {
+                            Debug.Assert(sendArgExpr is IVariableRef);
+                            IVariableRef argVar = (IVariableRef)sendArgExpr;
+                            context.WriteLine(output, $"_P_GEN_funargs[{i_in_loop}] = {GetVariableReference(function, argVar)};");
+                            i_in_loop++;
+                        }
+
+                        context.WriteLine(output, "PrtFreeValue(P_UnencryptedSend_IMPL(context, _P_GEN_funargs));");
+
+                        WriteCleanupCheck(output, function);
+                    }
+                    break;
 
                 case SendStmt sendStmt:
 
